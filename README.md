@@ -1,1 +1,1 @@
-# stamp-app
+# StampApp
