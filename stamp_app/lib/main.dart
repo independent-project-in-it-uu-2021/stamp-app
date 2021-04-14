@@ -26,10 +26,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Welcome to Flutter',
       home: Scaffold(
         appBar: AppBar(
-          actions: [
+          title: Image.asset('assets/images/uuLogaNew.png', fit: BoxFit.cover),
+          /*actions: [
             IconButton(
               iconSize: 45,
               padding: EdgeInsets.all(0),
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
               // TODO: Change onpressed
               onPressed: null,
             ),
-          ],
+          ],*/
           //title: Text('Welcome to Flutter'),
           backgroundColor: Colors.red.shade900,
         ),
