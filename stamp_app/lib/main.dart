@@ -29,18 +29,14 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           title: Image.asset('assets/images/uuLogaNew.png', fit: BoxFit.cover),
-          /*actions: [
-            IconButton(
-              iconSize: 45,
-              padding: EdgeInsets.all(0),
-              alignment: Alignment.center,
-              icon: Icon(Icons.favorite),
-              // TODO: Change onpressed
-              onPressed: null,
-            ),
-          ],*/
-          //title: Text('Welcome to Flutter'),
+          centerTitle: true,
           backgroundColor: Colors.red.shade900,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios_rounded),
+            // TODO: Change this
+            onPressed: () => Navigator.of(context).pop(),
+            tooltip: 'Tillbaka',
+          ),
         ),
         body: Center(
           child: Text('Hello World'),
