@@ -15,14 +15,19 @@ class CreateAccountState extends State<CreateAccount> {
   String _userPassword;
 
   // key to hold the state of the form i.e referens to the form
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final newTextTheme = Theme.of(context).textTheme.apply(
+        bodyColor: Colors.pink,
+        displayColor: Colors.pink,
+      );
+  // Function for the name
   Widget _buildName() {
     return Container(
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.name,
-        maxLength: 40,
+        //maxLength: 70,
         // Decorate the input field here,
         decoration: InputDecoration(
           filled: true,
@@ -35,6 +40,10 @@ class CreateAccountState extends State<CreateAccount> {
           if (value.isEmpty) {
             return 'Namn är obligatorisk';
           }
+          if (value.length > 10) {
+            //TODO: Change the text below
+            return 'Namn får inte vara längre än 70 tecken';
+          }
         },
         // The  form is saved and we tell what to do with the value
         onSaved: (String value) {
@@ -44,12 +53,13 @@ class CreateAccountState extends State<CreateAccount> {
     );
   }
 
+  //TODO: Check if a email is already used
   Widget _buildEmail() {
     return Container(
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.emailAddress,
-        maxLength: 40,
+        maxLength: 255,
         // Decorate the input field here,
         decoration: InputDecoration(
           filled: true,
@@ -63,6 +73,7 @@ class CreateAccountState extends State<CreateAccount> {
             return 'E-post är obligatorisk';
           }
 
+          // Check valid character for email
           if (!RegExp(
                   r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
               .hasMatch(value)) {
@@ -145,7 +156,7 @@ class CreateAccountState extends State<CreateAccount> {
           }
           if (value != _userPassword) {
             // TODO: Change the text below
-            return 'Lösenord är samma';
+            return 'Lösenord är inte samma';
           }
           return null;
         },
@@ -164,7 +175,7 @@ class CreateAccountState extends State<CreateAccount> {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_rounded),
-          // TODO: Change this
+          // TODO: Change this (Does nothing right now)
           onPressed: () => Navigator.of(context).pop(),
           tooltip: 'Tillbaka',
         ),
@@ -189,14 +200,20 @@ class CreateAccountState extends State<CreateAccount> {
                   height: 50,
                 ),
                 _buildName(),
+                Padding(
+                  padding: EdgeInsets.only(top: 17),
+                ),
                 _buildEmail(),
+                Padding(
+                  padding: EdgeInsets.only(top: 17),
+                ),
                 _buildNumber(),
                 Padding(
-                  padding: EdgeInsets.only(top: 20),
+                  padding: EdgeInsets.only(top: 27),
                 ),
                 _buildPassword(),
                 Padding(
-                  padding: EdgeInsets.only(top: 20),
+                  padding: EdgeInsets.only(top: 27),
                 ),
                 _checkUserPassword(),
                 // adding space
