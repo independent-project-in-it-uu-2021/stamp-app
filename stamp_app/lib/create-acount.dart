@@ -17,32 +17,29 @@ class CreateAccountState extends State<CreateAccount> {
   // key to hold the state of the form i.e referens to the form
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final newTextTheme = Theme.of(context).textTheme.apply(
-        bodyColor: Colors.pink,
-        displayColor: Colors.pink,
-      );
+
   // Function for the name
   Widget _buildName() {
     return Container(
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.name,
-        //maxLength: 70,
         // Decorate the input field here,
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.white,
           hintText: 'Förnamn Efternamn',
           counterStyle: TextStyle(color: Colors.white),
+          errorStyle: TextStyle(color: Colors.white),
         ),
         // The acutal value from the input
         validator: (String value) {
           if (value.isEmpty) {
             return 'Namn är obligatorisk';
           }
-          if (value.length > 10) {
+          if (value.length > 120) {
             //TODO: Change the text below
-            return 'Namn får inte vara längre än 70 tecken';
+            return 'Namn får inte vara längre än 120 tecken';
           }
         },
         // The  form is saved and we tell what to do with the value
@@ -59,18 +56,23 @@ class CreateAccountState extends State<CreateAccount> {
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.emailAddress,
-        maxLength: 255,
+        //maxLength: 255,
         // Decorate the input field here,
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.white,
           hintText: 'E-post',
           counterStyle: TextStyle(color: Colors.white),
+          errorStyle: TextStyle(color: Colors.white),
         ),
         // The acutal value from the input
         validator: (String value) {
           if (value.isEmpty) {
             return 'E-post är obligatorisk';
+          }
+          if (value.length > 255) {
+            //TODO: Change the text below
+            return 'Mejladress får inte vara längre än 255 tecken';
           }
 
           // Check valid character for email
@@ -100,6 +102,7 @@ class CreateAccountState extends State<CreateAccount> {
           fillColor: Colors.white,
           hintText: 'Telefonnummer (Frivilligt)',
           counterStyle: TextStyle(color: Colors.white),
+          errorStyle: TextStyle(color: Colors.white),
         ),
 
         // The  form is saved and we tell what to do with the value
@@ -121,6 +124,7 @@ class CreateAccountState extends State<CreateAccount> {
           fillColor: Colors.white,
           hintText: 'Lösenord',
           counterStyle: TextStyle(color: Colors.white),
+          errorStyle: TextStyle(color: Colors.white),
         ),
         // The acutal value from the input
         validator: (String value) {
@@ -148,6 +152,7 @@ class CreateAccountState extends State<CreateAccount> {
           fillColor: Colors.white,
           hintText: 'Upprepa lösenord',
           counterStyle: TextStyle(color: Colors.white),
+          errorStyle: TextStyle(color: Colors.white),
         ),
         // The acutal value from the input
         validator: (String value) {
