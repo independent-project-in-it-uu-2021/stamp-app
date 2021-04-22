@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+
 class CreateAccount extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -16,6 +19,33 @@ class CreateAccountState extends State<CreateAccount> {
   String _chosenProgram;
   // Boolean value use to hide the write bio option field
   bool _writeBio = false;
+
+  File _userImage;
+
+  Future _getImage() async {
+    final pickedImage =
+        await ImagePicker().getImage(source: ImageSource.gallery);
+    setState(() {
+      _userImage = File(pickedImage.path);
+      print('_UserImage: $_userImage');
+    });
+  }
+
+  // Method that is used to change the margin when an image is choosen
+  double _changeMarginImage() {
+    double curMargin;
+    setState(() {
+      /*
+      same as if(_userImage == null){
+        curMargin = 10;
+      } else{
+        curMargin = 0;
+      }
+      */
+      curMargin = _userImage == null ? 10 : 0;
+    });
+    return curMargin;
+  }
 
   void showWriteBio() {
     setState(() {
@@ -190,6 +220,7 @@ class CreateAccountState extends State<CreateAccount> {
     );
   }
 
+  // Choose program from dropdown
   Widget _program() {
     return Container(
       width: 350,
@@ -219,7 +250,7 @@ class CreateAccountState extends State<CreateAccount> {
           if (newValue == 'Övrigt') {
             showWriteBio();
           } else {
-            showWriteBio();
+            //showWriteBio();
             _chosenProgram = newValue;
           }
         },
@@ -238,6 +269,7 @@ class CreateAccountState extends State<CreateAccount> {
     );
   }
 
+  //Write bio if "Övrigt" is choosen in the dropdown meny
   Widget _buildBio() {
     return Container(
       width: 350,
@@ -341,6 +373,31 @@ class CreateAccountState extends State<CreateAccount> {
               // adding space
               SizedBox(
                 height: 12,
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.white,
+                  alignment: Alignment.center,
+                  //padding: EdgeInsets.only(top: 10),
+                ),
+                child: Container(
+                  height: 60,
+                  width: 100,
+                  margin: EdgeInsets.only(top: _changeMarginImage()),
+                  child: _userImage == null
+                      ? Text(
+                          'Ladda upp profilbild',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                        )
+                      : Image.file(_userImage),
+                ),
+                onPressed: _getImage,
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 12),
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
