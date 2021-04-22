@@ -14,8 +14,16 @@ class CreateAccountState extends State<CreateAccount> {
   String _mobilnumber;
   String _userPassword;
   String _chosenProgram;
+  // Boolean value use to hide the write bio option field
+  bool _writeBio = false;
 
-  final dropList = ['One', 'Two', 'Three'];
+  void showWriteBio() {
+    setState(() {
+      _writeBio = !_writeBio;
+    });
+  }
+
+  //final programList<String> = ['Elektroteknik', 'Energisystem', 'Industriell ekonomi'];
 
   // key to hold the state of the form i.e referens to the form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -183,41 +191,89 @@ class CreateAccountState extends State<CreateAccount> {
   }
 
   Widget _program() {
-    print('hej');
     return Container(
-      //width: 350,
-      //height: 60,
+      width: 350,
+      height: 60,
       child: DropdownButtonFormField(
+        //TODO: Change the position of the list to above
         items: <String>[
           'One',
           'Two',
           'Three',
+          'Övrigt',
         ].map<DropdownMenuItem<String>>((String value) {
-          print('inside map');
           return new DropdownMenuItem(
             value: value,
             child: Row(
               children: <Widget>[
-                Icon(Icons.star),
+                //TODO: Check with the grupp maybe change the icon
+                Icon(Icons.arrow_right),
                 Text(value),
               ],
             ),
           );
         }).toList(),
-        onSaved: (String newValue) {
-          _chosenProgram = newValue;
+        onChanged: (String newValue) {
+          print('Inside dropdown');
+          print(newValue);
+          if (newValue == 'Övrigt') {
+            showWriteBio();
+          } else {
+            showWriteBio();
+            _chosenProgram = newValue;
+          }
         },
         decoration: InputDecoration(
             border: new OutlineInputBorder(
                 borderRadius:
                     const BorderRadius.all(const Radius.circular(30.0))),
-            //contentPadding: EdgeInsets.only(left: 15, top: 15),
+            contentPadding: EdgeInsets.only(left: 15, top: 15),
             errorStyle: TextStyle(color: Colors.white, fontSize: 13),
             filled: true,
             fillColor: Colors.white,
             hintText: 'Does this work',
             //TODO: Change the text below
             errorText: 'Vänligen välj en program'),
+      ),
+    );
+  }
+
+  Widget _buildBio() {
+    return Container(
+      width: 350,
+      child: Visibility(
+        visible: _writeBio,
+        child: TextFormField(
+          keyboardType: TextInputType.name,
+          // Decorate the input field here,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+
+            //TODO: Change the text below
+            hintText: 'Din roll?',
+            counterStyle: TextStyle(color: Colors.white),
+            errorStyle: TextStyle(color: Colors.white),
+          ),
+          // The acutal value from the input
+          validator: (String value) {
+            if (value.isEmpty) {
+              return 'Bio är obligatorisk';
+            }
+            if (value.length > 150) {
+              //TODO: Change the text below
+              return 'Bio får inte vara längre än 120 tecken';
+            }
+            return null;
+          },
+          // The  form is saved and we tell what to do with the value
+          onSaved: (String value) {
+            print('Inside _buildbio');
+            print(value);
+            print(_chosenProgram);
+            _chosenProgram = value;
+          },
+        ),
       ),
     );
   }
@@ -244,7 +300,7 @@ class CreateAccountState extends State<CreateAccount> {
         child: Form(
           key: _formKey,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Text(
                 'Registrera Konto',
@@ -255,37 +311,49 @@ class CreateAccountState extends State<CreateAccount> {
                 ),
               ),
               SizedBox(
-                height: 50,
+                height: 20,
               ),
-              //_buildName(),
+              _buildName(),
               Padding(
                 padding: EdgeInsets.only(top: 12),
               ),
-              //_buildEmail(),
+              _buildEmail(),
               Padding(
                 padding: EdgeInsets.only(top: 12),
               ),
-              //_buildNumber(),
+              _buildNumber(),
               Padding(
                 padding: EdgeInsets.only(top: 12),
               ),
-              //_buildPassword(),
+              _buildPassword(),
               Padding(
                 padding: EdgeInsets.only(top: 12),
               ),
-              //_checkUserPassword(),
+              _checkUserPassword(),
               Padding(
                 padding: EdgeInsets.only(top: 12),
               ),
               _program(),
+              Padding(
+                padding: EdgeInsets.only(top: 12),
+              ),
+              _buildBio(),
               // adding space
               SizedBox(
-                height: 100,
+                height: 12,
               ),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.green[400],
+                  padding: EdgeInsets.symmetric(horizontal: 90, vertical: 15),
+                ),
                 child: Text(
-                  'Submit',
-                  style: TextStyle(color: Colors.white),
+                  'Registrera',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 21,
+                  ),
                 ),
                 onPressed: () {
                   // If the form is not valid
@@ -300,11 +368,11 @@ class CreateAccountState extends State<CreateAccount> {
                     print(_fullName);
                   }
 
-                  print(_fullName);
-                  print(_email);
-                  print(_mobilnumber);
-                  print(_userPassword);
-                  print(_chosenProgram);
+                  //print(_fullName);
+                  //print(_email);
+                  //print(_mobilnumber);
+                  //print(_userPassword);
+                  //print(_chosenProgram);
                 },
               )
             ],
