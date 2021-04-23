@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -315,124 +316,130 @@ class CreateAccountState extends State<CreateAccount> {
     return Scaffold(
       backgroundColor: Colors.red.shade900,
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+        ),
         title: Image.asset('assets/images/uuLogaNew.png', fit: BoxFit.cover),
         centerTitle: true,
         backgroundColor: Colors.red.shade900,
+        brightness: Brightness.light,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_rounded),
           // TODO: Change this (Does nothing right now)
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => null,
           tooltip: 'Tillbaka',
         ),
       ),
-      body: Container(
-        width: double.infinity,
-        margin: EdgeInsets.only(top: 60, bottom: 20),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                'Registrera Konto',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 40,
-                  color: Colors.white,
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              _buildName(),
-              Padding(
-                padding: EdgeInsets.only(top: 12),
-              ),
-              _buildEmail(),
-              Padding(
-                padding: EdgeInsets.only(top: 12),
-              ),
-              _buildNumber(),
-              Padding(
-                padding: EdgeInsets.only(top: 12),
-              ),
-              _buildPassword(),
-              Padding(
-                padding: EdgeInsets.only(top: 12),
-              ),
-              _checkUserPassword(),
-              Padding(
-                padding: EdgeInsets.only(top: 12),
-              ),
-              _program(),
-              Padding(
-                padding: EdgeInsets.only(top: 12),
-              ),
-              _buildBio(),
-              // adding space
-              SizedBox(
-                height: 12,
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
-                  alignment: Alignment.center,
-                  //padding: EdgeInsets.only(top: 10),
-                ),
-                child: Container(
-                  height: 60,
-                  width: 100,
-                  margin: EdgeInsets.only(top: _changeMarginImage()),
-                  child: _userImage == null
-                      ? Text(
-                          'Ladda upp profilbild',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.black,
-                          ),
-                        )
-                      : Image.file(_userImage),
-                ),
-                onPressed: _getImage,
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 12),
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.green[400],
-                  padding: EdgeInsets.symmetric(horizontal: 90, vertical: 15),
-                ),
-                child: Text(
-                  'Registrera',
+      body: SingleChildScrollView(
+        child: Container(
+          width: double.infinity,
+          margin: EdgeInsets.only(top: 60, bottom: 20),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'Registrera Konto',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 21,
+                    fontSize: 40,
+                    color: Colors.white,
                   ),
                 ),
-                onPressed: () {
-                  // If the form is not valid
-                  if (!_formKey.currentState.validate()) {
-                    return;
-                  }
+                SizedBox(
+                  height: 20,
+                ),
+                _buildName(),
+                Padding(
+                  padding: EdgeInsets.only(top: 12),
+                ),
+                _buildEmail(),
+                Padding(
+                  padding: EdgeInsets.only(top: 12),
+                ),
+                _buildNumber(),
+                Padding(
+                  padding: EdgeInsets.only(top: 12),
+                ),
+                _buildPassword(),
+                Padding(
+                  padding: EdgeInsets.only(top: 12),
+                ),
+                _checkUserPassword(),
+                Padding(
+                  padding: EdgeInsets.only(top: 12),
+                ),
+                _program(),
+                Padding(
+                  padding: EdgeInsets.only(top: 12),
+                ),
+                _buildBio(),
+                // adding space
+                SizedBox(
+                  height: 12,
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.white,
+                    alignment: Alignment.center,
+                    //padding: EdgeInsets.only(top: 10),
+                  ),
+                  child: Container(
+                    height: 60,
+                    width: 100,
+                    margin: EdgeInsets.only(top: _changeMarginImage()),
+                    child: _userImage == null
+                        ? Text(
+                            'Ladda upp profilbild',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          )
+                        : Image.file(_userImage),
+                  ),
+                  onPressed: _getImage,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 12),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.green[400],
+                    padding: EdgeInsets.symmetric(horizontal: 90, vertical: 15),
+                  ),
+                  child: Text(
+                    'Registrera',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 21,
+                    ),
+                  ),
+                  onPressed: () {
+                    // If the form is not valid
+                    if (!_formKey.currentState.validate()) {
+                      return;
+                    }
 
-                  // If the form is valid, onSaved method is called
-                  // onsave method from above is called
-                  if (_formKey.currentState.validate()) {
-                    _formKey.currentState.save();
-                    print(_fullName);
-                  }
+                    // If the form is valid, onSaved method is called
+                    // onsave method from above is called
+                    if (_formKey.currentState.validate()) {
+                      _formKey.currentState.save();
+                      print(_fullName);
+                    }
 
-                  //print(_fullName);
-                  //print(_email);
-                  //print(_mobilnumber);
-                  //print(_userPassword);
-                  //print(_chosenProgram);
-                },
-              )
-            ],
+                    //print(_fullName);
+                    //print(_email);
+                    //print(_mobilnumber);
+                    //print(_userPassword);
+                    //print(_chosenProgram);
+                  },
+                )
+              ],
+            ),
           ),
         ),
       ),
