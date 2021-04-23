@@ -102,7 +102,7 @@ class LogInState extends State<LogIn> {
       ),
       body: Container(
         width: double.infinity,
-        margin: EdgeInsets.only(top: 0, bottom: 250),
+        margin: EdgeInsets.only(top: 40),
         child: Form(
           key: _formKey,
           child: Column(
@@ -138,9 +138,7 @@ class LogInState extends State<LogIn> {
               Padding(
                 padding: EdgeInsets.only(top: 40),
               ),
-              Padding(
-                padding: EdgeInsets.only(top: 15),
-                child: Container(
+              Container(
                   width: MediaQuery.of(context).size.width * 0.5,
                   height: MediaQuery.of(context).size.height * 0.06,
                   child: RaisedButton(
@@ -163,7 +161,6 @@ class LogInState extends State<LogIn> {
                     },
                   ),
                 ),
-              ),
               Padding(
                 padding: EdgeInsets.only(top: 50),
                 child: TextButton(
