@@ -1,11 +1,10 @@
 from firebase import firebase
-firebase= firebase.FirebaseApplication('https://stamp-db6ad-default-rtdb.europe-west1.firebasedatabase.app/', None)#https://your_storage.firebaseio.com
-retrive = firebase.get('/stamp-db6ad-default-rtdb/student', None)
-print(retrive)
-
-#http://ozgur.github.io/python-firebase/
-#eur3
-
+from firebase_admin import db
+#import json
+firebase= firebase.FirebaseApplication('https://stamp-db6ad-default-rtdb.europe-west1.firebasedatabase.app/', None)
+#https://your_storage.firebaseio.com
+location = '/stamp-db6ad-default-rtdb/student/'
+#WRITING data TO SERVER
 data = {
     'name': 'user1',
     'email': 'user1@student.uu.se',
@@ -14,21 +13,21 @@ data = {
     'pwd_confirm': 'abc123', #bool?
     'program': 'IT',
     'image': 'img_url',
-}
+}   
 
-result = firebase.post('/stamp-db6ad-default-rtdb/student', data)
-print(result)
+result = firebase.post(location, data)
+print(result)    
 
+#RETRIVEING ALL DATA FROM SERVER
 
+retrive = firebase.get(location, None)
+print(retrive)
 
-#def wri(dest):
-#    from firebase_admin import db
+#UPDATING DATABASE FROM SERVER
+test_user_id = 'MYyZHu3C2EAqdD8TzGx'
+firebase.put(location + test_user_id, 'name', 'Gholam')
 
-#    ref = db.reference("/") #Setting ref to db root
+#DELETING DATA FROM DATABASE
+test_del_id = '-MYyZ-oXjvMBI74gsEfw'
+firebase.delete(location, test_del_id)
 
-#    import json
-#    with open(dest, "r") as f:
-#        file_cont = json.load(f)
-#    ref.set(file_cont)
-    #https://www.freecodecamp.org/news/how-to-get-started-with-firebase-using-python/
-    
