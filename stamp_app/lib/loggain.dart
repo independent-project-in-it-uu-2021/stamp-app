@@ -103,42 +103,43 @@ class LogInState extends State<LogIn> {
       body: Container(
         width: double.infinity,
         margin: EdgeInsets.only(top: 40),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                'Välkommen!',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 50,
-                  color: Colors.white,
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'Välkommen!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 50,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 70),
-              ),
-              Text(
-                'Vänligen logga in',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 30,
-                  color: Colors.white,
+                Padding(
+                  padding: EdgeInsets.only(top: 70),
                 ),
-              ),
-              SizedBox(
-                height: 50,
-              ),
-              _buildEmail(),
-              Padding(
-                padding: EdgeInsets.only(top: 30),
-              ),
-              _buildPassword(),
-              Padding(
-                padding: EdgeInsets.only(top: 40),
-              ),
-              Container(
+                Text(
+                  'Vänligen logga in',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(
+                  height: 50,
+                ),
+                _buildEmail(),
+                Padding(
+                  padding: EdgeInsets.only(top: 30),
+                ),
+                _buildPassword(),
+                Padding(
+                  padding: EdgeInsets.only(top: 40),
+                ),
+                Container(
                   width: MediaQuery.of(context).size.width * 0.5,
                   height: MediaQuery.of(context).size.height * 0.06,
                   child: RaisedButton(
@@ -161,21 +162,22 @@ class LogInState extends State<LogIn> {
                     },
                   ),
                 ),
-              Padding(
-                padding: EdgeInsets.only(top: 50),
-                child: TextButton(
-                  child: Text(
-                    'Registrera Konto',
-                    style: TextStyle(
-                      fontSize: 20,
-                      decoration: TextDecoration.underline,
-                      color: Colors.black,
+                Padding(
+                  padding: EdgeInsets.only(top: 50),
+                  child: TextButton(
+                    child: Text(
+                      'Registrera Konto',
+                      style: TextStyle(
+                        fontSize: 20,
+                        decoration: TextDecoration.underline,
+                        color: Colors.black,
+                      ),
                     ),
+                    onPressed: null,
                   ),
-                  onPressed: null,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
