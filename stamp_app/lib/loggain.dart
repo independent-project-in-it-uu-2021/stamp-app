@@ -27,6 +27,9 @@ class LogInState extends State<LogIn> {
           fillColor: Colors.white,
           hintText: 'E-post',
           counterStyle: TextStyle(color: Colors.white),
+          errorStyle: TextStyle(
+            color: Colors.white,
+          ),
           //The actual value from the input
         ),
         validator: (String value) {
@@ -53,11 +56,17 @@ class LogInState extends State<LogIn> {
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.visiblePassword,
+        obscureText: true,
+        enableSuggestions: false,
+        autocorrect: false,
         //Decorate the input field here
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.white,
           hintText: 'Lösenord',
+          errorStyle: TextStyle(
+            color: Colors.white,
+          ),
           counterStyle: TextStyle(color: Colors.white),
         ),
         //The actual value from the input
@@ -97,7 +106,7 @@ class LogInState extends State<LogIn> {
         child: Form(
           key: _formKey,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Text(
                 'Välkommen!',
