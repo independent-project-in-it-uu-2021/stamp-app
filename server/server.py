@@ -8,7 +8,7 @@ from firebase_admin import db
 import firebase_admin
 from firebase_admin import credentials
 
-cred = credentials.Certificate("/home/daniel/kex/stamp-app/stamp-db6ad-firebase-adminsdk-tu6j1-5f9c6e5cea.json")
+cred = credentials.Certificate("/git home/daniel/kex/stamp-app/stamp-db6ad-firebase-adminsdk-tu6j1-5f9c6e5cea.json")
 #create SDK:
 firebase_admin.initialize_app(cred)
 
@@ -43,4 +43,3 @@ firebase.put(location + test_user_id, 'name', 'Gholam')
 #DELETING DATA FROM DATABASE
 test_del_id = '-MYyZ-oXjvMBI74gsEfw'
 firebase.delete(location, test_del_id)
-
