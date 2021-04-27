@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stamp_app/main.dart';
 
 class Profil extends StatefulWidget {
   @override
@@ -245,16 +246,20 @@ class ProfilState extends State<Profil> {
                 Padding(
                   padding: EdgeInsets.only(top: 50),
                   child: TextButton(
-                    child: Text(
-                      'Redigera profil',
-                      style: TextStyle(
-                        fontSize: 20,
-                        decoration: TextDecoration.underline,
-                        color: Colors.black,
+                      child: Text(
+                        'Redigera profil',
+                        style: TextStyle(
+                          fontSize: 20,
+                          decoration: TextDecoration.underline,
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                    onPressed: null,
-                  ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ProfileEdit()),
+                        );
+                      }),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 60),
