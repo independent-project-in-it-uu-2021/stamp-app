@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stamp_app/screens/createAccount/create-acount.dart';
+import 'package:stamp_app/screens/wrapper.dart';
 //import 'package:stamp_app/screens/wrapper.dart';
 
 void main() {
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       //home: Wrapper(),
       title: 'Registrera konto',
-      home: CreateAccount(),
+      home: Wrapper(),
     );
   }
 }
