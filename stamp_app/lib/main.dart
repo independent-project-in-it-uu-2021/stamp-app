@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:stamp_app/screens/createAccount/create-acount.dart';
 import 'package:stamp_app/screens/wrapper.dart';
-//import 'package:stamp_app/screens/wrapper.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async {
+  // Needed inorder to use firebase authentication. init firebase connection here
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 

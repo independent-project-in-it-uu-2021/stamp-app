@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stamp_app/services/auth.dart';
 
 class LogIn extends StatefulWidget {
   @override
@@ -11,6 +12,9 @@ class LogInState extends State<LogIn> {
   // State parameter
   String _email;
   String _userPassword;
+
+  // Authentication instance used to login
+  final AuthService _auth = AuthService();
 
   // key to hold the state of the form i.e referens to the form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -150,7 +154,7 @@ class LogInState extends State<LogIn> {
                       'Logga in',
                       style: TextStyle(color: Colors.black, fontSize: 28),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       //if the form is not valid
                       if (!_formKey.currentState.validate()) {
                         return;
@@ -158,7 +162,14 @@ class LogInState extends State<LogIn> {
                       //If the form is valid, onSaved method is called
                       //onSave method from above is called
                       _formKey.currentState.save();
-                      print(_email);
+                      // login user returns either user of the error message
+                      dynamic result = await _auth.signInAnon();
+                      if (result == null) {
+                        print('error logining in');
+                      } else {
+                        print('logged in');
+                        print(result.toString());
+                      }
                     },
                   ),
                 ),
