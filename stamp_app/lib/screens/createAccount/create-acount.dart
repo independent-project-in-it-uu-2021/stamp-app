@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:stamp_app/services/auth.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -22,6 +23,9 @@ class CreateAccountState extends State<CreateAccount> {
   bool _writeBio = false;
 
   File _userImage;
+
+  // Authentication instance used to login
+  final AuthService _auth = AuthService();
 
   Future _getImage() async {
     final pickedImage =
@@ -85,9 +89,10 @@ class CreateAccountState extends State<CreateAccount> {
           return null;
         },
         // The  form is saved and we tell what to do with the value
-        onSaved: (String value) {
-          print(value);
-          _fullName = value;
+        onChanged: (String value) {
+          setState(() {
+            _fullName = value;
+          });
         },
       ),
     );
@@ -127,8 +132,10 @@ class CreateAccountState extends State<CreateAccount> {
           return null;
         },
         // The  form is saved and we tell what to do with the value
-        onSaved: (String value) {
-          _email = value;
+        onChanged: (String value) {
+          setState(() {
+            _email = value;
+          });
         },
       ),
     );
@@ -149,8 +156,10 @@ class CreateAccountState extends State<CreateAccount> {
         ),
 
         // The  form is saved and we tell what to do with the value
-        onSaved: (String value) {
-          _mobilnumber = value;
+        onChanged: (String value) {
+          setState(() {
+            _mobilnumber = value;
+          });
         },
       ),
     );
@@ -181,8 +190,10 @@ class CreateAccountState extends State<CreateAccount> {
         },
         //TODO: Password requirements
         // The  form is saved and we tell what to do with the value
-        onSaved: (String value) {
-          _userPassword = value;
+        onChanged: (String value) {
+          setState(() {
+            _userPassword = value;
+          });
         },
       ),
     );
@@ -252,7 +263,9 @@ class CreateAccountState extends State<CreateAccount> {
             showWriteBio();
           } else {
             //showWriteBio();
-            _chosenProgram = newValue;
+            setState(() {
+              _chosenProgram = newValue;
+            });
           }
         },
         decoration: InputDecoration(
@@ -300,11 +313,10 @@ class CreateAccountState extends State<CreateAccount> {
             return null;
           },
           // The  form is saved and we tell what to do with the value
-          onSaved: (String value) {
-            print('Inside _buildbio');
-            print(value);
-            print(_chosenProgram);
-            _chosenProgram = value;
+          onChanged: (String value) {
+            setState(() {
+              _chosenProgram = value;
+            });
           },
         ),
       ),

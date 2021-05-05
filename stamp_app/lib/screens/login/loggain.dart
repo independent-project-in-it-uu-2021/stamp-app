@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stamp_app/services/auth.dart';
+import 'package:stamp_app/screens/createAccount/create-acount.dart';
 
 class LogIn extends StatefulWidget {
   @override
@@ -48,8 +49,10 @@ class LogInState extends State<LogIn> {
           return null;
         },
         //The form is saved and we tell what to do with the value
-        onSaved: (String value) {
-          _email = value;
+        onChanged: (String value) {
+          setState(() {
+            _email = value;
+          });
         },
       ),
     );
@@ -81,8 +84,10 @@ class LogInState extends State<LogIn> {
           return null;
         },
         //The form is saved and we tell what to do with the value
-        onSaved: (String value) {
-          _userPassword = value;
+        onChanged: (String value) {
+          setState(() {
+            _userPassword = value;
+          });
         },
       ),
     );
@@ -97,12 +102,6 @@ class LogInState extends State<LogIn> {
         centerTitle: true,
         backgroundColor: Colors.red.shade900,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_rounded),
-          //TODO: This does nothing now
-          onPressed: () => Navigator.of(context).pop(),
-          tooltip: 'Tillbaka',
-        ),
       ),
       body: Container(
         width: double.infinity,
@@ -167,8 +166,8 @@ class LogInState extends State<LogIn> {
                       if (result == null) {
                         print('error logining in');
                       } else {
-                        print('logged in');
-                        print(result.uid);
+                        print(_email);
+                        print(_userPassword);
                       }
                     },
                   ),
@@ -184,7 +183,9 @@ class LogInState extends State<LogIn> {
                         color: Colors.black,
                       ),
                     ),
-                    onPressed: null,
+                    onPressed: () {
+                      CreateAccount();
+                    },
                   ),
                 ),
               ],

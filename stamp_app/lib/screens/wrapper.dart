@@ -9,7 +9,6 @@ class Wrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     // Current user that we get in the steamprovider
     final currentUser = Provider.of<User>(context);
-    print(currentUser);
     // return either Home or Autenicate widget
     if (currentUser == null) {
       return Authenticate();
