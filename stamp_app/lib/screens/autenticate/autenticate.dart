@@ -8,10 +8,19 @@ class Authenticate extends StatefulWidget {
 }
 
 class _AuthenticateState extends State<Authenticate> {
+  bool showSignIn = false;
+  void toggleView() {
+    setState(() {
+      showSignIn = !showSignIn;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: LogIn(),
-    );
+    if (showSignIn) {
+      return LogIn(toggleFunc: toggleView);
+    } else {
+      return CreateAccount(toggleFunc: toggleView);
+    }
   }
 }

@@ -3,6 +3,9 @@ import 'package:stamp_app/services/auth.dart';
 import 'package:stamp_app/screens/createAccount/create-acount.dart';
 
 class LogIn extends StatefulWidget {
+  final Function toggleFunc;
+  LogIn({this.toggleFunc});
+
   @override
   State<StatefulWidget> createState() {
     return LogInState();
@@ -184,7 +187,7 @@ class LogInState extends State<LogIn> {
                       ),
                     ),
                     onPressed: () {
-                      CreateAccount();
+                      widget.toggleFunc();
                     },
                   ),
                 ),

@@ -6,6 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 class CreateAccount extends StatefulWidget {
+  final Function toggleFunc;
+  CreateAccount({this.toggleFunc});
   @override
   State<StatefulWidget> createState() {
     return CreateAccountState();
@@ -339,7 +341,9 @@ class CreateAccountState extends State<CreateAccount> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_rounded),
           // TODO: Change this (Does nothing right now)
-          onPressed: () => null,
+          onPressed: () {
+            widget.toggleFunc();
+          },
           tooltip: 'Tillbaka',
         ),
       ),
