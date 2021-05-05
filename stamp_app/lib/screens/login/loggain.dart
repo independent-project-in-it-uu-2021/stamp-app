@@ -168,7 +168,7 @@ class LogInState extends State<LogIn> {
                         print('error logining in');
                       } else {
                         print('logged in');
-                        print(result.toString());
+                        print(result);
                       }
                     },
                   ),
