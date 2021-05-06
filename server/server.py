@@ -8,9 +8,9 @@ from firebase_admin import db
 import firebase_admin
 from firebase_admin import credentials
 
-cred = credentials.Certificate("/git home/daniel/kex/stamp-app/stamp-db6ad-firebase-adminsdk-tu6j1-5f9c6e5cea.json")
+#cred = credentials.Certificate("/git home/daniel/kex/stamp-app/stamp-db6ad-firebase-adminsdk-tu6j1-91783aeaf2.json")
 #create SDK:
-firebase_admin.initialize_app(cred)
+#firebase_admin.initialize_app(cred)
 
 
 #Set db url
@@ -28,18 +28,20 @@ data = {"Gholam":{
     'image': 'img_url',
     }   
 }
-result = firebase.post(location, data)
-print(result)    
+#result = firebase.post(location, data)
+#print(result)    
 
 #RETRIVEING ALL DATA FROM SERVER
 
-retrive = firebase.get(location, None)
-print(retrive)
+#retrive = firebase.get(location, None)
+retrive = firebase.get(location, 'user2@student.uu.se')
+print(retrive) 
+
 
 #UPDATING DATABASE FROM SERVER
 test_user_id = 'MYyZHu3C2EAqdD8TzGx'
-firebase.put(location + test_user_id, 'name', 'Gholam')
+#firebase.put(location + test_user_id, 'name', 'Gholam')
 
 #DELETING DATA FROM DATABASE
 test_del_id = '-MYyZ-oXjvMBI74gsEfw'
-firebase.delete(location, test_del_id)
+#firebase.delete(location, test_del_id)
