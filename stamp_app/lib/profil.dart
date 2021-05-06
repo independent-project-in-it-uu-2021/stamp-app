@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stamp_app/main.dart';
+import 'package:stamp_app/redigera-konto.dart';
 
 class Profil extends StatefulWidget {
   @override
