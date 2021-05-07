@@ -30,6 +30,7 @@
             {
               "client_id": "425247730307-e04udjp02t64nhom6uidmegsepreru9j.apps.googleusercontent.com",
               "client_type": 3
+<<<<<<< HEAD
             },
             {
               "client_id": "425247730307-bnnl064gge5s42j2gl3gqu4j5rcip0dv.apps.googleusercontent.com",
@@ -37,6 +38,8 @@
               "ios_info": {
                 "bundle_id": "com.grupp6.stamp-app"
               }
+=======
+>>>>>>> 2049d87df50efa428a8a496c50c25ec5d7dfe563
             }
           ]
         }
