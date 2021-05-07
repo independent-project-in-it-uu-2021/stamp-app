@@ -21,7 +21,7 @@ class CreateAccountState extends State<CreateAccount> {
   String _mobilnumber;
   String _userPassword;
   String _chosenProgram;
-  String _errorMsg;
+  String _errorMsg = '';
   // Boolean value use to hide the write bio option field
   bool _writeBio = false;
 
@@ -447,11 +447,18 @@ class CreateAccountState extends State<CreateAccount> {
                           _email, _userPassword);
                       if (result == null) {
                         setState(() {
-                          _errorMsg = 'Ange giltig mejladress';
+                          _errorMsg = 'Mejladressen används redan';
                         });
                       }
                     }
                   },
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                Text(
+                  _errorMsg,
+                  style: TextStyle(color: Colors.white, fontSize: 16),
                 )
               ],
             ),

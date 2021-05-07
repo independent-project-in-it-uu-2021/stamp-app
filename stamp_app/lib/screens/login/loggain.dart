@@ -16,6 +16,7 @@ class LogInState extends State<LogIn> {
   // State parameter
   String _email;
   String _userPassword;
+  String _erroMsg = '';
 
   // Authentication instance used to login
   final AuthService _auth = AuthService();
@@ -162,18 +163,28 @@ class LogInState extends State<LogIn> {
                         return;
                       }
                       //If the form is valid, onSaved method is called
-                      //onSave method from above is called
-                      _formKey.currentState.save();
-                      // login user returns either user of the error message
-                      dynamic result = await _auth.signInAnon();
-                      if (result == null) {
-                        print('error logining in');
-                      } else {
-                        print(_email);
-                        print(_userPassword);
+                      if (_formKey.currentState.validate()) {
+                        //onSave method from above is called
+                        _formKey.currentState.save();
+
+                        // sign in method from auth.dart file is called here
+                        dynamic result = await _auth.signInWithEmailAndPassword(
+                            _email, _userPassword);
+                        if (result == null) {
+                          setState(() {
+                            _erroMsg = 'E-post eller användarnamn är felaktig';
+                          });
+                        }
                       }
                     },
                   ),
+                ),
+                SizedBox(
+                  height: 14,
+                ),
+                Text(
+                  _erroMsg,
+                  style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 50),
