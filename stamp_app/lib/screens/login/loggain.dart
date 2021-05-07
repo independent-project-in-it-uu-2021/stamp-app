@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stamp_app/services/auth.dart';
-import 'package:stamp_app/screens/createAccount/create-acount.dart';
+
+import 'package:stamp_app/sharedWidget/inputDecoration.dart';
 
 class LogIn extends StatefulWidget {
   final Function toggleFunc;
@@ -31,16 +32,7 @@ class LogInState extends State<LogIn> {
         keyboardType: TextInputType.emailAddress,
         maxLength: 255,
         //Decorate the input field here,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.white,
-          hintText: 'E-post',
-          counterStyle: TextStyle(color: Colors.white),
-          errorStyle: TextStyle(
-            color: Colors.white,
-          ),
-          //The actual value from the input
-        ),
+        decoration: textInputDecoration.copyWith(hintText: 'E-post'),
         validator: (String value) {
           if (value.isEmpty) {
             return 'E-post är obligatoriskt.';
@@ -71,15 +63,7 @@ class LogInState extends State<LogIn> {
         enableSuggestions: false,
         autocorrect: false,
         //Decorate the input field here
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.white,
-          hintText: 'Lösenord',
-          errorStyle: TextStyle(
-            color: Colors.white,
-          ),
-          counterStyle: TextStyle(color: Colors.white),
-        ),
+        decoration: textInputDecoration.copyWith(hintText: 'Lösenord'),
         //The actual value from the input
         validator: (String value) {
           if (value.isEmpty) {

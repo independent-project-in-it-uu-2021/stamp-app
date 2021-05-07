@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:stamp_app/services/auth.dart';
 
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
+import 'package:stamp_app/sharedWidget/inputDecoration.dart';
 
 class CreateAccount extends StatefulWidget {
   final Function toggleFunc;
@@ -24,8 +23,6 @@ class CreateAccountState extends State<CreateAccount> {
   String _errorMsg = '';
   // Boolean value use to hide the write bio option field
   bool _writeBio = false;
-
-  File _userImage;
 
   // Authentication instance used to login
   final AuthService _auth = AuthService();
@@ -109,13 +106,7 @@ class CreateAccountState extends State<CreateAccount> {
         keyboardType: TextInputType.emailAddress,
         //maxLength: 255,
         // Decorate the input field here,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.white,
-          hintText: 'E-post',
-          counterStyle: TextStyle(color: Colors.white),
-          errorStyle: TextStyle(color: Colors.white),
-        ),
+        decoration: textInputDecoration.copyWith(hintText: 'E-post'),
         // The acutal value from the input
         validator: (String value) {
           if (value.isEmpty) {
@@ -177,13 +168,7 @@ class CreateAccountState extends State<CreateAccount> {
         enableSuggestions: false,
         autocorrect: false,
         // Decorate the input field here,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.white,
-          hintText: 'Lösenord',
-          counterStyle: TextStyle(color: Colors.white),
-          errorStyle: TextStyle(color: Colors.white),
-        ),
+        decoration: textInputDecoration.copyWith(hintText: 'Lösenord'),
         // The acutal value from the input
         validator: (String value) {
           if (value.isEmpty) {
@@ -210,14 +195,9 @@ class CreateAccountState extends State<CreateAccount> {
         enableSuggestions: false,
         autocorrect: false,
         keyboardType: TextInputType.visiblePassword,
-        // Decorate the input field here,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.white,
-          hintText: 'Upprepa lösenord',
-          counterStyle: TextStyle(color: Colors.white),
-          errorStyle: TextStyle(color: Colors.white),
-        ),
+        // Decorate the input field here, textInputDecoration is called from inputDecoration.dart
+        // textInputDecoration is used both here and in loggain.dart file. The decoration is the same.
+        decoration: textInputDecoration.copyWith(hintText: 'Upprepa lösenord'),
         // The acutal value from the input
         validator: (String value) {
           if (value.isEmpty) {
