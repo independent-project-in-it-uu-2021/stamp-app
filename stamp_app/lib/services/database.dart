@@ -6,11 +6,11 @@ class DatabaseService{ //Here we will have all the operations for the database
   DatabaseService({ this.uid });//To pass on the uid for future instances of the class
 
   //collection reference
-  final CollectionReference userCollection = Firestore.instance.collection('users');
+  final CollectionReference userCollection = FirebaseFirestore.instance.collection('users');
 
   Future updateUserData(String name, String email, String phone, String password, String passwordConfirmation, String passwordNew, String role, String program, String imageURL) async{//Asynchronus func (future).
   
-    return await userCollection.document(uid).setData({
+    return await userCollection.doc(uid).set({
 
       'name': name,
       'email': email,
