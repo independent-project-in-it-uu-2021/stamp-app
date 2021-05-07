@@ -8,7 +8,8 @@ class Authenticate extends StatefulWidget {
 }
 
 class _AuthenticateState extends State<Authenticate> {
-  bool showSignIn = false;
+  bool showSignIn = true;
+  //Function used to toggle between create acound and login screen
   void toggleView() {
     setState(() {
       showSignIn = !showSignIn;

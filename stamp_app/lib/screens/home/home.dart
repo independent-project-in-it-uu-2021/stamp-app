@@ -12,7 +12,7 @@ class Home extends StatelessWidget {
         actions: <Widget>[
           FlatButton.icon(
             onPressed: () async {
-              await _firebaseAuth.SignOutUser();
+              await _firebaseAuth.signOutUser();
             },
             icon: Icon(Icons.person),
             label: Text('Logga ut'),

@@ -21,6 +21,7 @@ class CreateAccountState extends State<CreateAccount> {
   String _mobilnumber;
   String _userPassword;
   String _chosenProgram;
+  String _errorMsg;
   // Boolean value use to hide the write bio option field
   bool _writeBio = false;
 
@@ -29,17 +30,17 @@ class CreateAccountState extends State<CreateAccount> {
   // Authentication instance used to login
   final AuthService _auth = AuthService();
 
-  Future _getImage() async {
+  /*Future _getImage() async {
     final pickedImage =
         await ImagePicker().getImage(source: ImageSource.gallery);
     setState(() {
       _userImage = File(pickedImage.path);
       print('_UserImage: $_userImage');
     });
-  }
+  }*/
 
   // Method that is used to change the margin when an image is choosen
-  double _changeMarginImage() {
+  /*double _changeMarginImage() {
     double curMargin;
     setState(() {
       /*
@@ -58,15 +59,16 @@ class CreateAccountState extends State<CreateAccount> {
     setState(() {
       _writeBio = !_writeBio;
     });
-  }
+  }*/
 
   //final programList<String> = ['Elektroteknik', 'Energisystem', 'Industriell ekonomi'];
 
   // key to hold the state of the form i.e referens to the form
+  // this is a global form key
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   // Function for the name
-  Widget _buildName() {
+  /*Widget _buildName() {
     return Container(
       width: 350,
       child: TextFormField(
@@ -98,9 +100,8 @@ class CreateAccountState extends State<CreateAccount> {
         },
       ),
     );
-  }
+  }*/
 
-  //TODO: Check if a email is already used
   Widget _buildEmail() {
     return Container(
       width: 350,
@@ -143,7 +144,7 @@ class CreateAccountState extends State<CreateAccount> {
     );
   }
 
-  Widget _buildNumber() {
+  /*Widget _buildNumber() {
     return Container(
       width: 350,
       child: TextFormField(
@@ -165,7 +166,7 @@ class CreateAccountState extends State<CreateAccount> {
         },
       ),
     );
-  }
+  }*/
 
   Widget _buildPassword() {
     return Container(
@@ -235,7 +236,7 @@ class CreateAccountState extends State<CreateAccount> {
   }
 
   // Choose program from dropdown
-  Widget _program() {
+  /*Widget _program() {
     return Container(
       width: 350,
       height: 60,
@@ -283,10 +284,10 @@ class CreateAccountState extends State<CreateAccount> {
             errorText: 'Vänligen välj en program'),
       ),
     );
-  }
+  }*/
 
   //Write bio if "Övrigt" is choosen in the dropdown meny
-  Widget _buildBio() {
+  /*Widget _buildBio() {
     return Container(
       width: 350,
       child: Visibility(
@@ -323,7 +324,7 @@ class CreateAccountState extends State<CreateAccount> {
         ),
       ),
     );
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -340,7 +341,6 @@ class CreateAccountState extends State<CreateAccount> {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_rounded),
-          // TODO: Change this (Does nothing right now)
           onPressed: () {
             widget.toggleFunc();
           },
@@ -367,18 +367,18 @@ class CreateAccountState extends State<CreateAccount> {
                 SizedBox(
                   height: 20,
                 ),
-                _buildName(),
+                /*_buildName(),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
-                ),
+                ),*/
                 _buildEmail(),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
-                _buildNumber(),
+                /*_buildNumber(),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
-                ),
+                ),*/
                 _buildPassword(),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
@@ -387,7 +387,7 @@ class CreateAccountState extends State<CreateAccount> {
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
-                _program(),
+                /*_program(),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
@@ -395,8 +395,8 @@ class CreateAccountState extends State<CreateAccount> {
                 // adding space
                 SizedBox(
                   height: 12,
-                ),
-                ElevatedButton(
+                ),*/
+                /*ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: Colors.white,
                     alignment: Alignment.center,
@@ -417,7 +417,7 @@ class CreateAccountState extends State<CreateAccount> {
                         : Image.file(_userImage),
                   ),
                   onPressed: _getImage,
-                ),
+                ),*/
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
@@ -434,24 +434,23 @@ class CreateAccountState extends State<CreateAccount> {
                       fontSize: 21,
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     // If the form is not valid
                     if (!_formKey.currentState.validate()) {
-                      return;
+                      print('Error: Form is not valid');
                     }
 
                     // If the form is valid, onSaved method is called
                     // onsave method from above is called
                     if (_formKey.currentState.validate()) {
-                      _formKey.currentState.save();
-                      print(_fullName);
+                      dynamic result = await _auth.registerWithEmailAndPassword(
+                          _email, _userPassword);
+                      if (result == null) {
+                        setState(() {
+                          _errorMsg = 'Ange giltig mejladress';
+                        });
+                      }
                     }
-
-                    //print(_fullName);
-                    //print(_email);
-                    //print(_mobilnumber);
-                    //print(_userPassword);
-                    //print(_chosenProgram);
                   },
                 )
               ],
