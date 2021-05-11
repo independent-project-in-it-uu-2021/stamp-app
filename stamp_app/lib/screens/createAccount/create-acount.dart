@@ -206,8 +206,7 @@ class CreateAccountState extends State<CreateAccount> {
           if (value != _userPassword) {
             print('Value inside checkpassword');
             print(value);
-            // TODO: Change the text below
-            return 'Lösenord är inte samma';
+            return 'Vänligen ange samma lösenord';
           }
           return null;
         },
