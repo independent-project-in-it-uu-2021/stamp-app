@@ -156,7 +156,7 @@ class LogInState extends State<LogIn> {
                             _email, _userPassword);
                         if (result == null) {
                           setState(() {
-                            _erroMsg = 'E-post eller användarnamn är felaktig';
+                            _erroMsg = 'E-post eller lösenord är felaktig';
                           });
                         }
                       }

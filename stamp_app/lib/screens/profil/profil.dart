@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stamp_app/main.dart';
-import 'package:stamp_app/redigera-konto.dart';
+import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
 
 class Profil extends StatefulWidget {
   @override
@@ -258,7 +257,8 @@ class ProfilState extends State<Profil> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => ProfileEdit()),
+                          MaterialPageRoute(
+                              builder: (context) => ProfileEdit()),
                         );
                       }),
                 ),
