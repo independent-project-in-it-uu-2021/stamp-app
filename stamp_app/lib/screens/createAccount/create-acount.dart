@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:stamp_app/services/auth.dart';
-
 import 'package:stamp_app/sharedWidget/inputDecoration.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:io';
+import 'package:path/path.dart' as Path;
 
 class CreateAccount extends StatefulWidget {
   final Function toggleFunc;
@@ -23,21 +26,63 @@ class CreateAccountState extends State<CreateAccount> {
   String _errorMsg = '';
   // Boolean value use to hide the write bio option field
   bool _writeBio = false;
+  File _userImage;
+  String _uploadedFileURL;
 
   // Authentication instance used to login
   final AuthService _auth = AuthService();
 
-  /*Future _getImage() async {
+  Future _getImage() async {
     final pickedImage =
         await ImagePicker().getImage(source: ImageSource.gallery);
     setState(() {
       _userImage = File(pickedImage.path);
       print('_UserImage: $_userImage');
     });
-  }*/
+  }
+
+  Future uploadFile() async {
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference ref = storage.ref().child("getImage");
+    UploadTask uploadTask = ref.putFile(_userImage);
+    /*
+      uploadTask.then((res) {
+      res.ref.getDownloadURL();
+      
+    });
+    */
+    String url;
+    uploadTask.whenComplete(() {
+      url = ref.getDownloadURL().toString();
+    }).catchError((onError) {
+      print(onError);
+    });
+    return url;
+  }
+/*
+  Widget enableUpload(){
+      return Container(
+        child: Column(
+          children: <Widget>[
+            //Image.file(sampleImage, height: 300.0, width: 300.0)
+            RaisedButton(
+              elevation: 7.0,
+              child: Text('Upload'),
+              textColor: Colors.white,
+              color: Colors.blue,
+              onPressed: (){
+                final firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child('myimage.jpg');
+                final firebase_storage.UploadTask task = firebaseStorageRef.putFile(_userImage); 
+              },
+            )
+          ]          
+        )
+      )
+  }
+  */
 
   // Method that is used to change the margin when an image is choosen
-  /*double _changeMarginImage() {
+  double _changeMarginImage() {
     double curMargin;
     setState(() {
       /*
@@ -56,7 +101,7 @@ class CreateAccountState extends State<CreateAccount> {
     setState(() {
       _writeBio = !_writeBio;
     });
-  }*/
+  }
 
   //final programList<String> = ['Elektroteknik', 'Energisystem', 'Industriell ekonomi'];
 
@@ -371,11 +416,12 @@ class CreateAccountState extends State<CreateAccount> {
                   padding: EdgeInsets.only(top: 12),
                 ),
                 _buildBio(),
+                */
                 // adding space
                 SizedBox(
                   height: 12,
-                ),*/
-                /*ElevatedButton(
+                ),
+                ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: Colors.white,
                     alignment: Alignment.center,
@@ -393,10 +439,11 @@ class CreateAccountState extends State<CreateAccount> {
                               color: Colors.black,
                             ),
                           )
-                        : Image.file(_userImage),
+                        : uploadFile(),
+                    //: Image.file(_userImage),
                   ),
                   onPressed: _getImage,
-                ),*/
+                ),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
