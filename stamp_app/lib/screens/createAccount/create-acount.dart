@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:stamp_app/services/auth.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 import 'package:stamp_app/sharedWidget/inputDecoration.dart';
 
@@ -21,32 +23,34 @@ class CreateAccountState extends State<CreateAccount> {
   String _userPassword;
   String _chosenProgram;
   String _errorMsg = '';
+  String _defaultProfilePic =
+      'gs://stamp-db6ad.appspot.com/userProfilePicture/defaultPicChangeLater.jpg';
+  File _userImage;
   // Boolean value use to hide the write bio option field
   bool _writeBio = false;
 
   // Authentication instance used to login
   final AuthService _auth = AuthService();
 
-  /*Future _getImage() async {
+  Future _getImage() async {
     final pickedImage =
         await ImagePicker().getImage(source: ImageSource.gallery);
     setState(() {
       _userImage = File(pickedImage.path);
       print('_UserImage: $_userImage');
     });
-  }*/
+  }
 
   // Method that is used to change the margin when an image is choosen
-  /*double _changeMarginImage() {
+  double _changeMarginImage() {
     double curMargin;
     setState(() {
-      /*
-      same as if(_userImage == null){
+      if (_userImage == null) {
         curMargin = 10;
-      } else{
+      } else {
         curMargin = 0;
       }
-      */
+
       curMargin = _userImage == null ? 10 : 0;
     });
     return curMargin;
@@ -56,7 +60,7 @@ class CreateAccountState extends State<CreateAccount> {
     setState(() {
       _writeBio = !_writeBio;
     });
-  }*/
+  }
 
   //final programList<String> = ['Elektroteknik', 'Energisystem', 'Industriell ekonomi'];
 
@@ -65,19 +69,13 @@ class CreateAccountState extends State<CreateAccount> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   // Function for the name
-  /*Widget _buildName() {
+  Widget _buildName() {
     return Container(
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.name,
         // Decorate the input field here,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.white,
-          hintText: 'Förnamn Efternamn',
-          counterStyle: TextStyle(color: Colors.white),
-          errorStyle: TextStyle(color: Colors.white),
-        ),
+        decoration: textInputDecoration.copyWith(hintText: 'Förnamn Efternamn'),
         // The acutal value from the input
         validator: (String value) {
           if (value.isEmpty) {
@@ -97,7 +95,7 @@ class CreateAccountState extends State<CreateAccount> {
         },
       ),
     );
-  }*/
+  }
 
   Widget _buildEmail() {
     return Container(
@@ -135,20 +133,14 @@ class CreateAccountState extends State<CreateAccount> {
     );
   }
 
-  /*Widget _buildNumber() {
+  Widget _buildNumber() {
     return Container(
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.number,
         // Decorate the input field here,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.white,
-          hintText: 'Telefonnummer (Frivilligt)',
-          counterStyle: TextStyle(color: Colors.white),
-          errorStyle: TextStyle(color: Colors.white),
-        ),
-
+        decoration:
+            textInputDecoration.copyWith(hintText: 'Telefonnummer (Frivillig)'),
         // The  form is saved and we tell what to do with the value
         onChanged: (String value) {
           setState(() {
@@ -157,7 +149,7 @@ class CreateAccountState extends State<CreateAccount> {
         },
       ),
     );
-  }*/
+  }
 
   Widget _buildPassword() {
     return Container(
@@ -215,17 +207,17 @@ class CreateAccountState extends State<CreateAccount> {
   }
 
   // Choose program from dropdown
-  /*Widget _program() {
+  Widget _program() {
     return Container(
       width: 350,
       height: 60,
       child: DropdownButtonFormField(
         //TODO: Change the position of the list to above
         items: <String>[
-          'One',
-          'Two',
-          'Three',
-          'Övrigt',
+          'IT',
+          'STS',
+          'F',
+          'W',
         ].map<DropdownMenuItem<String>>((String value) {
           return new DropdownMenuItem(
             value: value,
@@ -263,10 +255,10 @@ class CreateAccountState extends State<CreateAccount> {
             errorText: 'Vänligen välj en program'),
       ),
     );
-  }*/
+  }
 
   //Write bio if "Övrigt" is choosen in the dropdown meny
-  /*Widget _buildBio() {
+  Widget _buildBio() {
     return Container(
       width: 350,
       child: Visibility(
@@ -303,7 +295,7 @@ class CreateAccountState extends State<CreateAccount> {
         ),
       ),
     );
-  }*/
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -346,18 +338,18 @@ class CreateAccountState extends State<CreateAccount> {
                 SizedBox(
                   height: 20,
                 ),
-                /*_buildName(),
+                _buildName(),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
-                ),*/
+                ),
                 _buildEmail(),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
-                /*_buildNumber(),
+                _buildNumber(),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
-                ),*/
+                ),
                 _buildPassword(),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
@@ -366,7 +358,7 @@ class CreateAccountState extends State<CreateAccount> {
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
-                /*_program(),
+                _program(),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
@@ -374,8 +366,8 @@ class CreateAccountState extends State<CreateAccount> {
                 // adding space
                 SizedBox(
                   height: 12,
-                ),*/
-                /*ElevatedButton(
+                ),
+                ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: Colors.white,
                     alignment: Alignment.center,
@@ -396,7 +388,7 @@ class CreateAccountState extends State<CreateAccount> {
                         : Image.file(_userImage),
                   ),
                   onPressed: _getImage,
-                ),*/
+                ),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
@@ -423,7 +415,12 @@ class CreateAccountState extends State<CreateAccount> {
                     // onsave method from above is called
                     if (_formKey.currentState.validate()) {
                       dynamic result = await _auth.registerWithEmailAndPassword(
-                          _email, _userPassword);
+                          _email,
+                          _userPassword,
+                          _fullName,
+                          _mobilnumber,
+                          _chosenProgram,
+                          _defaultProfilePic);
                       if (result == null) {
                         setState(() {
                           _errorMsg = 'Mejladressen används redan';
