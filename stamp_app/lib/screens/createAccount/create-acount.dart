@@ -41,23 +41,31 @@ class CreateAccountState extends State<CreateAccount> {
     });
   }
 
-  Future uploadFile() async {
+  Future __uploadFile() async {
     FirebaseStorage storage = FirebaseStorage.instance;
     Reference ref = storage.ref().child("getImage");
     UploadTask uploadTask = ref.putFile(_userImage);
+
+    TaskSnapshot taskSnapshot = await uploadTask;
+    taskSnapshot.ref.getDownloadURL().then(
+          (value) => print("Done: $value"),
+        );
+
     /*
       uploadTask.then((res) {
       res.ref.getDownloadURL();
       
     });
     */
-    String url;
-    uploadTask.whenComplete(() {
-      url = ref.getDownloadURL().toString();
+/*
+    await uploadTask.whenComplete(() {
+      _uploadedFileURL = ref.getDownloadURL().toString();
     }).catchError((onError) {
       print(onError);
     });
-    return url;
+    print(_uploadedFileURL);
+    return _uploadedFileURL;
+*/
   }
 /*
   Widget enableUpload(){
@@ -439,7 +447,7 @@ class CreateAccountState extends State<CreateAccount> {
                               color: Colors.black,
                             ),
                           )
-                        : uploadFile(),
+                        : __uploadFile(),
                     //: Image.file(_userImage),
                   ),
                   onPressed: _getImage,
