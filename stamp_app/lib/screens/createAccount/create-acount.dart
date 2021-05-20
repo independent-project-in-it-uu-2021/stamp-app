@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
 import 'package:path/path.dart' as Path;
+import 'package:file_picker/file_picker.dart';
 
 class CreateAccount extends StatefulWidget {
   final Function toggleFunc;
@@ -41,6 +42,24 @@ class CreateAccountState extends State<CreateAccount> {
     });
   }
 
+  Future __selectFile() async {
+    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+
+    if (result == null) return;
+    final path = result.files.single.path;
+    //setState(() => file = File(path));
+    setState(() {
+      _uploadedFileURL = File(path).toString();
+    });
+  }
+  /*
+  Future uploadFile() async {
+    if (file ==null) return;
+    final fileName = basename(file!.path);
+    FirebaseApi.uploadFile(destination, file!);
+*/
+
+  /*
   Future __uploadFile() async {
     FirebaseStorage storage = FirebaseStorage.instance;
     Reference ref = storage.ref().child("getImage");
@@ -49,9 +68,9 @@ class CreateAccountState extends State<CreateAccount> {
     TaskSnapshot taskSnapshot = await uploadTask;
     taskSnapshot.ref.getDownloadURL().then(
           (value) => print("Done: $value"),
-        );
+        );*/
 
-    /*
+  /*
       uploadTask.then((res) {
       res.ref.getDownloadURL();
       
@@ -66,7 +85,7 @@ class CreateAccountState extends State<CreateAccount> {
     print(_uploadedFileURL);
     return _uploadedFileURL;
 */
-  }
+
 /*
   Widget enableUpload(){
       return Container(
@@ -447,8 +466,7 @@ class CreateAccountState extends State<CreateAccount> {
                               color: Colors.black,
                             ),
                           )
-                        : __uploadFile(),
-                    //: Image.file(_userImage),
+                        : Image.file(_userImage),
                   ),
                   onPressed: _getImage,
                 ),
@@ -485,6 +503,7 @@ class CreateAccountState extends State<CreateAccount> {
                         });
                       }
                     }
+                    //__uploadImage();
                   },
                 ),
                 SizedBox(
