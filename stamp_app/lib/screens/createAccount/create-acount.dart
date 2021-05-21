@@ -42,6 +42,7 @@ class CreateAccountState extends State<CreateAccount> {
     });
   }
 
+  // Used to upload the image to the database
   Future __uploadFile() async {
     FirebaseStorage storage = FirebaseStorage.instance;
     Reference ref = storage.ref().child(_email);
@@ -55,28 +56,6 @@ class CreateAccountState extends State<CreateAccount> {
     print(_uploadedFileURL);
     return _uploadedFileURL;
   }
-
-/*
-  Widget enableUpload(){
-      return Container(
-        child: Column(
-          children: <Widget>[
-            //Image.file(sampleImage, height: 300.0, width: 300.0)
-            RaisedButton(
-              elevation: 7.0,
-              child: Text('Upload'),
-              textColor: Colors.white,
-              color: Colors.blue,
-              onPressed: (){
-                final firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child('myimage.jpg');
-                final firebase_storage.UploadTask task = firebaseStorageRef.putFile(_userImage); 
-              },
-            )
-          ]          
-        )
-      )
-  }
-  */
 
   // Method that is used to change the margin when an image is choosen
   double _changeMarginImage() {
