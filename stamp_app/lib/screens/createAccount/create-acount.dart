@@ -42,17 +42,6 @@ class CreateAccountState extends State<CreateAccount> {
     });
   }
 
-  Future __selectFile() async {
-    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-
-    if (result == null) return;
-    final path = result.files.single.path;
-    //setState(() => file = File(path));
-    setState(() {
-      _uploadedFileURL = File(path).toString();
-    });
-  }
-
   Future __uploadFile() async {
     FirebaseStorage storage = FirebaseStorage.instance;
     Reference ref = storage.ref().child(_email);
