@@ -55,7 +55,7 @@ class CreateAccountState extends State<CreateAccount> {
 
   Future __uploadFile() async {
     FirebaseStorage storage = FirebaseStorage.instance;
-    Reference ref = storage.ref().child("getImage");
+    Reference ref = storage.ref().child(_email);
     UploadTask uploadTask = ref.putFile(_userImage);
 
     await uploadTask.whenComplete(() {
