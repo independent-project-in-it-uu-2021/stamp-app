@@ -7,18 +7,30 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Hem'),
+        elevation: 5,
         backgroundColor: Colors.red.shade900,
-        actions: <Widget>[
-          FlatButton.icon(
-            onPressed: () async {
-              await _firebaseAuth.signOutUser();
-            },
-            icon: Icon(Icons.person),
-            label: Text('Logga ut'),
-          )
-        ],
+        title: Row(
+          children: <Widget>[
+            FlatButton.icon(
+              onPressed: () async {
+                await _firebaseAuth.signOutUser();
+              },
+              icon: Icon(Icons.person),
+              label: Text('Logga ut'),
+            ),
+            Text('Meny'),
+            FlatButton.icon(
+              padding: EdgeInsets.fromLTRB(150, 0, 0, 0),
+              onPressed: () async {
+                await _firebaseAuth.signOutUser();
+              },
+              icon: Icon(Icons.chat_bubble_rounded),
+              label: Text(''),
+            ),
+          ],
+        ),
       ),
+      backgroundColor: Colors.red.shade900,
     );
   }
 }
