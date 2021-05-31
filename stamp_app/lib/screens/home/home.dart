@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stamp_app/screens/jobb/jobb.dart';
 import 'package:stamp_app/services/auth.dart';
 
 import 'package:stamp_app/screens/profil/profil.dart';
@@ -61,7 +62,12 @@ class Home extends StatelessWidget {
               height: 100,
               width: 330,
               child: FlatButton(
-                onPressed: () => {},
+                onPressed: () => {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Work()),
+                  )
+                },
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(15.0))),
                 color: Colors.white,
