@@ -44,7 +44,7 @@ class hanteraKontonState extends State<hanteraKonton> {
                   padding: EdgeInsets.only(top: 30),
                 ),
                 Text(
-                  'Konton',
+                  'Hantera Konton',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 40,
@@ -149,9 +149,6 @@ class hanteraKontonState extends State<hanteraKonton> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 30),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 60),
                 ),
                 Text(
                   'Administratörer',
