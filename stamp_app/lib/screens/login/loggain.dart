@@ -148,16 +148,14 @@ class LogInState extends State<LogIn> {
                       }
                       //If the form is valid, onSaved method is called
                       if (_formKey.currentState.validate()) {
-                        //onSave method from above is called
-                        _formKey.currentState.save();
-
                         // sign in method from auth.dart file is called here
                         dynamic result = await _auth.signInWithEmailAndPassword(
                             _email, _userPassword);
                         if (result == null) {
                           setState(() {
-                            _erroMsg = 'E-post eller användarnamn är felaktig';
+                            _erroMsg = 'E-post eller lösenord är felaktig';
                           });
+                          print(_erroMsg);
                         }
                       }
                     },
@@ -182,6 +180,7 @@ class LogInState extends State<LogIn> {
                       ),
                     ),
                     onPressed: () {
+                      print('hej');
                       widget.toggleFunc();
                     },
                   ),
