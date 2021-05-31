@@ -1,47 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:stamp_app/services/auth.dart';
 
+import 'package:stamp_app/screens/profil/profil.dart';
+
 class Home extends StatelessWidget {
   final AuthService _firebaseAuth = AuthService();
   @override
   Widget build(BuildContext context) {
+    // Streamproivder listen to stream and exposes its content to child
     return Scaffold(
       backgroundColor: Colors.red.shade900,
       appBar: AppBar(
         elevation: 5,
         backgroundColor: Colors.red.shade900,
-        title: Row(
-          children: <Widget>[
-            FlatButton.icon(
-              onPressed: () async {
-                await _firebaseAuth.signOutUser();
-              },
-              icon: Icon(Icons.person),
-              label: Text('Logga ut'),
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-            ),
-            Text(
-              'Meny',
-              style: TextStyle(
-                fontSize: 33,
-              ),
-            ),
-            FlatButton.icon(
-              padding: EdgeInsets.fromLTRB(85, 0, 0, 0),
-              onPressed: () async {
-                await _firebaseAuth.signOutUser();
-              },
-              icon: Icon(
-                Icons.chat_bubble_rounded,
-                color: Colors.white,
-                size: 35,
-              ),
-              label: Text(''),
-            ),
-          ],
+        title: Text(
+          'Meny',
+          style: TextStyle(
+            fontSize: 33,
+          ),
         ),
+        centerTitle: true,
+        leadingWidth: 117,
+        leading: TextButton.icon(
+          onPressed: () async {
+            await _firebaseAuth.signOutUser();
+          },
+          icon: Icon(
+            Icons.person,
+            color: Colors.white,
+          ),
+          label: Text(
+            'Logga ut',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ),
+        actions: <Widget>[
+          IconButton(
+            padding: EdgeInsets.only(right: 10),
+            onPressed: null,
+            icon: Icon(
+              Icons.chat_bubble_rounded,
+              color: Colors.white,
+              size: 35,
+            ),
+          ),
+        ],
       ),
       body: Container(
         width: double.infinity,
@@ -87,7 +92,12 @@ class Home extends StatelessWidget {
               height: 100,
               width: 330,
               child: FlatButton(
-                onPressed: () => {},
+                onPressed: () => {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Profil()),
+                  )
+                },
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(15.0))),
                 color: Colors.white,

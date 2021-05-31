@@ -1,37 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:stamp_app/services/auth.dart';
-import 'package:image_picker/image_picker.dart';
+
+//import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-import 'package:stamp_app/sharedWidget/inputDecoration.dart';
-
-class CreateAccount extends StatefulWidget {
-  final Function toggleFunc;
-  CreateAccount({this.toggleFunc});
+class ProfileEdit extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return CreateAccountState();
+    return ProfileEditState();
   }
 }
 
-class CreateAccountState extends State<CreateAccount> {
+class ProfileEditState extends State<ProfileEdit> {
   // State parameter
   String _fullName;
   String _email;
   String _mobilnumber;
   String _userPassword;
   String _chosenProgram;
-  String _errorMsg = '';
-  String _defaultProfilePic =
-      'gs://stamp-db6ad.appspot.com/userProfilePicture/defaultPicChangeLater.jpg';
-  File _userImage;
   // Boolean value use to hide the write bio option field
   bool _writeBio = false;
 
-  // Authentication instance used to login
-  final AuthService _auth = AuthService();
-
+  File _userImage;
+/*
   Future _getImage() async {
     final pickedImage =
         await ImagePicker().getImage(source: ImageSource.gallery);
@@ -40,17 +31,18 @@ class CreateAccountState extends State<CreateAccount> {
       print('_UserImage: $_userImage');
     });
   }
-
+*/
   // Method that is used to change the margin when an image is choosen
   double _changeMarginImage() {
     double curMargin;
     setState(() {
-      if (_userImage == null) {
+      /*
+      same as if(_userImage == null){
         curMargin = 10;
-      } else {
+      } else{
         curMargin = 0;
       }
-
+      */
       curMargin = _userImage == null ? 10 : 0;
     });
     return curMargin;
@@ -65,7 +57,6 @@ class CreateAccountState extends State<CreateAccount> {
   //final programList<String> = ['Elektroteknik', 'Energisystem', 'Industriell ekonomi'];
 
   // key to hold the state of the form i.e referens to the form
-  // this is a global form key
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   // Function for the name
@@ -75,7 +66,13 @@ class CreateAccountState extends State<CreateAccount> {
       child: TextFormField(
         keyboardType: TextInputType.name,
         // Decorate the input field here,
-        decoration: textInputDecoration.copyWith(hintText: 'Förnamn Efternamn'),
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.black12,
+          hintText: 'Förnamn Efternamn',
+          counterStyle: TextStyle(color: Colors.red.shade900),
+          errorStyle: TextStyle(color: Colors.red.shade900),
+        ),
         // The acutal value from the input
         validator: (String value) {
           if (value.isEmpty) {
@@ -88,15 +85,15 @@ class CreateAccountState extends State<CreateAccount> {
           return null;
         },
         // The  form is saved and we tell what to do with the value
-        onChanged: (String value) {
-          setState(() {
-            _fullName = value;
-          });
+        onSaved: (String value) {
+          print(value);
+          _fullName = value;
         },
       ),
     );
   }
 
+  //TODO: Check if a email is already used
   Widget _buildEmail() {
     return Container(
       width: 350,
@@ -104,7 +101,13 @@ class CreateAccountState extends State<CreateAccount> {
         keyboardType: TextInputType.emailAddress,
         //maxLength: 255,
         // Decorate the input field here,
-        decoration: textInputDecoration.copyWith(hintText: 'E-post'),
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.black12,
+          hintText: 'E-post',
+          counterStyle: TextStyle(color: Colors.red.shade900),
+          errorStyle: TextStyle(color: Colors.red.shade900),
+        ),
         // The acutal value from the input
         validator: (String value) {
           if (value.isEmpty) {
@@ -124,10 +127,8 @@ class CreateAccountState extends State<CreateAccount> {
           return null;
         },
         // The  form is saved and we tell what to do with the value
-        onChanged: (String value) {
-          setState(() {
-            _email = value;
-          });
+        onSaved: (String value) {
+          _email = value;
         },
       ),
     );
@@ -139,13 +140,17 @@ class CreateAccountState extends State<CreateAccount> {
       child: TextFormField(
         keyboardType: TextInputType.number,
         // Decorate the input field here,
-        decoration:
-            textInputDecoration.copyWith(hintText: 'Telefonnummer (Frivillig)'),
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.black12,
+          hintText: 'Telefonnummer (Frivilligt)',
+          counterStyle: TextStyle(color: Colors.red.shade900),
+          errorStyle: TextStyle(color: Colors.red.shade900),
+        ),
+
         // The  form is saved and we tell what to do with the value
-        onChanged: (String value) {
-          setState(() {
-            _mobilnumber = value;
-          });
+        onSaved: (String value) {
+          _mobilnumber = value;
         },
       ),
     );
@@ -160,7 +165,13 @@ class CreateAccountState extends State<CreateAccount> {
         enableSuggestions: false,
         autocorrect: false,
         // Decorate the input field here,
-        decoration: textInputDecoration.copyWith(hintText: 'Lösenord'),
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.black12,
+          hintText: 'Lösenord',
+          counterStyle: TextStyle(color: Colors.red.shade900),
+          errorStyle: TextStyle(color: Colors.red.shade900),
+        ),
         // The acutal value from the input
         validator: (String value) {
           if (value.isEmpty) {
@@ -170,10 +181,8 @@ class CreateAccountState extends State<CreateAccount> {
         },
         //TODO: Password requirements
         // The  form is saved and we tell what to do with the value
-        onChanged: (String value) {
-          setState(() {
-            _userPassword = value;
-          });
+        onSaved: (String value) {
+          _userPassword = value;
         },
       ),
     );
@@ -187,9 +196,14 @@ class CreateAccountState extends State<CreateAccount> {
         enableSuggestions: false,
         autocorrect: false,
         keyboardType: TextInputType.visiblePassword,
-        // Decorate the input field here, textInputDecoration is called from inputDecoration.dart
-        // textInputDecoration is used both here and in loggain.dart file. The decoration is the same.
-        decoration: textInputDecoration.copyWith(hintText: 'Upprepa lösenord'),
+        // Decorate the input field here,
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.black12,
+          hintText: 'Upprepa lösenord',
+          counterStyle: TextStyle(color: Colors.red.shade900),
+          errorStyle: TextStyle(color: Colors.red.shade900),
+        ),
         // The acutal value from the input
         validator: (String value) {
           if (value.isEmpty) {
@@ -198,7 +212,8 @@ class CreateAccountState extends State<CreateAccount> {
           if (value != _userPassword) {
             print('Value inside checkpassword');
             print(value);
-            return 'Vänligen ange samma lösenord';
+            // TODO: Change the text below
+            return 'Lösenord är inte samma';
           }
           return null;
         },
@@ -214,10 +229,10 @@ class CreateAccountState extends State<CreateAccount> {
       child: DropdownButtonFormField(
         //TODO: Change the position of the list to above
         items: <String>[
-          'IT',
-          'STS',
-          'F',
-          'W',
+          'One',
+          'Two',
+          'Three',
+          'Övrigt',
         ].map<DropdownMenuItem<String>>((String value) {
           return new DropdownMenuItem(
             value: value,
@@ -237,9 +252,7 @@ class CreateAccountState extends State<CreateAccount> {
             showWriteBio();
           } else {
             //showWriteBio();
-            setState(() {
-              _chosenProgram = newValue;
-            });
+            _chosenProgram = newValue;
           }
         },
         decoration: InputDecoration(
@@ -247,9 +260,9 @@ class CreateAccountState extends State<CreateAccount> {
                 borderRadius:
                     const BorderRadius.all(const Radius.circular(30.0))),
             contentPadding: EdgeInsets.only(left: 15, top: 15),
-            errorStyle: TextStyle(color: Colors.white, fontSize: 13),
+            errorStyle: TextStyle(color: Colors.black, fontSize: 13),
             filled: true,
-            fillColor: Colors.white,
+            fillColor: Colors.black12,
             hintText: 'Does this work',
             //TODO: Change the text below
             errorText: 'Vänligen välj en program'),
@@ -272,8 +285,8 @@ class CreateAccountState extends State<CreateAccount> {
 
             //TODO: Change the text below
             hintText: 'Din roll?',
-            counterStyle: TextStyle(color: Colors.white),
-            errorStyle: TextStyle(color: Colors.white),
+            counterStyle: TextStyle(color: Colors.red.shade900),
+            errorStyle: TextStyle(color: Colors.red.shade900),
           ),
           // The acutal value from the input
           validator: (String value) {
@@ -287,10 +300,11 @@ class CreateAccountState extends State<CreateAccount> {
             return null;
           },
           // The  form is saved and we tell what to do with the value
-          onChanged: (String value) {
-            setState(() {
-              _chosenProgram = value;
-            });
+          onSaved: (String value) {
+            print('Inside _buildbio');
+            print(value);
+            print(_chosenProgram);
+            _chosenProgram = value;
           },
         ),
       ),
@@ -300,7 +314,7 @@ class CreateAccountState extends State<CreateAccount> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.red.shade900,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
@@ -312,8 +326,9 @@ class CreateAccountState extends State<CreateAccount> {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_rounded),
+          // TODO: Change this (Does nothing right now)
           onPressed: () {
-            widget.toggleFunc();
+            Navigator.pop(context);
           },
           tooltip: 'Tillbaka',
         ),
@@ -328,11 +343,11 @@ class CreateAccountState extends State<CreateAccount> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'Registrera Konto',
+                  'Redigera profil',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 40,
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
                 ),
                 SizedBox(
@@ -367,12 +382,16 @@ class CreateAccountState extends State<CreateAccount> {
                 SizedBox(
                   height: 12,
                 ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
+                OutlineButton(
+                  color: Colors.white,
+                  borderSide: BorderSide(
+                    color: Colors.black,
+                  ),
+                  /*style: ElevatedButton.styleFrom(
                     primary: Colors.white,
                     alignment: Alignment.center,
                     //padding: EdgeInsets.only(top: 10),
-                  ),
+                  ),*/
                   child: Container(
                     height: 60,
                     width: 100,
@@ -383,11 +402,12 @@ class CreateAccountState extends State<CreateAccount> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.black,
+                              
                             ),
                           )
                         : Image.file(_userImage),
                   ),
-                  onPressed: _getImage,
+                  onPressed: () => null,
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
@@ -405,36 +425,26 @@ class CreateAccountState extends State<CreateAccount> {
                       fontSize: 21,
                     ),
                   ),
-                  onPressed: () async {
+                  onPressed: () {
                     // If the form is not valid
+
                     if (!_formKey.currentState.validate()) {
-                      print('Error: Form is not valid');
+                      return;
                     }
 
                     // If the form is valid, onSaved method is called
                     // onsave method from above is called
                     if (_formKey.currentState.validate()) {
-                      dynamic result = await _auth.registerWithEmailAndPassword(
-                          _email,
-                          _userPassword,
-                          _fullName,
-                          _mobilnumber,
-                          _chosenProgram,
-                          _defaultProfilePic);
-                      if (result == null) {
-                        setState(() {
-                          _errorMsg = 'Mejladressen används redan';
-                        });
-                      }
+                      _formKey.currentState.save();
+                      print(_fullName);
                     }
+
+                    //print(_fullName);
+                    //print(_email);
+                    //print(_mobilnumber);
+                    //print(_userPassword);
+                    //print(_chosenProgram);
                   },
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                Text(
-                  _errorMsg,
-                  style: TextStyle(color: Colors.white, fontSize: 16),
                 )
               ],
             ),
