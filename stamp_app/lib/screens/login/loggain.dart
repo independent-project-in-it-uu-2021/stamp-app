@@ -182,6 +182,7 @@ class LogInState extends State<LogIn> {
                       ),
                     ),
                     onPressed: () {
+                      print('hej');
                       widget.toggleFunc();
                     },
                   ),

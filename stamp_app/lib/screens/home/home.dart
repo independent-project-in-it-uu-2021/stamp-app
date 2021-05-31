@@ -43,9 +43,10 @@ class Home extends StatelessWidget {
           ],
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
+      body: Container(
+        width: double.infinity,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Padding(
               padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
