@@ -142,20 +142,15 @@ class LogInState extends State<LogIn> {
                       style: TextStyle(color: Colors.black, fontSize: 28),
                     ),
                     onPressed: () async {
-                      print('heh');
                       //if the form is not valid
                       if (!_formKey.currentState.validate()) {
                         return;
                       }
                       //If the form is valid, onSaved method is called
                       if (_formKey.currentState.validate()) {
-                        //onSave method from above is called
-                        _formKey.currentState.save();
-
                         // sign in method from auth.dart file is called here
                         dynamic result = await _auth.signInWithEmailAndPassword(
                             _email, _userPassword);
-                        print(result);
                         if (result == null) {
                           setState(() {
                             _erroMsg = 'E-post eller lösenord är felaktig';
@@ -185,6 +180,7 @@ class LogInState extends State<LogIn> {
                       ),
                     ),
                     onPressed: () {
+                      print('hej');
                       widget.toggleFunc();
                     },
                   ),

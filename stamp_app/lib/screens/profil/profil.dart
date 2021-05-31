@@ -23,7 +23,7 @@ class ProfilState extends State<Profil> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Image.asset('assets/images/uuLogaNew.png', fit: BoxFit.cover),
-        centerTitle: true,
+        //centerTitle: true,
         backgroundColor: Colors.red.shade900,
         elevation: 0,
         leading: IconButton(
