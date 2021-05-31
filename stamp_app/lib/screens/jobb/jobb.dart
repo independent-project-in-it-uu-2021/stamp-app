@@ -12,16 +12,15 @@ class Work extends StatelessWidget {
         title: Text('Jobb'),
         backgroundColor: Colors.red.shade900,
         actions: <Widget>[
-          FlatButton.icon(
-            onPressed: () => {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Home()),
-              )
-            },
-            icon: Icon(Icons.person),
-            label: Text('Tillbaka'),
-          )
+          IconButton(
+            padding: EdgeInsets.only(right: 10),
+            onPressed: null,
+            icon: Icon(
+              Icons.chat_bubble_rounded,
+              color: Colors.white,
+              size: 35,
+            ),
+          ),
         ],
       ),
       body: Container(
