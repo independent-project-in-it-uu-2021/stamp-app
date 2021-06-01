@@ -1,14 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
 
-class Profil extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return ProfilState();
-  }
-}
-
-class ProfilState extends State<Profil> {
+class OthersProfile extends StatelessWidget {
   // State parameter
   String _email;
   String _userPassword;
@@ -54,28 +46,6 @@ class ProfilState extends State<Profil> {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(top: 30),
-                ),
-                Text(
-                  'Din profil',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 40,
-                    color: Colors.black,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 15),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 15),
                 ),
                 Text(
                   'Förnamn Efternamn',
@@ -256,22 +226,6 @@ class ProfilState extends State<Profil> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 50),
-                  child: TextButton(
-                      child: Text(
-                        'Redigera profil',
-                        style: TextStyle(
-                          fontSize: 20,
-                          decoration: TextDecoration.underline,
-                          color: Colors.black,
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProfileEdit()),
-                        );
-                      }),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 60),
