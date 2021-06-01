@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:stamp_app/screens/konton/raderaKonto.dart';
 import 'package:stamp_app/screens/konton/makeAdmin.dart';
-import 'package:stamp_app/screens/konton/makeStudent.dart';
 import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
 
-class editStudent extends StatefulWidget {
+class EditStudent extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return editStudentState();
+    return EditStudentState();
   }
 }
 
-class editStudentState extends State<editStudent> {
+class EditStudentState extends State<EditStudent> {
   // State parameter
   String _email;
   String _userPassword;

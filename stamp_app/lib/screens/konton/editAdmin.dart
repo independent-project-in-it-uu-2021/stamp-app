@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:stamp_app/screens/konton/raderaKonto.dart';
-import 'package:stamp_app/screens/konton/makeAdmin.dart';
 import 'package:stamp_app/screens/konton/makeStudent.dart';
 import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
 
-class editStudent extends StatefulWidget {
+class EditAdmin extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return editStudentState();
+    return EditAdminState();
   }
 }
 
-class editStudentState extends State<editStudent> {
+class EditAdminState extends State<EditAdmin> {
   // State parameter
   String _email;
   String _userPassword;
@@ -105,7 +104,7 @@ class editStudentState extends State<editStudent> {
                     onPressed: () => {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => makeAdmin()),
+                        MaterialPageRoute(builder: (context) => makeStudent()),
                       )
                     },
                     shape: RoundedRectangleBorder(
@@ -117,7 +116,7 @@ class editStudentState extends State<editStudent> {
                         Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
                         Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
                         Text(
-                          "Gör till administratör",
+                          "Gör till Student",
                           style: TextStyle(
                             fontSize: 20,
                             backgroundColor: Colors.red,
@@ -252,7 +251,7 @@ class editStudentState extends State<editStudent> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => redigeraKonto()),
+                              builder: (context) => ProfileEdit()),
                         );
                       }),
                 ),
