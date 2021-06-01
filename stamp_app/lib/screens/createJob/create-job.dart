@@ -279,6 +279,17 @@ class CreateJobState extends State<CreateJob> {
           },
           tooltip: 'Tillbaka',
         ),
+        actions: <Widget>[
+          IconButton(
+            padding: EdgeInsets.only(right: 10),
+            onPressed: null,
+            icon: Icon(
+              Icons.chat_bubble_rounded,
+              color: Colors.white,
+              size: 35,
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Container(
