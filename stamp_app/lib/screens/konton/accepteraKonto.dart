@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stamp_app/screens/konton/makeAccept.dart';
 import 'package:stamp_app/screens/konton/raderaKonto.dart';
 import 'package:stamp_app/screens/konton/makeAdmin.dart';
 import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
@@ -98,28 +99,27 @@ class AccepteraKontoState extends State<AccepteraKonto> {
                   ),
                 ),
                 Container(
-                  height: 100,
-                  width: 330,
+                  height: 50,
+                  width: 300,
                   child: FlatButton(
                     onPressed: () => {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => makeAdmin()),
-                      )
+                        MaterialPageRoute(builder: (context) => MakeAccept()),
+                      ),
                     },
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                    color: Colors.white,
+                    color: Colors.red,
                     child: Row(
                       // Replace with a Row for horizontal icon + text
                       children: <Widget>[
-                        Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
-                        Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
+                        Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
+                        Padding(padding: EdgeInsets.fromLTRB(45, 0, 0, 0)),
                         Text(
                           "Acceptera användaren",
                           style: TextStyle(
                             fontSize: 20,
-                            backgroundColor: Colors.red,
                           ),
                         ),
                       ],
