@@ -101,11 +101,8 @@ class StudentChoice extends StatelessWidget {
                   fontSize: 21,
                 ),
               ),
-              onPressed: () => {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => StudentWork()),
-                ),
+              onPressed: () {
+                Navigator.pop(context);
               },
             ),
             Padding(padding: EdgeInsets.only(bottom: 100))
