@@ -149,7 +149,7 @@ class LogInState extends State<LogIn> {
                       }*/
                       //If the form is valid, onSaved method is called
                       if (_formKey.currentState.validate()) {
-                        //_formKey.currentState.save();
+                        _formKey.currentState.save();
                         // sign in method from auth.dart file is called here
                         dynamic result = await _auth.signInWithEmailAndPassword(
                             _email, _userPassword);
@@ -183,7 +183,6 @@ class LogInState extends State<LogIn> {
                       ),
                     ),
                     onPressed: () {
-                      print('hej');
                       widget.toggleFunc();
                     },
                   ),
