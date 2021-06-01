@@ -35,7 +35,7 @@ class Work extends StatelessWidget {
                   padding: EdgeInsets.only(top: 10),
                 ),
                 Text(
-                  'Kommande Jobb',
+                  'Kommande jobb',
                   style: TextStyle(
                     fontSize: 30,
                     color: Colors.black,

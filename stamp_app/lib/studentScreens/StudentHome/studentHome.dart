@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:stamp_app/services/auth.dart';
-import 'package:stamp_app/screens/profil/profil.dart';
-import 'package:stamp_app/screens/konton/hanteraKonton.dart';
+
 import 'package:stamp_app/screens/jobb/jobb.dart';
 import 'package:stamp_app/screens/profil/profil.dart';
 import 'package:stamp_app/screens/historik/historik.dart';
-import 'package:stamp_app/studentScreens/StudentHome/studentHome.dart';
+import 'package:stamp_app/studentScreens/studentJobs/studentjobs.dart';
+import 'package:stamp_app/studentScreens/StudentHistory/studentHistory.dart';
+import 'package:stamp_app/studentScreens/studentProfile/studentprofile.dart';
 
-class Home extends StatelessWidget {
+class StudentHome extends StatelessWidget {
   final AuthService _firebaseAuth = AuthService();
   @override
   Widget build(BuildContext context) {
@@ -60,7 +61,6 @@ class Home extends StatelessWidget {
             Padding(
               padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
             ),
-            
             //Button to go to Job page
             Container(
               height: 100,
@@ -69,7 +69,7 @@ class Home extends StatelessWidget {
                 onPressed: () => {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Work()),
+                    MaterialPageRoute(builder: (context) => StudentJobs()),
                   ),
                 },
                 shape: RoundedRectangleBorder(
@@ -105,7 +105,7 @@ class Home extends StatelessWidget {
                 onPressed: () => {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Profil()),
+                    MaterialPageRoute(builder: (context) => StudentProfile()),
                   )
                 },
                 shape: RoundedRectangleBorder(
@@ -141,7 +141,7 @@ class Home extends StatelessWidget {
                 onPressed: () => {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => History()),
+                    MaterialPageRoute(builder: (context) => StudentHistory()),
                   )
                 },
                 shape: RoundedRectangleBorder(
@@ -170,51 +170,17 @@ class Home extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
             ),
             //Button for Accounts
-            Container(
-              height: 100,
-              width: 330,
-              child: FlatButton(
-                onPressed: () => {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => hanteraKonton()),
-                  )
-                },
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                color: Colors.white,
-                child: Row(
-                  // Replace with a Row for horizontal icon + text
-                  children: <Widget>[
-                    Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
-                    Icon(
-                      Icons.person_add,
-                      size: 60,
-                    ),
-                    Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
-                    Text(
-                      "Hantera konton",
-                      style: TextStyle(
-                        fontSize: 30,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+
             Padding(
-              padding: EdgeInsets.fromLTRB(0, 60, 0, 0),
+              padding: EdgeInsets.fromLTRB(0, 163, 0, 0),
             ),
             //Button for previous jobs
             Container(
               height: 50,
               width: 200,
               child: FlatButton(
-                onPressed: () => {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => StudentHome()),
-                  )
+                onPressed: () {
+                  Navigator.pop(context);
                 },
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(15.0))),
@@ -224,7 +190,7 @@ class Home extends StatelessWidget {
                   children: <Widget>[
                     Padding(padding: EdgeInsets.fromLTRB(25, 0, 0, 0)),
                     Text(
-                      "Gå till student vy",
+                      "Gå till admin vy",
                       style: TextStyle(
                         fontSize: 15,
                       ),

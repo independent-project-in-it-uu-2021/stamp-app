@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
 
-class Profil extends StatefulWidget {
+class StudentProfile extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return ProfilState();
+    return StudentProfileState();
   }
 }
 
-class ProfilState extends State<Profil> {
+class StudentProfileState extends State<StudentProfile> {
   // State parameter
   String _email;
   String _userPassword;
@@ -150,7 +150,7 @@ class ProfilState extends State<Profil> {
                   padding: EdgeInsets.only(top: 12),
                 ),
                 Text(
-                  'STAMP admin',
+                  'IT Ingenjör',
                   style: TextStyle(
                     fontSize: 15,
                     color: Colors.black,
@@ -170,8 +170,92 @@ class ProfilState extends State<Profil> {
                 Padding(
                   padding: EdgeInsets.only(top: 30),
                 ),
+                Text(
+                  'Senaste Jobb',
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.black,
+                  ),
+                ),
                 Padding(
-                  padding: EdgeInsets.only(top: 150),
+                  padding: EdgeInsets.only(top: 30),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.001,
+                    width: MediaQuery.of(context).size.width * 0.83,
+                    color: Colors.black12,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 30),
+                ),
+                Text(
+                  'Jobb 1',
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.black,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 30),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.001,
+                    width: MediaQuery.of(context).size.width * 0.83,
+                    color: Colors.black12,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 30),
+                ),
+                Text(
+                  'Jobb 2',
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.black,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 30),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.001,
+                    width: MediaQuery.of(context).size.width * 0.83,
+                    color: Colors.black12,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 30),
+                ),
+                Text(
+                  'Jobb 3',
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.black,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 30),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.001,
+                    width: MediaQuery.of(context).size.width * 0.83,
+                    color: Colors.black12,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 30),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 50),
                   child: TextButton(
                       child: Text(
                         'Redigera profil',
