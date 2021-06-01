@@ -25,4 +25,9 @@ class DatabaseService {
       },
     );
   }
+
+  // Get user information stream
+  Stream<DocumentSnapshot> get userData {
+    return userCollection.doc(userId).snapshots();
+  }
 }
