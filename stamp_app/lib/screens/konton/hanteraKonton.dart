@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stamp_app/screens/konton/aktiveraKonto.dart';
 
 class hanteraKonton extends StatefulWidget {
   @override
@@ -87,11 +88,80 @@ class hanteraKontonState extends State<hanteraKonton> {
                 Padding(
                   padding: EdgeInsets.only(top: 30),
                 ),
-                Text(
-                  'Kalle Hansson',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
+                //---------------
+                FlatButton(
+                  onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => aktiveraKonto()),
+                    )
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                  color: Colors.white,
+                  child: Row(
+                    // Replace with a Row for horizontal icon + text
+                    children: <Widget>[
+                      Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
+                      Image.asset(
+                        'assets/images/profilbild.png',
+                        fit: BoxFit.cover,
+                        scale: 3,
+                      ),
+                      Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
+                      Text(
+                        'Kalle Hansson',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.only(top: 30),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.001,
+                    width: MediaQuery.of(context).size.width * 0.83,
+                    color: Colors.black12,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 30),
+                ),
+                FlatButton(
+                  onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => aktiveraKonto()),
+                    )
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                  color: Colors.white,
+                  child: Row(
+                    // Replace with a Row for horizontal icon + text
+                    children: <Widget>[
+                      Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
+                      Image.asset(
+                        'assets/images/profilbild.png',
+                        fit: BoxFit.cover,
+                        scale: 3,
+                      ),
+                      Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
+                      Text(
+                        'Agnes Brorson',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Padding(
@@ -108,32 +178,34 @@ class hanteraKontonState extends State<hanteraKonton> {
                 Padding(
                   padding: EdgeInsets.only(top: 30),
                 ),
-                Text(
-                  'Torsten Nilsson',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                Text(
-                  'Sixten Andersson',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
+                FlatButton(
+                  onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => aktiveraKonto()),
+                    )
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                  color: Colors.white,
+                  child: Row(
+                    // Replace with a Row for horizontal icon + text
+                    children: <Widget>[
+                      Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
+                      Image.asset(
+                        'assets/images/profilbild.png',
+                        fit: BoxFit.cover,
+                        scale: 3,
+                      ),
+                      Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
+                      Text(
+                        'Sixten Andersson',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Padding(
@@ -172,11 +244,34 @@ class hanteraKontonState extends State<hanteraKonton> {
                 Padding(
                   padding: EdgeInsets.only(top: 30),
                 ),
-                Text(
-                  'Kalle Hansson',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
+                FlatButton(
+                  onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => aktiveraKonto()),
+                    )
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                  color: Colors.white,
+                  child: Row(
+                    // Replace with a Row for horizontal icon + text
+                    children: <Widget>[
+                      Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
+                      Image.asset(
+                        'assets/images/profilbild.png',
+                        fit: BoxFit.cover,
+                        scale: 3,
+                      ),
+                      Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
+                      Text(
+                        'Frida Svansson',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Padding(
@@ -193,11 +288,34 @@ class hanteraKontonState extends State<hanteraKonton> {
                 Padding(
                   padding: EdgeInsets.only(top: 30),
                 ),
-                Text(
-                  'Torsten Nilsson',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
+                FlatButton(
+                  onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => aktiveraKonto()),
+                    )
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                  color: Colors.white,
+                  child: Row(
+                    // Replace with a Row for horizontal icon + text
+                    children: <Widget>[
+                      Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
+                      Image.asset(
+                        'assets/images/profilbild.png',
+                        fit: BoxFit.cover,
+                        scale: 3,
+                      ),
+                      Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
+                      Text(
+                        'Ingela Månsson',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Padding(
@@ -214,11 +332,34 @@ class hanteraKontonState extends State<hanteraKonton> {
                 Padding(
                   padding: EdgeInsets.only(top: 30),
                 ),
-                Text(
-                  'Sixten Andersson',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
+                FlatButton(
+                  onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => aktiveraKonto()),
+                    )
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                  color: Colors.white,
+                  child: Row(
+                    // Replace with a Row for horizontal icon + text
+                    children: <Widget>[
+                      Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
+                      Image.asset(
+                        'assets/images/profilbild.png',
+                        fit: BoxFit.cover,
+                        scale: 3,
+                      ),
+                      Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
+                      Text(
+                        'Per Karlsson',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Padding(
