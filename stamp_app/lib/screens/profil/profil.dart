@@ -32,6 +32,17 @@ class ProfilState extends State<Profil> {
           onPressed: () => Navigator.of(context).pop(),
           tooltip: 'Tillbaka',
         ),
+        actions: <Widget>[
+          IconButton(
+            padding: EdgeInsets.only(right: 10),
+            onPressed: null,
+            icon: Icon(
+              Icons.chat_bubble_rounded,
+              color: Colors.white,
+              size: 35,
+            ),
+          ),
+        ],
       ),
       body: Container(
         width: double.infinity,
