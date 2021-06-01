@@ -177,7 +177,7 @@ class aktiveraKontoState extends State<aktiveraKonto> {
                   padding: EdgeInsets.only(top: 50),
                   child: TextButton(
                       child: Text(
-                        'Redigera profil',
+                        'Radera Konto',
                         style: TextStyle(
                           fontSize: 20,
                           decoration: TextDecoration.underline,
