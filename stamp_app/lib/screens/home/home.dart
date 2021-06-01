@@ -3,6 +3,7 @@ import 'package:stamp_app/services/auth.dart';
 
 import 'package:stamp_app/screens/jobb/jobb.dart';
 import 'package:stamp_app/screens/profil/profil.dart';
+import 'package:stamp_app/screens/jobs/jobs.dart';
 import 'package:stamp_app/screens/historik/historik.dart';
 
 class Home extends StatelessWidget {
@@ -67,7 +68,7 @@ class Home extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => Work()),
-                  )
+                  ),
                 },
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(15.0))),

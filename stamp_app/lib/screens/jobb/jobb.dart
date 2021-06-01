@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stamp_app/screens/createJob/create-job.dart';
 import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
 import 'package:stamp_app/screens/val/val.dart';
 import 'package:stamp_app/services/auth.dart';
@@ -118,7 +119,7 @@ class Work extends StatelessWidget {
               onPressed: () => {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ProfileEdit()),
+                  MaterialPageRoute(builder: (context) => CreateJob()),
                 )
               },
               child: Icon(Icons.add),
