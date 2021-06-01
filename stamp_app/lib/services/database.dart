@@ -9,7 +9,7 @@ class DatabaseService {
 
   // reference to the user collection in firestore database
   final CollectionReference userCollection =
-      FirebaseFirestore.instance.collection('user');
+      FirebaseFirestore.instance.collection('users');
 
 //updateUserData(userName, userPhoneNumber, userProgram, userProfilePic)
   // method to update user data
