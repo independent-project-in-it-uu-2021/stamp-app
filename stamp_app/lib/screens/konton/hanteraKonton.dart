@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stamp_app/screens/konton/editStudent.dart';
 import 'package:stamp_app/screens/konton/editAdmin.dart';
+import 'package:stamp_app/screens/konton/accepteraKonto.dart';
 
 class hanteraKonton extends StatefulWidget {
   @override
@@ -338,6 +339,160 @@ class hanteraKontonState extends State<hanteraKonton> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => EditAdmin()),
+                    )
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                  color: Colors.white,
+                  child: Row(
+                    // Replace with a Row for horizontal icon + text
+                    children: <Widget>[
+                      Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
+                      Image.asset(
+                        'assets/images/profilbild.png',
+                        fit: BoxFit.cover,
+                        scale: 3,
+                      ),
+                      Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
+                      Text(
+                        'Per Karlsson',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 30),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.001,
+                    width: MediaQuery.of(context).size.width * 0.83,
+                    color: Colors.black12,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 30),
+                ),
+                Text(
+                  'Nya Användare',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 25,
+                    color: Colors.black,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 30),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.001,
+                    width: MediaQuery.of(context).size.width * 0.83,
+                    color: Colors.black12,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 30),
+                ),
+                FlatButton(
+                  onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AccepteraKonto()),
+                    )
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                  color: Colors.white,
+                  child: Row(
+                    // Replace with a Row for horizontal icon + text
+                    children: <Widget>[
+                      Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
+                      Image.asset(
+                        'assets/images/profilbild.png',
+                        fit: BoxFit.cover,
+                        scale: 3,
+                      ),
+                      Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
+                      Text(
+                        'Frida Svansson',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 30),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.001,
+                    width: MediaQuery.of(context).size.width * 0.83,
+                    color: Colors.black12,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 30),
+                ),
+                FlatButton(
+                  onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AccepteraKonto()),
+                    )
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                  color: Colors.white,
+                  child: Row(
+                    // Replace with a Row for horizontal icon + text
+                    children: <Widget>[
+                      Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
+                      Image.asset(
+                        'assets/images/profilbild.png',
+                        fit: BoxFit.cover,
+                        scale: 3,
+                      ),
+                      Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
+                      Text(
+                        'Ingela Månsson',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 30),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.001,
+                    width: MediaQuery.of(context).size.width * 0.83,
+                    color: Colors.black12,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 30),
+                ),
+                FlatButton(
+                  onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AccepteraKonto()),
                     )
                   },
                   shape: RoundedRectangleBorder(
