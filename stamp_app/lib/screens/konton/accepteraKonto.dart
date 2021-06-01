@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:stamp_app/screens/konton/makeAccept.dart';
 import 'package:stamp_app/screens/konton/raderaKonto.dart';
-import 'package:stamp_app/screens/konton/makeAdmin.dart';
 import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
 
-class AccepteraKonto extends StatefulWidget {
+class ConfirmUser extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return AccepteraKontoState();
+    return ConfirmUserState();
   }
 }
 
-class AccepteraKontoState extends State<AccepteraKonto> {
-  // State parameter
-  String _email;
-  String _userPassword;
-
+class ConfirmUserState extends State<ConfirmUser> {
   // key to hold the state of the form i.e referens to the form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   //TODO: Check if an email is already used
@@ -114,8 +109,7 @@ class AccepteraKontoState extends State<AccepteraKonto> {
                     child: Row(
                       // Replace with a Row for horizontal icon + text
                       children: <Widget>[
-                        Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
-                        Padding(padding: EdgeInsets.fromLTRB(45, 0, 0, 0)),
+                        Padding(padding: EdgeInsets.fromLTRB(18, 0, 0, 0)),
                         Text(
                           "Acceptera användaren",
                           style: TextStyle(
@@ -232,7 +226,7 @@ class AccepteraKontoState extends State<AccepteraKonto> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => raderaKonto()),
+                              builder: (context) => DeleteAccount()),
                         );
                       }),
                 ),

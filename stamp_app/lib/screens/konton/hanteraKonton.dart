@@ -404,7 +404,7 @@ class hanteraKontonState extends State<hanteraKonton> {
                   onPressed: () => {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => AccepteraKonto()),
+                      MaterialPageRoute(builder: (context) => ConfirmUser()),
                     )
                   },
                   shape: RoundedRectangleBorder(
@@ -448,7 +448,7 @@ class hanteraKontonState extends State<hanteraKonton> {
                   onPressed: () => {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => AccepteraKonto()),
+                      MaterialPageRoute(builder: (context) => ConfirmUser()),
                     )
                   },
                   shape: RoundedRectangleBorder(
@@ -492,7 +492,7 @@ class hanteraKontonState extends State<hanteraKonton> {
                   onPressed: () => {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => AccepteraKonto()),
+                      MaterialPageRoute(builder: (context) => ConfirmUser()),
                     )
                   },
                   shape: RoundedRectangleBorder(
