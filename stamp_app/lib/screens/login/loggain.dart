@@ -133,6 +133,7 @@ class LogInState extends State<LogIn> {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.5,
                   height: MediaQuery.of(context).size.height * 0.06,
+                  //TODO change to elevated button instead
                   child: RaisedButton(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50)),
@@ -143,14 +144,16 @@ class LogInState extends State<LogIn> {
                     ),
                     onPressed: () async {
                       //if the form is not valid
-                      if (!_formKey.currentState.validate()) {
+                      /*if (!_formKey.currentState.validate()) {
                         return;
-                      }
+                      }*/
                       //If the form is valid, onSaved method is called
                       if (_formKey.currentState.validate()) {
+                        //_formKey.currentState.save();
                         // sign in method from auth.dart file is called here
                         dynamic result = await _auth.signInWithEmailAndPassword(
                             _email, _userPassword);
+                        print(result);
                         if (result == null) {
                           setState(() {
                             _erroMsg = 'E-post eller lösenord är felaktig';
