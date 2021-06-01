@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stamp_app/screens/konton/raderaKonto.dart';
+import 'package:stamp_app/screens/konton/makeAdmin.dart';
 
 class aktiveraKonto extends StatefulWidget {
   @override
@@ -44,14 +45,6 @@ class aktiveraKontoState extends State<aktiveraKonto> {
                 Padding(
                   padding: EdgeInsets.only(top: 30),
                 ),
-                Text(
-                  'Din profil',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 40,
-                    color: Colors.black,
-                  ),
-                ),
                 Padding(
                   padding: EdgeInsets.only(top: 15),
                 ),
@@ -67,7 +60,7 @@ class aktiveraKontoState extends State<aktiveraKonto> {
                   padding: EdgeInsets.only(top: 15),
                 ),
                 Text(
-                  'Förnamn Efternamn',
+                  'Kalle Hansson',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 25,
@@ -81,6 +74,56 @@ class aktiveraKontoState extends State<aktiveraKonto> {
                   'assets/images/profilbild.png',
                   fit: BoxFit.cover,
                   scale: 1.5,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 20),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.001,
+                    width: MediaQuery.of(context).size.width * 0.83,
+                    color: Colors.black12,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 12),
+                ),
+                Text(
+                  'Student',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.black,
+                  ),
+                ),
+                Container(
+                  height: 100,
+                  width: 330,
+                  child: FlatButton(
+                    onPressed: () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => makeAdmin()),
+                      )
+                    },
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                    color: Colors.white,
+                    child: Row(
+                      // Replace with a Row for horizontal icon + text
+                      children: <Widget>[
+                        Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
+                        Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
+                        Text(
+                          "Gör till administratör",
+                          style: TextStyle(
+                            fontSize: 20,
+                            backgroundColor: Colors.red,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 20),
