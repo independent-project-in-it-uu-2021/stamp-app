@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
-import 'package:stamp_app/screens/val/val.dart';
 import 'package:stamp_app/services/auth.dart';
 
-class Work extends StatelessWidget {
+import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
+import 'package:stamp_app/screens/home/home.dart';
+import 'package:stamp_app/screens/jobb/jobb.dart';
+import 'package:stamp_app/screens/annansProfil/annansProfil.dart';
+
+class FinalChoice extends StatelessWidget {
   final AuthService _firebaseAuth = AuthService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Jobb'),
+        title: Text('Välj Studentambassadörer'),
         backgroundColor: Colors.red.shade900,
         actions: <Widget>[
           IconButton(
@@ -31,17 +34,24 @@ class Work extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.only(top: 10),
+                  padding: EdgeInsets.only(top: 60),
                 ),
                 Text(
-                  'Kommande Jobb',
+                  '[Jobbinformation]',
                   style: TextStyle(
                     fontSize: 30,
                     color: Colors.black,
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 10),
+                  padding: EdgeInsets.only(top: 80),
+                ),
+                Text(
+                  'Valda',
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.black,
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -55,19 +65,30 @@ class Work extends StatelessWidget {
                   padding: EdgeInsets.only(top: 30),
                 ),
                 TextButton(
-                    style: TextButton.styleFrom(
-                      textStyle: const TextStyle(fontSize: 30),
-                      primary: Colors.black,
-                    ),
-                    onPressed: () => {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Choice()),
-                          )
-                        },
-                    child: const Text('Jobb 1')),
+                  style: TextButton.styleFrom(
+                    textStyle: const TextStyle(fontSize: 26),
+                    primary: Colors.blue,
+                  ),
+                  onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => OthersProfile()),
+                    )
+                  },
+                  child: const Text('[Valda studenter]'),
+                ),
                 Padding(
                   padding: EdgeInsets.only(top: 30),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 30),
+                ),
+                Text(
+                  'Reserver',
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.black,
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -81,27 +102,17 @@ class Work extends StatelessWidget {
                   padding: EdgeInsets.only(top: 30),
                 ),
                 TextButton(
-                    style: TextButton.styleFrom(
-                      textStyle: const TextStyle(fontSize: 30),
-                      primary: Colors.black,
-                    ),
-                    onPressed: () => {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Choice()),
-                          )
-                        },
-                    child: const Text('Jobb 2')),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
+                  style: TextButton.styleFrom(
+                    textStyle: const TextStyle(fontSize: 26),
+                    primary: Colors.blue,
                   ),
+                  onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => OthersProfile()),
+                    )
+                  },
+                  child: const Text('[Valda reserver]'),
                 ),
               ],
             ),
@@ -112,16 +123,25 @@ class Work extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FloatingActionButton(
-              backgroundColor: Colors.red.shade900,
-              foregroundColor: Colors.white,
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.green[400],
+                padding: EdgeInsets.symmetric(horizontal: 90, vertical: 15),
+              ),
+              child: Text(
+                'Bekräfta',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 21,
+                ),
+              ),
               onPressed: () => {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ProfileEdit()),
-                )
+                  MaterialPageRoute(builder: (context) => Work()),
+                ),
               },
-              child: Icon(Icons.add),
             ),
             Padding(padding: EdgeInsets.only(bottom: 100))
           ],
