@@ -91,7 +91,7 @@ class EditAdminState extends State<EditAdmin> {
                   padding: EdgeInsets.only(top: 12),
                 ),
                 Text(
-                  'Student',
+                  'Administratör',
                   style: TextStyle(
                     fontSize: 15,
                     color: Colors.black,
