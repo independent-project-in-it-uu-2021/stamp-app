@@ -6,7 +6,6 @@ import 'package:stamp_app/screens/profil/profil.dart';
 import 'package:stamp_app/screens/jobs/jobs.dart';
 import 'package:stamp_app/screens/historik/historik.dart';
 
-
 class Home extends StatelessWidget {
   final AuthService _firebaseAuth = AuthService();
   @override
@@ -68,12 +67,8 @@ class Home extends StatelessWidget {
                 onPressed: () => {
                   Navigator.push(
                     context,
-
-                    MaterialPageRoute(builder: (context) => Jobs()),
-                  ),
-
                     MaterialPageRoute(builder: (context) => Work()),
-                  )
+                  ),
                 },
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(15.0))),
