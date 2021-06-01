@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:stamp_app/screens/konton/aktiveraKonto.dart';
+import 'package:stamp_app/screens/konton/editStudent.dart';
+import 'package:stamp_app/screens/konton/editAdmin.dart';
 
 class hanteraKonton extends StatefulWidget {
   @override
@@ -93,7 +94,7 @@ class hanteraKontonState extends State<hanteraKonton> {
                   onPressed: () => {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => aktiveraKonto()),
+                      MaterialPageRoute(builder: (context) => editStudent()),
                     )
                   },
                   shape: RoundedRectangleBorder(
@@ -138,7 +139,7 @@ class hanteraKontonState extends State<hanteraKonton> {
                   onPressed: () => {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => aktiveraKonto()),
+                      MaterialPageRoute(builder: (context) => editStudent()),
                     )
                   },
                   shape: RoundedRectangleBorder(
@@ -182,7 +183,7 @@ class hanteraKontonState extends State<hanteraKonton> {
                   onPressed: () => {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => aktiveraKonto()),
+                      MaterialPageRoute(builder: (context) => editStudent()),
                     )
                   },
                   shape: RoundedRectangleBorder(
@@ -248,7 +249,7 @@ class hanteraKontonState extends State<hanteraKonton> {
                   onPressed: () => {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => aktiveraKonto()),
+                      MaterialPageRoute(builder: (context) => editAdmin()),
                     )
                   },
                   shape: RoundedRectangleBorder(
@@ -292,7 +293,7 @@ class hanteraKontonState extends State<hanteraKonton> {
                   onPressed: () => {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => aktiveraKonto()),
+                      MaterialPageRoute(builder: (context) => editAdmin()),
                     )
                   },
                   shape: RoundedRectangleBorder(
@@ -336,7 +337,7 @@ class hanteraKontonState extends State<hanteraKonton> {
                   onPressed: () => {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => aktiveraKonto()),
+                      MaterialPageRoute(builder: (context) => editAdmin()),
                     )
                   },
                   shape: RoundedRectangleBorder(

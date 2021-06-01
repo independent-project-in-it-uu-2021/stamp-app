@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:stamp_app/screens/konton/raderaKonto.dart';
 import 'package:stamp_app/screens/konton/makeAdmin.dart';
+import 'package:stamp_app/screens/konton/makeStudent.dart';
+import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
 
-class aktiveraKonto extends StatefulWidget {
+class editStudent extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return aktiveraKontoState();
+    return editStudentState();
   }
 }
 
-class aktiveraKontoState extends State<aktiveraKonto> {
+class editStudentState extends State<editStudent> {
   // State parameter
   String _email;
   String _userPassword;
@@ -232,6 +234,25 @@ class aktiveraKontoState extends State<aktiveraKonto> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => raderaKonto()),
+                        );
+                      }),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 50),
+                  child: TextButton(
+                      child: Text(
+                        'Redigera Konto',
+                        style: TextStyle(
+                          fontSize: 20,
+                          decoration: TextDecoration.underline,
+                          color: Colors.black,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProfileEdit()),
                         );
                       }),
                 ),
