@@ -98,8 +98,8 @@ class EditAdminState extends State<EditAdmin> {
                   ),
                 ),
                 Container(
-                  height: 50,
-                  width: 300,
+                  height: 45,
+                  width: 230,
                   child: FlatButton(
                     onPressed: () => {
                       Navigator.push(
@@ -109,19 +109,13 @@ class EditAdminState extends State<EditAdmin> {
                     },
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                    color: Colors.red,
-                    child: Row(
-                      // Replace with a Row for horizontal icon + text
-                      children: <Widget>[
-                        Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
-                        Padding(padding: EdgeInsets.fromLTRB(45, 0, 0, 0)),
-                        Text(
-                          "Gör till student",
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
-                        ),
-                      ],
+                    color: Colors.red.shade900,
+                    child: Text(
+                      "Gör till student",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
                     ),
                   ),
                 ),
