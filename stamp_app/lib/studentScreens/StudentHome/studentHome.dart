@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stamp_app/screens/studentJobb/studentjobb.dart';
 import 'package:stamp_app/services/auth.dart';
 
 import 'package:stamp_app/screens/jobb/jobb.dart';
@@ -69,7 +70,7 @@ class StudentHome extends StatelessWidget {
                 onPressed: () => {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => StudentJobs()),
+                    MaterialPageRoute(builder: (context) => StudentWork()),
                   ),
                 },
                 shape: RoundedRectangleBorder(
