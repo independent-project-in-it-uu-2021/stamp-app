@@ -15,6 +15,7 @@ class CreateJob extends StatefulWidget {
 }
 
 class CreateJobState extends State<CreateJob> {
+  //HÄR BLIR DET VÄL ÄNDÅ FEL MED PARAMETRARNA?
   // State parameter
   String _fullName;
   String _email;
