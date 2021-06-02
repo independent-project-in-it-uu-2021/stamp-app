@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 //import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -18,6 +19,8 @@ class CreateJobState extends State<CreateJob> {
   String _mobilnumber;
   String _userPassword;
   String _chosenProgram;
+  String _selectedTime;
+
   // Boolean value use to hide the write bio option field
   bool _writeBio = false;
 
@@ -32,6 +35,17 @@ class CreateJobState extends State<CreateJob> {
     });
   }
 */
+
+  Future<void> _show() async {
+    final TimeOfDay result =
+        await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    if (result != null) {
+      setState(() {
+        _selectedTime = result.format(context);
+      });
+    }
+  }
+
   // Method that is used to change the margin when an image is choosen
   double _changeMarginImage() {
     double curMargin;
@@ -126,77 +140,11 @@ class CreateJobState extends State<CreateJob> {
     );
   }
 
-  Widget _buildDate() {
-    return Container(
-      width: 350,
-      child: TextFormField(
-        keyboardType: TextInputType.name,
-        // Decorate the input field here,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.black12,
-          hintText: 'Datum',
-          counterStyle: TextStyle(color: Colors.red.shade900),
-          errorStyle: TextStyle(color: Colors.red.shade900),
-        ),
-        // The acutal value from the input
-        validator: (String value) {
-          if (value.isEmpty) {
-            return 'Datum är obligatorisk';
-          }
-          if (value.length > 120) {
-            //TODO: Change the text below
-            return 'Datum får inte vara längre än 120 tecken';
-          }
-          return null;
-        },
-        // The  form is saved and we tell what to do with the value
-        onSaved: (String value) {
-          print(value);
-          _fullName = value;
-        },
-      ),
-    );
-  }
-
-  Widget _buildTime() {
-    return Container(
-      width: 350,
-      child: TextFormField(
-        keyboardType: TextInputType.name,
-        // Decorate the input field here,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.black12,
-          hintText: 'Tid',
-          counterStyle: TextStyle(color: Colors.red.shade900),
-          errorStyle: TextStyle(color: Colors.red.shade900),
-        ),
-        // The acutal value from the input
-        validator: (String value) {
-          if (value.isEmpty) {
-            return 'Tid är obligatorisk';
-          }
-          if (value.length > 120) {
-            //TODO: Change the text below
-            return 'Tid får inte vara längre än 120 tecken';
-          }
-          return null;
-        },
-        // The  form is saved and we tell what to do with the value
-        onSaved: (String value) {
-          print(value);
-          _fullName = value;
-        },
-      ),
-    );
-  }
-
   Widget _buildStudents() {
     return Container(
       width: 350,
       child: TextFormField(
-        keyboardType: TextInputType.name,
+        keyboardType: TextInputType.number,
         // Decorate the input field here,
         decoration: InputDecoration(
           filled: true,
@@ -255,6 +203,33 @@ class CreateJobState extends State<CreateJob> {
           _fullName = value;
         },
       ),
+    );
+  }
+
+  Widget _buildDate() {
+    return Container(
+        width: 350,
+        child: TextButton(
+          onPressed: () {
+            DatePicker.showDatePicker(context,
+                showTitleActions: true,
+                minTime: DateTime(2018, 3, 5),
+                maxTime: DateTime(9999, 12, 31), onChanged: (date) {
+              print('change $date');
+            }, onConfirm: (date) {
+              print('confirm $date');
+            }, currentTime: DateTime.now(), locale: LocaleType.sv);
+          },
+          child: Text(
+            'Välj ett datum för jobbet',
+            style: TextStyle(color: Colors.blue),
+          ),
+        ));
+  }
+
+  Widget _buildTime() {
+    return Container(
+      child: TextButton(onPressed: _show, child: Text('Välj tid för jobbet')),
     );
   }
 
@@ -319,15 +294,15 @@ class CreateJobState extends State<CreateJob> {
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
-                _buildDate(),
-                Padding(
-                  padding: EdgeInsets.only(top: 12),
-                ),
                 _buildAbout(),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
                 _buildStudents(),
+                Padding(
+                  padding: EdgeInsets.only(top: 12),
+                ),
+                _buildDate(),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
