@@ -11,10 +11,6 @@ class EditAdmin extends StatefulWidget {
 }
 
 class EditAdminState extends State<EditAdmin> {
-  // State parameter
-  String _email;
-  String _userPassword;
-
   // key to hold the state of the form i.e referens to the form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   //TODO: Check if an email is already used
@@ -225,7 +221,7 @@ class EditAdminState extends State<EditAdmin> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => raderaKonto()),
+                              builder: (context) => DeleteAccount()),
                         );
                       }),
                 ),
