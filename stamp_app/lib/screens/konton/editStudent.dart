@@ -21,7 +21,7 @@ class EditStudentState extends State<EditStudent> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Image.asset('assets/images/uuLogaNew.png', fit: BoxFit.cover),
-        //centerTitle: true,
+        centerTitle: true,
         backgroundColor: Colors.red.shade900,
         elevation: 0,
         leading: IconButton(
@@ -94,8 +94,8 @@ class EditStudentState extends State<EditStudent> {
                   ),
                 ),
                 Container(
-                  height: 50,
-                  width: 300,
+                  height: 45,
+                  width: 230,
                   child: FlatButton(
                     onPressed: () => {
                       Navigator.push(
@@ -105,19 +105,13 @@ class EditStudentState extends State<EditStudent> {
                     },
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                    color: Colors.red,
-                    child: Row(
-                      // Replace with a Row for horizontal icon + text
-                      children: <Widget>[
-                        Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
-                        Padding(padding: EdgeInsets.fromLTRB(45, 0, 0, 0)),
-                        Text(
-                          "Gör till administratör",
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
-                        ),
-                      ],
+                    color: Colors.red.shade900,
+                    child: Text(
+                      "Gör till administratör",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
                     ),
                   ),
                 ),

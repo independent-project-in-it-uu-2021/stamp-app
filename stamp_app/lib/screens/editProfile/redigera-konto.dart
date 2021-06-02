@@ -263,7 +263,7 @@ class ProfileEditState extends State<ProfileEdit> {
             errorStyle: TextStyle(color: Colors.black, fontSize: 13),
             filled: true,
             fillColor: Colors.black12,
-            hintText: 'Does this work',
+            hintText: 'Program',
             //TODO: Change the text below
             errorText: 'Vänligen välj en program'),
       ),
@@ -402,7 +402,6 @@ class ProfileEditState extends State<ProfileEdit> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.black,
-                              
                             ),
                           )
                         : Image.file(_userImage),
@@ -418,7 +417,7 @@ class ProfileEditState extends State<ProfileEdit> {
                     padding: EdgeInsets.symmetric(horizontal: 90, vertical: 15),
                   ),
                   child: Text(
-                    'Registrera',
+                    'Spara',
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,

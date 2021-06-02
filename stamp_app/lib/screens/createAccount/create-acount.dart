@@ -250,7 +250,7 @@ class CreateAccountState extends State<CreateAccount> {
             errorStyle: TextStyle(color: Colors.white, fontSize: 13),
             filled: true,
             fillColor: Colors.white,
-            hintText: 'Does this work',
+            hintText: 'Program',
             //TODO: Change the text below
             errorText: 'Vänligen välj en program'),
       ),
