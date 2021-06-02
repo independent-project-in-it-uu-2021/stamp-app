@@ -3,14 +3,14 @@ import 'package:stamp_app/screens/konton/editStudent.dart';
 import 'package:stamp_app/screens/konton/editAdmin.dart';
 import 'package:stamp_app/screens/konton/accepteraKonto.dart';
 
-class hanteraKonton extends StatefulWidget {
+class ManageAccount extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return hanteraKontonState();
+    return ManageAccountState();
   }
 }
 
-class hanteraKontonState extends State<hanteraKonton> {
+class ManageAccountState extends State<ManageAccount> {
   // State parameter
   String _email;
   String _userPassword;
