@@ -206,6 +206,7 @@ class CreateJobState extends State<CreateJob> {
     );
   }
 
+  //Widget för att välja datum
   Widget _buildDate() {
     return Container(
         width: 350,
@@ -227,6 +228,7 @@ class CreateJobState extends State<CreateJob> {
         ));
   }
 
+  //Widget för klockan med hjälp av _show
   Widget _buildTime() {
     return Container(
       child: TextButton(onPressed: _show, child: Text('Välj tid för jobbet')),
