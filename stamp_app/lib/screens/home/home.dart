@@ -60,17 +60,19 @@ class Home extends StatelessWidget {
             Padding(
               padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
             ),
-            
+
             //Button to go to Job page
             Container(
               height: 100,
               width: 330,
               child: FlatButton(
                 onPressed: () => {
-                  Navigator.push(
+                  Profil()
+                  /*Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => Work()),
-                  ),
+                  )*/
+                  ,
                 },
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(15.0))),
