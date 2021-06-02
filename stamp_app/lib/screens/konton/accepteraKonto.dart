@@ -110,6 +110,7 @@ class ConfirmUserState extends State<ConfirmUser> {
                       "Acceptera användaren",
                       textAlign: TextAlign.center,
                       style: TextStyle(
+                        color: Colors.white,
                         fontSize: 20,
                       ),
                     ),

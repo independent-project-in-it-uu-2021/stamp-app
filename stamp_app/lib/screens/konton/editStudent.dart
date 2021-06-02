@@ -110,6 +110,7 @@ class EditStudentState extends State<EditStudent> {
                       "Gör till administratör",
                       textAlign: TextAlign.center,
                       style: TextStyle(
+                        color: Colors.white,
                         fontSize: 18,
                       ),
                     ),
