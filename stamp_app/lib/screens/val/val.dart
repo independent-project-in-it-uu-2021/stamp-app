@@ -15,7 +15,7 @@ class Choice extends StatelessWidget {
       appBar: AppBar(
         title: Text('Välj Studentambassadörer'),
         backgroundColor: Colors.red.shade900,
-        actions: <Widget>[
+        /*actions: <Widget>[
           IconButton(
             padding: EdgeInsets.only(right: 10),
             onPressed: null,
@@ -25,7 +25,7 @@ class Choice extends StatelessWidget {
               size: 35,
             ),
           ),
-        ],
+        ],*/
       ),
       body: Container(
         width: double.infinity,

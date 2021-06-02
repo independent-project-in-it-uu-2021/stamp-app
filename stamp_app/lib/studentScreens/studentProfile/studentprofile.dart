@@ -47,7 +47,7 @@ class StudentProfileState extends State<StudentProfile> {
               onPressed: () => Navigator.of(context).pop(),
               tooltip: 'Tillbaka',
             ),
-            actions: <Widget>[
+            /*actions: <Widget>[
               IconButton(
                 padding: EdgeInsets.only(right: 10),
                 onPressed: null,
@@ -57,7 +57,7 @@ class StudentProfileState extends State<StudentProfile> {
                   size: 35,
                 ),
               ),
-            ],
+            ],*/
           ),
           body: Container(
             width: double.infinity,

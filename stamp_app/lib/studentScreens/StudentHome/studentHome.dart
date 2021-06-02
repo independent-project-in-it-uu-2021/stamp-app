@@ -42,7 +42,7 @@ class StudentHome extends StatelessWidget {
             ),
           ),
         ),
-        actions: <Widget>[
+        /*actions: <Widget>[
           IconButton(
             padding: EdgeInsets.only(right: 10),
             onPressed: null,
@@ -52,7 +52,7 @@ class StudentHome extends StatelessWidget {
               size: 35,
             ),
           ),
-        ],
+        ],*/
       ),
       body: Container(
         width: double.infinity,
