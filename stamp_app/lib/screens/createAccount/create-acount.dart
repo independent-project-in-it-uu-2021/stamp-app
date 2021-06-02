@@ -25,6 +25,7 @@ class CreateAccountState extends State<CreateAccount> {
   String _errorMsg = '';
   String _defaultProfilePic =
       'gs://stamp-db6ad.appspot.com/userProfilePicture/defaultPicChangeLater.jpg';
+  String _defaultAccountStatue = 'inactive';
   File _userImage;
   // Boolean value use to hide the write bio option field
   bool _writeBio = false;
@@ -250,7 +251,7 @@ class CreateAccountState extends State<CreateAccount> {
             errorStyle: TextStyle(color: Colors.white, fontSize: 13),
             filled: true,
             fillColor: Colors.white,
-            hintText: 'Does this work',
+            hintText: 'Program',
             //TODO: Change the text below
             errorText: 'Vänligen välj en program'),
       ),
@@ -420,7 +421,8 @@ class CreateAccountState extends State<CreateAccount> {
                           _fullName,
                           _mobilnumber,
                           _chosenProgram,
-                          _defaultProfilePic);
+                          _defaultProfilePic,
+                          _defaultAccountStatue);
                       if (result == null) {
                         setState(() {
                           _errorMsg = 'Mejladressen används redan';

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stamp_app/screens/autenticate/autenticate.dart';
-import 'package:stamp_app/screens/home/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:stamp_app/screens/checkAccount/checkAccount.dart';
 
 class Wrapper extends StatelessWidget {
   @override
@@ -13,7 +14,7 @@ class Wrapper extends StatelessWidget {
     if (currentUser == null) {
       return Authenticate();
     } else {
-      return Home();
+      return CheckAccount();
     }
   }
 }

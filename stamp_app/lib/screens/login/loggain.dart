@@ -30,7 +30,6 @@ class LogInState extends State<LogIn> {
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.emailAddress,
-        maxLength: 255,
         //Decorate the input field here,
         decoration: textInputDecoration.copyWith(hintText: 'E-post'),
         validator: (String value) {
@@ -41,6 +40,9 @@ class LogInState extends State<LogIn> {
                   r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
               .hasMatch(value)) {
             return 'Ogiltig mejladress';
+          }
+          if (value.length > 255) {
+            return 'Mejladress får inte vara längre än 255 tecken';
           }
           return null;
         },
@@ -193,8 +195,5 @@ class LogInState extends State<LogIn> {
         ),
       ),
     );
-    
   }
 }
-
-

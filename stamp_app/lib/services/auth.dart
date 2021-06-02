@@ -56,6 +56,7 @@ class AuthService {
       String userPhoneNumber,
       String userProgram,
       String userProfilePicUrl,
+      String accountType,
       [String bio]) async {
     try {
       UserCredential result =
@@ -63,7 +64,12 @@ class AuthService {
               email: userEmail, password: userPassword);
       // Create a empty document inside user collection in the db
       await DatabaseService(userId: result.user.uid).updateUserData(
-          userName, userPhoneNumber, userProgram, userProfilePicUrl);
+          userName,
+          userEmail,
+          userPhoneNumber,
+          userProgram,
+          userProfilePicUrl,
+          accountType);
       return result.user;
     } catch (e) {
       print(e.toString());

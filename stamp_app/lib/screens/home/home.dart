@@ -40,7 +40,7 @@ class Home extends StatelessWidget {
             ),
           ),
         ),
-        actions: <Widget>[
+        /*actions: <Widget>[
           IconButton(
             padding: EdgeInsets.only(right: 10),
             onPressed: null,
@@ -50,7 +50,7 @@ class Home extends StatelessWidget {
               size: 35,
             ),
           ),
-        ],
+        ],*/
       ),
       body: Container(
         width: double.infinity,
@@ -204,34 +204,6 @@ class Home extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(0, 60, 0, 0),
-            ),
-            //Button for previous jobs
-            Container(
-              height: 50,
-              width: 200,
-              child: FlatButton(
-                onPressed: () => {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => StudentHome()),
-                  )
-                },
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                color: Colors.white,
-                child: Row(
-                  // Replace with a Row for horizontal icon + text
-                  children: <Widget>[
-                    Padding(padding: EdgeInsets.fromLTRB(25, 0, 0, 0)),
-                    Text(
-                      "Gå till student vy",
-                      style: TextStyle(
-                        fontSize: 15,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
             ),
           ],
         ),

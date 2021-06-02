@@ -13,7 +13,7 @@ class StudentWork extends StatelessWidget {
       appBar: AppBar(
         title: Text('Jobb'),
         backgroundColor: Colors.red.shade900,
-        actions: <Widget>[
+        /*actions: <Widget>[
           IconButton(
             padding: EdgeInsets.only(right: 10),
             onPressed: null,
@@ -23,7 +23,7 @@ class StudentWork extends StatelessWidget {
               size: 35,
             ),
           ),
-        ],
+        ],*/
       ),
       body: Container(
         width: double.infinity,

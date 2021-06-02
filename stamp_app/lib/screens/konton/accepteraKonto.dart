@@ -94,8 +94,8 @@ class ConfirmUserState extends State<ConfirmUser> {
                   ),
                 ),
                 Container(
-                  height: 50,
-                  width: 300,
+                  height: 45,
+                  width: 250,
                   child: FlatButton(
                     onPressed: () => {
                       Navigator.push(
@@ -105,18 +105,14 @@ class ConfirmUserState extends State<ConfirmUser> {
                     },
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                    color: Colors.red,
-                    child: Row(
-                      // Replace with a Row for horizontal icon + text
-                      children: <Widget>[
-                        Padding(padding: EdgeInsets.fromLTRB(18, 0, 0, 0)),
-                        Text(
-                          "Acceptera användaren",
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
-                        ),
-                      ],
+                    color: Colors.red.shade900,
+                    child: Text(
+                      "Acceptera användaren",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
                     ),
                   ),
                 ),

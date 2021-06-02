@@ -24,7 +24,7 @@ class OthersProfile extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
           tooltip: 'Tillbaka',
         ),
-        actions: <Widget>[
+        /*actions: <Widget>[
           IconButton(
             padding: EdgeInsets.only(right: 10),
             onPressed: null,
@@ -34,7 +34,7 @@ class OthersProfile extends StatelessWidget {
               size: 35,
             ),
           ),
-        ],
+        ],*/
       ),
       body: Container(
         width: double.infinity,
