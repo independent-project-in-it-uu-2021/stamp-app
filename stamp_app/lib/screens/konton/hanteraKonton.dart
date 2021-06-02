@@ -3,18 +3,14 @@ import 'package:stamp_app/screens/konton/editStudent.dart';
 import 'package:stamp_app/screens/konton/editAdmin.dart';
 import 'package:stamp_app/screens/konton/accepteraKonto.dart';
 
-class hanteraKonton extends StatefulWidget {
+class ManageAccount extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return hanteraKontonState();
+    return ManageAccountState();
   }
 }
 
-class hanteraKontonState extends State<hanteraKonton> {
-  // State parameter
-  String _email;
-  String _userPassword;
-
+class ManageAccountState extends State<ManageAccount> {
   // key to hold the state of the form i.e referens to the form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   //TODO: Check if an email is already used
