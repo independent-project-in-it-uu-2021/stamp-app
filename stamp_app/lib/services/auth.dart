@@ -56,14 +56,15 @@ class AuthService {
       String userPhoneNumber,
       String userProgram,
       String userProfilePicUrl,
+      String accountType,
       [String bio]) async {
     try {
       UserCredential result =
           await _firebaseAuth.createUserWithEmailAndPassword(
               email: userEmail, password: userPassword);
       // Create a empty document inside user collection in the db
-      await DatabaseService(userId: result.user.uid).updateUserData(
-          userName, userPhoneNumber, userProgram, userProfilePicUrl);
+      await DatabaseService(userId: result.user.uid).updateUserData(userName,
+          userPhoneNumber, userProgram, userProfilePicUrl, accountType);
       return result.user;
     } catch (e) {
       print(e.toString());
