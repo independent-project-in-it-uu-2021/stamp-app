@@ -60,7 +60,7 @@ class Home extends StatelessWidget {
             Padding(
               padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
             ),
-            
+
             //Button to go to Job page
             Container(
               height: 100,
@@ -177,7 +177,7 @@ class Home extends StatelessWidget {
                 onPressed: () => {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => hanteraKonton()),
+                    MaterialPageRoute(builder: (context) => ManageAccount()),
                   )
                 },
                 shape: RoundedRectangleBorder(
