@@ -176,7 +176,7 @@ class StudentHome extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(0, 163, 0, 0),
             ),
             //Button for previous jobs
-            Container(
+            /*Container(
               height: 50,
               width: 200,
               child: FlatButton(
@@ -199,7 +199,7 @@ class StudentHome extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
+            ),*/
           ],
         ),
       ),

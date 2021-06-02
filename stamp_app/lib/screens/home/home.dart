@@ -67,12 +67,10 @@ class Home extends StatelessWidget {
               width: 330,
               child: FlatButton(
                 onPressed: () => {
-                  Profil()
-                  /*Navigator.push(
+                  Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => Work()),
-                  )*/
-                  ,
+                  ),
                 },
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(15.0))),
@@ -208,7 +206,7 @@ class Home extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(0, 60, 0, 0),
             ),
             //Button for previous jobs
-            Container(
+            /*Container(
               height: 50,
               width: 200,
               child: FlatButton(
@@ -234,7 +232,7 @@ class Home extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
+            ),*/
           ],
         ),
       ),

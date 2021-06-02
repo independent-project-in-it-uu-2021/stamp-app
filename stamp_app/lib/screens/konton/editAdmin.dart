@@ -114,6 +114,7 @@ class EditAdminState extends State<EditAdmin> {
                       "Gör till student",
                       textAlign: TextAlign.center,
                       style: TextStyle(
+                        color: Colors.white,
                         fontSize: 20,
                       ),
                     ),
