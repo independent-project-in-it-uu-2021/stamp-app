@@ -214,8 +214,9 @@ class CreateJobState extends State<CreateJob> {
           onPressed: () {
             DatePicker.showDatePicker(context,
                 showTitleActions: true,
-                minTime: DateTime(2018, 3, 5),
-                maxTime: DateTime(9999, 12, 31), onChanged: (date) {
+                minTime: DateTime(DateTime.now().year - 5, 1, 1),
+                maxTime: DateTime(DateTime.now().year + 5, 12, 31),
+                onChanged: (date) {
               print('change $date');
             }, onConfirm: (date) {
               print('confirm $date');
