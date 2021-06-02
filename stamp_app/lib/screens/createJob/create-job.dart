@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -20,6 +22,7 @@ class CreateJobState extends State<CreateJob> {
   String _userPassword;
   String _chosenProgram;
   String _selectedTime;
+  Float numStud;
 
   // Boolean value use to hide the write bio option field
   bool _writeBio = false;
@@ -220,6 +223,7 @@ class CreateJobState extends State<CreateJob> {
               print('change $date');
             }, onConfirm: (date) {
               print('confirm $date');
+              Text(date.toString());
             }, currentTime: DateTime.now(), locale: LocaleType.sv);
           },
           child: Text(
