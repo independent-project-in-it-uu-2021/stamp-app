@@ -21,7 +21,7 @@ class CreateJobState extends State<CreateJob> {
   String _location;
   String _desc;
   String _numbStudents;
-  DateTime _selectedDate;
+  String _selectedDate;
   String _selectedTime;
   List form;
 
@@ -192,8 +192,11 @@ class CreateJobState extends State<CreateJob> {
   //Widget för att välja datum
   Widget _buildDate() {
     return Container(
-        width: 350,
-        child: TextButton(
+        width: 300,
+        child: FlatButton(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(15.0))),
+          color: Colors.red,
           onPressed: () {
             DatePicker.showDatePicker(context,
                 showTitleActions: true,
@@ -206,7 +209,7 @@ class CreateJobState extends State<CreateJob> {
 
               if (date != null) {
                 setState(() {
-                  _selectedDate = date;
+                  _selectedDate = date.toString();
                   Text(date.toString());
                   print(date.toString());
                 });
@@ -215,7 +218,7 @@ class CreateJobState extends State<CreateJob> {
           },
           child: Text(
             'Välj ett datum för jobbet',
-            style: TextStyle(color: Colors.blue),
+            style: TextStyle(color: Colors.white),
           ),
         ));
   }
@@ -223,7 +226,17 @@ class CreateJobState extends State<CreateJob> {
   //Widget för klockan med hjälp av _show
   Widget _buildTime() {
     return Container(
-      child: TextButton(onPressed: _show, child: Text('Välj tid för jobbet')),
+      width: 300,
+      child: FlatButton(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(15.0))),
+        color: Colors.red,
+        onPressed: _show,
+        child: Text(
+          'Välj ett datum för jobbet',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
     );
   }
 
