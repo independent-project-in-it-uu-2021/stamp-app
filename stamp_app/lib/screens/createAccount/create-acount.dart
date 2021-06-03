@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:stamp_app/services/auth.dart';
-import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart';
 
+import 'package:stamp_app/services/auth.dart';
 import 'package:stamp_app/sharedWidget/inputDecoration.dart';
 
 class CreateAccount extends StatefulWidget {
@@ -57,6 +59,13 @@ class CreateAccountState extends State<CreateAccount> {
     return curMargin;
   }
 
+  //Upload the image to firebase storage
+  Future uploadImage(BuildContext context) async {
+    String fileName = basename(_userImage.path);
+    Reference storageReference =
+        FirebaseStorage.instance.ref().child('userProfilePicture/&fileName');
+  }
+
   void showWriteBio() {
     setState(() {
       _writeBio = !_writeBio;
@@ -83,8 +92,7 @@ class CreateAccountState extends State<CreateAccount> {
             return 'Namn är obligatorisk';
           }
           if (value.length > 120) {
-            //TODO: Change the text below
-            return 'Namn får inte vara längre än 120 tecken';
+            return 'Namnet får inte vara längre än 120 tecken';
           }
           return null;
         },
@@ -112,10 +120,8 @@ class CreateAccountState extends State<CreateAccount> {
             return 'E-post är obligatorisk';
           }
           if (value.length > 255) {
-            //TODO: Change the text below
-            return 'Mejladress får inte vara längre än 255 tecken';
+            return 'Mejladressen får inte vara längre än 255 tecken';
           }
-
           // Check valid character for email
           if (!RegExp(
                   r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")

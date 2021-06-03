@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       initialData: null,
       value: AuthService().curUser,
       child: MaterialApp(
-        //home: Wrapper(),
+        showSemanticsDebugger: false,
         title: 'Registrera konto',
         home: Wrapper(),
       ),
