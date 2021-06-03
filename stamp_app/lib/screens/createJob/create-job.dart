@@ -170,6 +170,7 @@ class CreateJobState extends State<CreateJob> {
               new EdgeInsets.symmetric(vertical: 35.0, horizontal: 10.0),
         ),
         keyboardType: TextInputType.multiline,
+        maxLines: null,
         textAlignVertical: TextAlignVertical.top,
         // The acutal value from the input
         validator: (String value) {
