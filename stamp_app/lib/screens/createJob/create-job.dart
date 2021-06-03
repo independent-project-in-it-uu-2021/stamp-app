@@ -337,12 +337,12 @@ class CreateJobState extends State<CreateJob> {
                       _formKey.currentState.save();
 
                       FirebaseFirestore.instance.collection('jobs').add({
-                        'Jobbnamn': _name,
-                        'Plats': _location,
-                        'Beskrivning': _desc,
-                        'Antal': _numbStudents,
-                        'Datum': _selectedDate,
-                        'Tid': _selectedTime
+                        'jobName': _name,
+                        'location': _location,
+                        'description': _desc,
+                        'numberOfStudents': _numbStudents,
+                        'date': _selectedDate,
+                        'time': _selectedTime
                       });
                     }
                     Navigator.push(
