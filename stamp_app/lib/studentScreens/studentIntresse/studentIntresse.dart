@@ -6,27 +6,37 @@ import 'package:stamp_app/screens/home/home.dart';
 import 'package:stamp_app/screens/jobb/jobb.dart';
 import 'package:stamp_app/screens/slutval/slutval.dart';
 import 'package:stamp_app/screens/annansProfil/annansProfil.dart';
+import 'package:stamp_app/studentScreens/FinalStudentChoice/finalStudentChoice.dart';
 
-class Choice extends StatelessWidget {
+class StudentChoice extends StatelessWidget {
   final AuthService _firebaseAuth = AuthService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Välj Studentambassadörer'),
-        backgroundColor: Colors.red.shade900,
-        /*actions: <Widget>[
-          IconButton(
-            padding: EdgeInsets.only(right: 10),
-            onPressed: null,
-            icon: Icon(
-              Icons.chat_bubble_rounded,
-              color: Colors.white,
-              size: 35,
+            title:
+                Image.asset('assets/images/uuLogaNew.png', fit: BoxFit.cover),
+            //centerTitle: true,
+            backgroundColor: Colors.red.shade900,
+            elevation: 0,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios_rounded),
+              //TODO: This does nothing now
+              onPressed: () => Navigator.of(context).pop(),
+              tooltip: 'Tillbaka',
             ),
+            /*actions: <Widget>[
+              IconButton(
+                padding: EdgeInsets.only(right: 10),
+                onPressed: null,
+                icon: Icon(
+                  Icons.chat_bubble_rounded,
+                  color: Colors.white,
+                  size: 35,
+                ),
+              ),
+            ],*/
           ),
-        ],*/
-      ),
       body: Container(
         width: double.infinity,
         child: SingleChildScrollView(
@@ -260,10 +270,10 @@ class Choice extends StatelessWidget {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 primary: Colors.green[400],
-                padding: EdgeInsets.symmetric(horizontal: 90, vertical: 15),
+                padding: EdgeInsets.symmetric(horizontal: 70, vertical: 15),
               ),
               child: Text(
-                'Nästa Steg',
+                'Anmäl intresse',
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -273,7 +283,7 @@ class Choice extends StatelessWidget {
               onPressed: () => {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => FinalChoice()),
+                  MaterialPageRoute(builder: (context) => FinalStudentChoice()),
                 ),
               },
             ),

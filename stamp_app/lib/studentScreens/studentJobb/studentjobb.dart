@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
 import 'package:stamp_app/screens/val/val.dart';
 import 'package:stamp_app/screens/visaJobb/visaJobb.dart';
-import 'package:stamp_app/screens/studentIntresse/studentIntresse.dart';
+import 'package:stamp_app/studentScreens/studentIntresse/studentIntresse.dart';
 import 'package:stamp_app/services/auth.dart';
 
 class StudentWork extends StatelessWidget {
@@ -119,10 +119,39 @@ class StudentWork extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => StudentChoice()),
-                          )
+                              builder: (context) => StudentChoice(),
+                            ),
+                          ),
                         },
                     child: const Text('Jobb 2')),
+                Padding(
+                  padding: EdgeInsets.only(top: 30),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.001,
+                    width: MediaQuery.of(context).size.width * 0.83,
+                    color: Colors.black12,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 30),
+                ),
+                TextButton(
+                    style: TextButton.styleFrom(
+                      textStyle: const TextStyle(fontSize: 30),
+                      primary: Colors.black,
+                    ),
+                    onPressed: () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => StudentChoice(),
+                            ),
+                          ),
+                        },
+                    child: const Text('Jobb 3')),
                 Padding(
                   padding: EdgeInsets.only(top: 30),
                 ),

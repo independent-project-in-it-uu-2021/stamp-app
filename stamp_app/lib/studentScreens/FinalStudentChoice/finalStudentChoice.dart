@@ -7,25 +7,36 @@ import 'package:stamp_app/screens/jobb/jobb.dart';
 import 'package:stamp_app/screens/slutval/slutval.dart';
 import 'package:stamp_app/screens/annansProfil/annansProfil.dart';
 
-class Choice extends StatelessWidget {
+class FinalStudentChoice extends StatelessWidget {
   final AuthService _firebaseAuth = AuthService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Välj Studentambassadörer'),
+        title: Image.asset('assets/images/uuLogaNew.png', fit: BoxFit.cover),
+        //centerTitle: true,
         backgroundColor: Colors.red.shade900,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_rounded),
+          //TODO: This does nothing now
+          onPressed: () {
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+          },
+          tooltip: 'Tillbaka',
+        ),
         /*actions: <Widget>[
-          IconButton(
-            padding: EdgeInsets.only(right: 10),
-            onPressed: null,
-            icon: Icon(
-              Icons.chat_bubble_rounded,
-              color: Colors.white,
-              size: 35,
-            ),
-          ),
-        ],*/
+              IconButton(
+                padding: EdgeInsets.only(right: 10),
+                onPressed: null,
+                icon: Icon(
+                  Icons.chat_bubble_rounded,
+                  color: Colors.white,
+                  size: 35,
+                ),
+              ),
+            ],*/
       ),
       body: Container(
         width: double.infinity,
@@ -104,6 +115,13 @@ class Choice extends StatelessWidget {
                     color: Colors.black,
                   ),
                 ),
+                Padding(padding: EdgeInsets.only(top: 10)),
+                Text('Du har anmält intresse',
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.red.shade900,
+                      fontWeight: FontWeight.bold,
+                    )),
 
                 TextButton(
                   style: TextButton.styleFrom(
@@ -251,34 +269,6 @@ class Choice extends StatelessWidget {
               ],
             ),
           ),
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Colors.green[400],
-                padding: EdgeInsets.symmetric(horizontal: 90, vertical: 15),
-              ),
-              child: Text(
-                'Nästa Steg',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 21,
-                ),
-              ),
-              onPressed: () => {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => FinalChoice()),
-                ),
-              },
-            ),
-            Padding(padding: EdgeInsets.only(bottom: 100))
-          ],
         ),
       ),
     );
