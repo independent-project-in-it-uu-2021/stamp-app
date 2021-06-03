@@ -286,7 +286,7 @@ class ChoiceState extends State<Choice> {
                             ),
                             Padding(padding: EdgeInsets.fromLTRB(5, 0, 0, 0)),
                             Text(
-                              'Sixten Andersson',
+                              'Kalle Hansson',
                               style: TextStyle(
                                 fontSize: 15,
                                 color: Colors.black,
@@ -404,7 +404,7 @@ class ChoiceState extends State<Choice> {
                             ),
                             Padding(padding: EdgeInsets.fromLTRB(5, 0, 0, 0)),
                             Text(
-                              'Sixten Andersson',
+                              'Agnes Brorson',
                               style: TextStyle(
                                 fontSize: 15,
                                 color: Colors.black,
