@@ -7,41 +7,6 @@ import 'package:stamp_app/studentScreens/studentJobs/studentjobs.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Work extends StatelessWidget {
-  /*
-void printFirebase(){
-  databaseRef.once().then((DataSnapshot snapshot) {
-    print('Data : ${snapshot.value}');
-  });
-}
-    Widget build(BuildContext context) {
-    final currentJob = Provider.of<StudentJobs>(context);
-    print(currentJob.uid);
-    return StreamProvider<DocumentSnapshot>.value(
-      stream: FirebaseFirestore.instance.collection("jobs").snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) return new Text("There is no expense");
-          return new ListView(children: getExpenseItems(snapshot));
-    );
-  }
-}
-
-  getExpenseItems(AsyncSnapshot<QuerySnapshot> snapshot) {
-    return snapshot.data.documents
-        .map((doc) => new ListTile(title: new Text(doc["name"]), subtitle: new Text(doc["amount"].toString())))
-        .toList();
-  }
-
-final databaseReference = FirebaseFirestore.instance;
-void getData() {
-  databaseReference
-      .collection("books")
-      .getDocuments()
-      .then((QuerySnapshot snapshot) {
-    snapshot.documents.forEach((f) => print('${f.data}}'));
-  });
-}
-}*/
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -167,12 +132,4 @@ void getData() {
       ),
     );
   }
-  /*Widget build(BuildContext context) {
-    return new StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance.collection("jobs").snapshots,
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) return new Text("There is no expense");
-          return new ListView(children: getExpenseItems(snapshot));
-        });
-  }*/
 }
