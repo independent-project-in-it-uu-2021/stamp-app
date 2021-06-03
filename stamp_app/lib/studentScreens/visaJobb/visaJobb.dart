@@ -7,7 +7,7 @@ import 'package:stamp_app/screens/jobb/jobb.dart';
 import 'package:stamp_app/screens/slutval/slutval.dart';
 import 'package:stamp_app/screens/annansProfil/annansProfil.dart';
 
-class FinalStudentChoice extends StatelessWidget {
+class ShowWork extends StatelessWidget {
   final AuthService _firebaseAuth = AuthService();
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,6 @@ class FinalStudentChoice extends StatelessWidget {
           icon: Icon(Icons.arrow_back_ios_rounded),
           //TODO: This does nothing now
           onPressed: () {
-            Navigator.of(context).pop();
             Navigator.of(context).pop();
           },
           tooltip: 'Tillbaka',
@@ -116,9 +115,9 @@ class FinalStudentChoice extends StatelessWidget {
                   ),
                 ),
                 Padding(padding: EdgeInsets.only(top: 10)),
-                Text('Du har anmält intresse',
+                Text('Du är reserv',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 24,
                       color: Colors.red.shade900,
                       fontWeight: FontWeight.bold,
                     )),
