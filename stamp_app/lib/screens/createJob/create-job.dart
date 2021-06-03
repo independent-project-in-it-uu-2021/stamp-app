@@ -1,13 +1,12 @@
-import 'dart:ffi';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:stamp_app/screens/jobb/jobb.dart';
 
 //import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 
 class CreateJob extends StatefulWidget {
   @override
@@ -17,13 +16,12 @@ class CreateJob extends StatefulWidget {
 }
 
 class CreateJobState extends State<CreateJob> {
-  //HÄR BLIR DET VÄL ÄNDÅ FEL MED PARAMETRARNA?
   // State parameter
   String _name;
   String _location;
   String _desc;
   String _numbStudents; //TODO Set to float
-  String _selectedDate;
+  DateTime _selectedDate;
   String _selectedTime;
   List form;
 
@@ -31,13 +29,21 @@ class CreateJobState extends State<CreateJob> {
   bool _writeBio = false;
 
   Future<void> _show() async {
-    final TimeOfDay result =
-        await showTimePicker(context: context, initialTime: TimeOfDay.now());
-    if (result != null) {
+    final TimeOfDay result = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      builder: (BuildContext context, Widget child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child,
+        );
+      },
+    );
+    /*if (result != null) {
       setState(() {
         _selectedTime = result.format(context);
       });
-    }
+    }*/
   }
 
   void showWriteBio() {
@@ -199,7 +205,7 @@ class CreateJobState extends State<CreateJob> {
               Text(date.toString());
               if (date != null) {
                 setState(() {
-                  _selectedTime = date.toString();
+                  _selectedDate = date;
                 });
               }
             }, currentTime: DateTime.now(), locale: LocaleType.sv);
@@ -311,14 +317,14 @@ class CreateJobState extends State<CreateJob> {
                     // onsave method from above is called
                     if (_formKey.currentState.validate()) {
                       _formKey.currentState.save();
-                      form = [
+                      /*form = [
                         _name,
                         _location,
                         _desc,
                         _numbStudents,
                         _selectedDate,
                         _selectedTime,
-                      ];
+                      ];*/
                       print(form);
                       FirebaseFirestore.instance.collection('jobs').add({
                         'Jobbnamn': _name,
@@ -329,12 +335,10 @@ class CreateJobState extends State<CreateJob> {
                         'Tid': _selectedTime
                       });
                     }
-
-                    //print(_fullName);
-                    //print(_email);
-                    //print(_mobilnumber);
-                    //print(_userPassword);
-                    //print(_chosenProgram);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Work()),
+                    );
                   },
                 )
               ],
