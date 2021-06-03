@@ -136,12 +136,7 @@ class FinalChoice extends StatelessWidget {
                   fontSize: 21,
                 ),
               ),
-              onPressed: () => {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Work()),
-                ),
-              },
+              onPressed: () => {Navigator.pop(context), Navigator.pop(context)},
             ),
             Padding(padding: EdgeInsets.only(bottom: 100))
           ],
