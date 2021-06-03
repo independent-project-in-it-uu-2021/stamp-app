@@ -17,28 +17,16 @@ class CreateJob extends StatefulWidget {
 class CreateJobState extends State<CreateJob> {
   //HÄR BLIR DET VÄL ÄNDÅ FEL MED PARAMETRARNA?
   // State parameter
-  String _fullName;
-  String _email;
-  String _mobilnumber;
-  String _userPassword;
-  String _chosenProgram;
+  String _name;
+  String _location;
+  String _desc;
+  String _numbStudents; //TODO Set to float
+  String _selecteddate;
   String _selectedTime;
-  Float numStud;
+  List form;
 
   // Boolean value use to hide the write bio option field
   bool _writeBio = false;
-
-  File _userImage;
-/*
-  Future _getImage() async {
-    final pickedImage =
-        await ImagePicker().getImage(source: ImageSource.gallery);
-    setState(() {
-      _userImage = File(pickedImage.path);
-      print('_UserImage: $_userImage');
-    });
-  }
-*/
 
   Future<void> _show() async {
     final TimeOfDay result =
@@ -50,29 +38,11 @@ class CreateJobState extends State<CreateJob> {
     }
   }
 
-  // Method that is used to change the margin when an image is choosen
-  double _changeMarginImage() {
-    double curMargin;
-    setState(() {
-      /*
-      same as if(_userImage == null){
-        curMargin = 10;
-      } else{
-        curMargin = 0;
-      }
-      */
-      curMargin = _userImage == null ? 10 : 0;
-    });
-    return curMargin;
-  }
-
   void showWriteBio() {
     setState(() {
       _writeBio = !_writeBio;
     });
   }
-
-  //final programList<String> = ['Elektroteknik', 'Energisystem', 'Industriell ekonomi'];
 
   // key to hold the state of the form i.e referens to the form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -105,7 +75,7 @@ class CreateJobState extends State<CreateJob> {
         // The  form is saved and we tell what to do with the value
         onSaved: (String value) {
           print(value);
-          _fullName = value;
+          _name = value;
         },
       ),
     );
@@ -138,7 +108,7 @@ class CreateJobState extends State<CreateJob> {
         // The  form is saved and we tell what to do with the value
         onSaved: (String value) {
           print(value);
-          _fullName = value;
+          _location = value;
         },
       ),
     );
@@ -171,7 +141,7 @@ class CreateJobState extends State<CreateJob> {
         // The  form is saved and we tell what to do with the value
         onSaved: (String value) {
           print(value);
-          _fullName = value;
+          _numbStudents = value; //TODO Save as int
         },
       ),
     );
@@ -204,7 +174,7 @@ class CreateJobState extends State<CreateJob> {
         // The  form is saved and we tell what to do with the value
         onSaved: (String value) {
           print(value);
-          _fullName = value;
+          _desc = value;
         },
       ),
     );
@@ -225,6 +195,11 @@ class CreateJobState extends State<CreateJob> {
             }, onConfirm: (date) {
               print('confirm $date');
               Text(date.toString());
+              if (date != null) {
+                setState(() {
+                  _selectedTime = date.toString();
+                });
+              }
             }, currentTime: DateTime.now(), locale: LocaleType.sv);
           },
           child: Text(
@@ -262,17 +237,6 @@ class CreateJobState extends State<CreateJob> {
           },
           tooltip: 'Tillbaka',
         ),
-        /*actions: <Widget>[
-          IconButton(
-            padding: EdgeInsets.only(right: 10),
-            onPressed: null,
-            icon: Icon(
-              Icons.chat_bubble_rounded,
-              color: Colors.white,
-              size: 35,
-            ),
-          ),
-        ],*/
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -345,7 +309,15 @@ class CreateJobState extends State<CreateJob> {
                     // onsave method from above is called
                     if (_formKey.currentState.validate()) {
                       _formKey.currentState.save();
-                      print(_fullName);
+                      form = [
+                        _name,
+                        _location,
+                        _desc,
+                        _numbStudents,
+                        _selecteddate,
+                        _selectedTime,
+                      ];
+                      print(form);
                     }
 
                     //print(_fullName);
