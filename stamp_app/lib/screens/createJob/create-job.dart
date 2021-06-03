@@ -170,8 +170,6 @@ class CreateJobState extends State<CreateJob> {
           hintText: 'Beskrivning',
           counterStyle: TextStyle(color: Colors.red.shade900),
           errorStyle: TextStyle(color: Colors.red.shade900),
-          contentPadding:
-              new EdgeInsets.symmetric(vertical: 35.0, horizontal: 10.0),
         ),
         keyboardType: TextInputType.multiline,
         maxLines: null,
