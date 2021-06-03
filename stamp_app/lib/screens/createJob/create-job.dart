@@ -60,6 +60,8 @@ class CreateJobState extends State<CreateJob> {
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.name,
+        maxLength: 50,
+
         // Decorate the input field here,
         decoration: InputDecoration(
           filled: true,
@@ -93,6 +95,8 @@ class CreateJobState extends State<CreateJob> {
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.name,
+        maxLength: 50,
+
         // Decorate the input field here,
         decoration: InputDecoration(
           filled: true,
@@ -171,6 +175,7 @@ class CreateJobState extends State<CreateJob> {
         ),
         keyboardType: TextInputType.multiline,
         maxLines: null,
+        maxLength: 500,
         textAlignVertical: TextAlignVertical.top,
         // The acutal value from the input
         validator: (String value) {
