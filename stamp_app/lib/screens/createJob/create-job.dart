@@ -1,5 +1,7 @@
 import 'dart:ffi';
+import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -21,7 +23,7 @@ class CreateJobState extends State<CreateJob> {
   String _location;
   String _desc;
   String _numbStudents; //TODO Set to float
-  String _selecteddate;
+  String _selectedDate;
   String _selectedTime;
   List form;
 
@@ -314,10 +316,18 @@ class CreateJobState extends State<CreateJob> {
                         _location,
                         _desc,
                         _numbStudents,
-                        _selecteddate,
+                        _selectedDate,
                         _selectedTime,
                       ];
                       print(form);
+                      FirebaseFirestore.instance.collection('jobs').add({
+                        'Jobbnamn': _name,
+                        'Plats': _location,
+                        'Beskrivning': _desc,
+                        'Antal': _numbStudents,
+                        'Datum': _selectedDate,
+                        'Tid': _selectedTime
+                      });
                     }
 
                     //print(_fullName);
