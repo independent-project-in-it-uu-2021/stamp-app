@@ -21,8 +21,8 @@ class CreateJobState extends State<CreateJob> {
   String _location;
   String _desc;
   String _numbStudents;
-  String _selectedDate;
-  String _selectedTime;
+  String _selectedDate = "Inget datum valt";
+  String _selectedTime = "Ingen tid vald";
   List form;
 
   // Boolean value use to hide the write bio option field
@@ -206,18 +206,18 @@ class CreateJobState extends State<CreateJob> {
               print('change $date');
             }, onConfirm: (date) {
               print('confirm $date');
-
               if (date != null) {
                 setState(() {
-                  _selectedDate = date.toString();
-                  Text(date.toString());
+                  var formattedDate = "${date.day}-${date.month}-${date.year}";
+                  _selectedDate = formattedDate.toString();
                   print(date.toString());
                 });
               }
             }, currentTime: DateTime.now(), locale: LocaleType.sv);
           },
           child: Text(
-            'Välj ett datum för jobbet',
+            '''Välj ett datum för jobbet:
+            $_selectedDate''',
             style: TextStyle(color: Colors.white),
           ),
         ));
@@ -233,7 +233,8 @@ class CreateJobState extends State<CreateJob> {
         color: Colors.red,
         onPressed: _show,
         child: Text(
-          'Välj en tid för jobbet',
+          '''Välj en tid för jobbet:
+            $_selectedTime''',
           style: TextStyle(color: Colors.white),
         ),
       ),
