@@ -21,9 +21,8 @@ class CreateJobState extends State<CreateJob> {
   String _location;
   String _desc;
   String _numbStudents;
-  String _selectedDate = "Inget datum valt";
-  String _selectedTime = "Ingen tid vald";
-  List form;
+  String _selectedDate = "Välj ett datum för jobbet";
+  String _selectedTime = "Välj en tid för jobbet";
 
   // Boolean value use to hide the write bio option field
   bool _writeBio = false;
@@ -160,7 +159,6 @@ class CreateJobState extends State<CreateJob> {
     return Container(
       width: 350,
       child: TextFormField(
-        keyboardType: TextInputType.name,
         // Decorate the input field here,
         decoration: InputDecoration(
           filled: true,
@@ -168,7 +166,11 @@ class CreateJobState extends State<CreateJob> {
           hintText: 'Beskrivning',
           counterStyle: TextStyle(color: Colors.red.shade900),
           errorStyle: TextStyle(color: Colors.red.shade900),
+          contentPadding:
+              new EdgeInsets.symmetric(vertical: 35.0, horizontal: 10.0),
         ),
+        keyboardType: TextInputType.multiline,
+        textAlignVertical: TextAlignVertical.top,
         // The acutal value from the input
         validator: (String value) {
           if (value.isEmpty) {
@@ -196,7 +198,7 @@ class CreateJobState extends State<CreateJob> {
         child: FlatButton(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(15.0))),
-          color: Colors.red,
+          color: Colors.black12,
           onPressed: () {
             DatePicker.showDatePicker(context,
                 showTitleActions: true,
@@ -216,9 +218,8 @@ class CreateJobState extends State<CreateJob> {
             }, currentTime: DateTime.now(), locale: LocaleType.sv);
           },
           child: Text(
-            '''Välj ett datum för jobbet:
-            $_selectedDate''',
-            style: TextStyle(color: Colors.white),
+            "$_selectedDate",
+            style: TextStyle(color: Colors.black),
           ),
         ));
   }
@@ -230,12 +231,11 @@ class CreateJobState extends State<CreateJob> {
       child: FlatButton(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(15.0))),
-        color: Colors.red,
+        color: Colors.black12,
         onPressed: _show,
         child: Text(
-          '''Välj en tid för jobbet:
-            $_selectedTime''',
-          style: TextStyle(color: Colors.white),
+          "$_selectedTime",
+          style: TextStyle(color: Colors.black),
         ),
       ),
     );
@@ -334,15 +334,7 @@ class CreateJobState extends State<CreateJob> {
                     // onsave method from above is called
                     if (_formKey.currentState.validate()) {
                       _formKey.currentState.save();
-                      /*form = [
-                        _name,
-                        _location,
-                        _desc,
-                        _numbStudents,
-                        _selectedDate,
-                        _selectedTime,
-                      ];*/
-                      print(form);
+
                       FirebaseFirestore.instance.collection('jobs').add({
                         'Jobbnamn': _name,
                         'Plats': _location,
