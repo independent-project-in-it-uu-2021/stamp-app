@@ -20,7 +20,7 @@ class CreateJobState extends State<CreateJob> {
   String _name;
   String _location;
   String _desc;
-  String _numbStudents; //TODO Set to float
+  String _numbStudents;
   DateTime _selectedDate;
   String _selectedTime;
   List form;
@@ -29,16 +29,16 @@ class CreateJobState extends State<CreateJob> {
   bool _writeBio = false;
 
   Future<void> _show() async {
-    final TimeOfDay result =
-        await showTimePicker(context: context, initialTime: TimeOfDay.now());
-    /*,
+    final TimeOfDay result = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
       builder: (BuildContext context, Widget child) {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
           child: child,
         );
       },
-    );*/
+    );
     if (result != null) {
       setState(() {
         _selectedTime = result.format(context);
@@ -127,6 +127,7 @@ class CreateJobState extends State<CreateJob> {
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.number,
+        inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
         // Decorate the input field here,
         decoration: InputDecoration(
           filled: true,
@@ -202,10 +203,12 @@ class CreateJobState extends State<CreateJob> {
               print('change $date');
             }, onConfirm: (date) {
               print('confirm $date');
-              Text(date.toString());
+
               if (date != null) {
                 setState(() {
                   _selectedDate = date;
+                  Text(date.toString());
+                  print(date.toString());
                 });
               }
             }, currentTime: DateTime.now(), locale: LocaleType.sv);
