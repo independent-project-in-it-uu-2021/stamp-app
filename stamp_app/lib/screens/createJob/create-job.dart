@@ -29,21 +29,21 @@ class CreateJobState extends State<CreateJob> {
   bool _writeBio = false;
 
   Future<void> _show() async {
-    final TimeOfDay result = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
+    final TimeOfDay result =
+        await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    /*,
       builder: (BuildContext context, Widget child) {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
           child: child,
         );
       },
-    );
-    /*if (result != null) {
+    );*/
+    if (result != null) {
       setState(() {
         _selectedTime = result.format(context);
       });
-    }*/
+    }
   }
 
   void showWriteBio() {
