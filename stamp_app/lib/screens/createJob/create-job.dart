@@ -233,7 +233,7 @@ class CreateJobState extends State<CreateJob> {
         color: Colors.red,
         onPressed: _show,
         child: Text(
-          'Välj ett datum för jobbet',
+          'Välj en tid för jobbet',
           style: TextStyle(color: Colors.white),
         ),
       ),
