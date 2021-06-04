@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:stamp_app/screens/jobb/jobb.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
+import 'package:flutter_iconpicker/Serialization/iconDataSerialization.dart';
 //import 'package:image_picker/image_picker.dart';
 
 class CreateJob extends StatefulWidget {
@@ -24,15 +24,14 @@ class CreateJobState extends State<CreateJob> {
   String _numbStudents;
   String _selectedDate = "Välj ett datum för jobbet";
   String _selectedTime = "Välj en tid för jobbet";
-
+  Icon _icon;
   // Boolean value use to hide the write bio option field
   bool _writeBio = false;
-  Icon _icon;
 
-  _pickIcon() async {
+  Future<void> _pickIcon() async {
     IconData icon = await FlutterIconPicker.showIconPicker(context,
         iconPackMode: IconPack.cupertino);
-
+    serializeIcon(icon);
     _icon = Icon(icon);
     setState(() {});
 
@@ -150,7 +149,7 @@ class CreateJobState extends State<CreateJob> {
             SizedBox(height: 10),
             AnimatedSwitcher(
                 duration: Duration(milliseconds: 300),
-                child: _icon != null ? _icon : Container())
+                child: _icon != null ? _icon : Container()),
           ]),
     );
   }
