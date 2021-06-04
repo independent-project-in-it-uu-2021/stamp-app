@@ -253,7 +253,7 @@ class CreateAccountState extends State<CreateAccount> {
             fillColor: Colors.white,
             hintText: 'Program',
             //TODO: Change the text below
-            errorText: 'Vänligen välj en program'),
+            errorText: 'Vänligen välj ett program'),
       ),
     );
   }

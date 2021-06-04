@@ -241,7 +241,7 @@ class EditStudentState extends State<EditStudent> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ProfileEdit()),
+                              builder: (context) => EditAccount()),
                         );
                       }),
                 ),

@@ -1,28 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-//import 'package:image_picker/image_picker.dart';
+import 'package:stamp_app/services/auth.dart';
+import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-class ProfileEdit extends StatefulWidget {
+import 'package:stamp_app/sharedWidget/inputDecoration.dart';
+
+class EditAccount extends StatefulWidget {
+  final Function toggleFunc;
+  EditAccount({this.toggleFunc});
   @override
   State<StatefulWidget> createState() {
-    return ProfileEditState();
+    return EditAccountState();
   }
 }
 
-class ProfileEditState extends State<ProfileEdit> {
+class EditAccountState extends State<EditAccount> {
   // State parameter
   String _fullName;
   String _email;
   String _mobilnumber;
   String _userPassword;
   String _chosenProgram;
+  String _errorMsg = '';
+  String _defaultProfilePic =
+      'gs://stamp-db6ad.appspot.com/userProfilePicture/defaultPicChangeLater.jpg';
+  String _defaultAccountStatue = 'inactive';
+  File _userImage;
   // Boolean value use to hide the write bio option field
   bool _writeBio = false;
 
-  File _userImage;
-/*
+  // Authentication instance used to login
+  final AuthService _auth = AuthService();
+
   Future _getImage() async {
     final pickedImage =
         await ImagePicker().getImage(source: ImageSource.gallery);
@@ -31,18 +41,17 @@ class ProfileEditState extends State<ProfileEdit> {
       print('_UserImage: $_userImage');
     });
   }
-*/
+
   // Method that is used to change the margin when an image is choosen
   double _changeMarginImage() {
     double curMargin;
     setState(() {
-      /*
-      same as if(_userImage == null){
+      if (_userImage == null) {
         curMargin = 10;
-      } else{
+      } else {
         curMargin = 0;
       }
-      */
+
       curMargin = _userImage == null ? 10 : 0;
     });
     return curMargin;
@@ -57,6 +66,7 @@ class ProfileEditState extends State<ProfileEdit> {
   //final programList<String> = ['Elektroteknik', 'Energisystem', 'Industriell ekonomi'];
 
   // key to hold the state of the form i.e referens to the form
+  // this is a global form key
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   // Function for the name
@@ -66,34 +76,30 @@ class ProfileEditState extends State<ProfileEdit> {
       child: TextFormField(
         keyboardType: TextInputType.name,
         // Decorate the input field here,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.black12,
-          hintText: 'Förnamn Efternamn',
-          counterStyle: TextStyle(color: Colors.red.shade900),
-          errorStyle: TextStyle(color: Colors.red.shade900),
-        ),
+        decoration: textInputDecoration.copyWith(hintText: 'Förnamn Efternamn'),
         // The acutal value from the input
         validator: (String value) {
           if (value.isEmpty) {
-            return 'Namn är obligatorisk';
+            _fullName = _fullName;
           }
-          if (value.length > 120) {
+          if (value.isNotEmpty) {
+            if (value.length > 120) {
             //TODO: Change the text below
             return 'Namn får inte vara längre än 120 tecken';
           }
           return null;
-        },
+        };
         // The  form is saved and we tell what to do with the value
-        onSaved: (String value) {
-          print(value);
-          _fullName = value;
-        },
+        onChanged: (String value) {
+          setState(() {
+            _fullName = value;
+          });
+        };
+          }
       ),
     );
   }
 
-  //TODO: Check if a email is already used
   Widget _buildEmail() {
     return Container(
       width: 350,
@@ -101,19 +107,16 @@ class ProfileEditState extends State<ProfileEdit> {
         keyboardType: TextInputType.emailAddress,
         //maxLength: 255,
         // Decorate the input field here,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.black12,
-          hintText: 'E-post',
-          counterStyle: TextStyle(color: Colors.red.shade900),
-          errorStyle: TextStyle(color: Colors.red.shade900),
-        ),
+        decoration: textInputDecoration.copyWith(hintText: 'E-post'),
         // The acutal value from the input
         validator: (String value) {
           if (value.isEmpty) {
-            return 'E-post är obligatorisk';
+            setState(() {
+              _email = 'anders@admin.se';
+            });
           }
-          if (value.length > 255) {
+          if (value.isNotEmpty) {
+            if (value.length > 255) {
             //TODO: Change the text below
             return 'Mejladress får inte vara längre än 255 tecken';
           }
@@ -125,10 +128,13 @@ class ProfileEditState extends State<ProfileEdit> {
             return 'Ogiltig mejladress';
           }
           return null;
-        },
+        };
+          },
         // The  form is saved and we tell what to do with the value
-        onSaved: (String value) {
-          _email = value;
+        onChanged: (String value) {
+          setState(() {
+            _email = value;
+          });
         },
       ),
     );
@@ -140,17 +146,13 @@ class ProfileEditState extends State<ProfileEdit> {
       child: TextFormField(
         keyboardType: TextInputType.number,
         // Decorate the input field here,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.black12,
-          hintText: 'Telefonnummer (Frivilligt)',
-          counterStyle: TextStyle(color: Colors.red.shade900),
-          errorStyle: TextStyle(color: Colors.red.shade900),
-        ),
-
+        decoration:
+            textInputDecoration.copyWith(hintText: 'Telefonnummer (Frivillig)'),
         // The  form is saved and we tell what to do with the value
-        onSaved: (String value) {
-          _mobilnumber = value;
+        onChanged: (String value) {
+          setState(() {
+            _mobilnumber = value;
+          });
         },
       ),
     );
@@ -165,24 +167,20 @@ class ProfileEditState extends State<ProfileEdit> {
         enableSuggestions: false,
         autocorrect: false,
         // Decorate the input field here,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.black12,
-          hintText: 'Lösenord',
-          counterStyle: TextStyle(color: Colors.red.shade900),
-          errorStyle: TextStyle(color: Colors.red.shade900),
-        ),
+        decoration: textInputDecoration.copyWith(hintText: 'Lösenord'),
         // The acutal value from the input
         validator: (String value) {
           if (value.isEmpty) {
-            return 'Lösenord är obligatorisk';
+            return null;
           }
           return null;
         },
         //TODO: Password requirements
         // The  form is saved and we tell what to do with the value
-        onSaved: (String value) {
-          _userPassword = value;
+        onChanged: (String value) {
+          setState(() {
+            _userPassword = value;
+          });
         },
       ),
     );
@@ -196,14 +194,9 @@ class ProfileEditState extends State<ProfileEdit> {
         enableSuggestions: false,
         autocorrect: false,
         keyboardType: TextInputType.visiblePassword,
-        // Decorate the input field here,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.black12,
-          hintText: 'Upprepa lösenord',
-          counterStyle: TextStyle(color: Colors.red.shade900),
-          errorStyle: TextStyle(color: Colors.red.shade900),
-        ),
+        // Decorate the input field here, textInputDecoration is called from inputDecoration.dart
+        // textInputDecoration is used both here and in loggain.dart file. The decoration is the same.
+        decoration: textInputDecoration.copyWith(hintText: 'Upprepa lösenord'),
         // The acutal value from the input
         validator: (String value) {
           if (value.isEmpty) {
@@ -212,8 +205,7 @@ class ProfileEditState extends State<ProfileEdit> {
           if (value != _userPassword) {
             print('Value inside checkpassword');
             print(value);
-            // TODO: Change the text below
-            return 'Lösenord är inte samma';
+            return 'Vänligen ange samma lösenord';
           }
           return null;
         },
@@ -229,10 +221,10 @@ class ProfileEditState extends State<ProfileEdit> {
       child: DropdownButtonFormField(
         //TODO: Change the position of the list to above
         items: <String>[
-          'One',
-          'Two',
-          'Three',
-          'Övrigt',
+          'IT',
+          'STS',
+          'F',
+          'W',
         ].map<DropdownMenuItem<String>>((String value) {
           return new DropdownMenuItem(
             value: value,
@@ -252,7 +244,9 @@ class ProfileEditState extends State<ProfileEdit> {
             showWriteBio();
           } else {
             //showWriteBio();
-            _chosenProgram = newValue;
+            setState(() {
+              _chosenProgram = newValue;
+            });
           }
         },
         decoration: InputDecoration(
@@ -260,12 +254,12 @@ class ProfileEditState extends State<ProfileEdit> {
                 borderRadius:
                     const BorderRadius.all(const Radius.circular(30.0))),
             contentPadding: EdgeInsets.only(left: 15, top: 15),
-            errorStyle: TextStyle(color: Colors.black, fontSize: 13),
+            errorStyle: TextStyle(color: Colors.white, fontSize: 13),
             filled: true,
-            fillColor: Colors.black12,
+            fillColor: Colors.white,
             hintText: 'Program',
             //TODO: Change the text below
-            errorText: 'Vänligen välj en program'),
+            errorText: 'Vänligen välj ett program'),
       ),
     );
   }
@@ -285,8 +279,8 @@ class ProfileEditState extends State<ProfileEdit> {
 
             //TODO: Change the text below
             hintText: 'Din roll?',
-            counterStyle: TextStyle(color: Colors.red.shade900),
-            errorStyle: TextStyle(color: Colors.red.shade900),
+            counterStyle: TextStyle(color: Colors.white),
+            errorStyle: TextStyle(color: Colors.white),
           ),
           // The acutal value from the input
           validator: (String value) {
@@ -300,11 +294,10 @@ class ProfileEditState extends State<ProfileEdit> {
             return null;
           },
           // The  form is saved and we tell what to do with the value
-          onSaved: (String value) {
-            print('Inside _buildbio');
-            print(value);
-            print(_chosenProgram);
-            _chosenProgram = value;
+          onChanged: (String value) {
+            setState(() {
+              _chosenProgram = value;
+            });
           },
         ),
       ),
@@ -314,7 +307,7 @@ class ProfileEditState extends State<ProfileEdit> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.red.shade900,
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
@@ -326,17 +319,14 @@ class ProfileEditState extends State<ProfileEdit> {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_rounded),
-          // TODO: Change this (Does nothing right now)
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.of(context).pop(),
           tooltip: 'Tillbaka',
         ),
       ),
       body: SingleChildScrollView(
         child: Container(
           width: double.infinity,
-          margin: EdgeInsets.only(top: 60, bottom: 20),
+          margin: EdgeInsets.only(top: 40, bottom: 20),
           child: Form(
             key: _formKey,
             child: Column(
@@ -347,7 +337,7 @@ class ProfileEditState extends State<ProfileEdit> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 40,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                 ),
                 SizedBox(
@@ -382,16 +372,12 @@ class ProfileEditState extends State<ProfileEdit> {
                 SizedBox(
                   height: 12,
                 ),
-                OutlineButton(
-                  color: Colors.white,
-                  borderSide: BorderSide(
-                    color: Colors.black,
-                  ),
-                  /*style: ElevatedButton.styleFrom(
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
                     primary: Colors.white,
                     alignment: Alignment.center,
                     //padding: EdgeInsets.only(top: 10),
-                  ),*/
+                  ),
                   child: Container(
                     height: 60,
                     width: 100,
@@ -406,7 +392,7 @@ class ProfileEditState extends State<ProfileEdit> {
                           )
                         : Image.file(_userImage),
                   ),
-                  onPressed: () => null,
+                  onPressed: _getImage,
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
@@ -424,26 +410,37 @@ class ProfileEditState extends State<ProfileEdit> {
                       fontSize: 21,
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     // If the form is not valid
-
                     if (!_formKey.currentState.validate()) {
-                      return;
+                      print('Error: Form is not valid');
                     }
 
                     // If the form is valid, onSaved method is called
                     // onsave method from above is called
                     if (_formKey.currentState.validate()) {
-                      _formKey.currentState.save();
-                      print(_fullName);
+                      dynamic result = await _auth.registerWithEmailAndPassword(
+                          _email,
+                          _userPassword,
+                          _fullName,
+                          _mobilnumber,
+                          _chosenProgram,
+                          _defaultProfilePic,
+                          _defaultAccountStatue);
+                      if (result == null) {
+                        setState(() {
+                          _errorMsg = 'Mejladressen används redan';
+                        });
+                      }
                     }
-
-                    //print(_fullName);
-                    //print(_email);
-                    //print(_mobilnumber);
-                    //print(_userPassword);
-                    //print(_chosenProgram);
                   },
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                Text(
+                  _errorMsg,
+                  style: TextStyle(color: Colors.white, fontSize: 16),
                 )
               ],
             ),

@@ -241,7 +241,7 @@ class EditAdminState extends State<EditAdmin> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ProfileEdit()),
+                              builder: (context) => EditAccount()),
                         );
                       }),
                 ),

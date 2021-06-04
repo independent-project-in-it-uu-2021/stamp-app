@@ -241,7 +241,7 @@ class ConfirmUserState extends State<ConfirmUser> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ProfileEdit()),
+                              builder: (context) => EditAccount()),
                         );
                       }),
                 ),

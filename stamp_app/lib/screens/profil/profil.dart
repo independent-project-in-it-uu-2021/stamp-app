@@ -200,7 +200,7 @@ class ProfilState extends State<Profil> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ProfileEdit()),
+                                  builder: (context) => EditAccount()),
                             );
                           }),
                     ),
