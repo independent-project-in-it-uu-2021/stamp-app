@@ -31,8 +31,8 @@ class CreateJobState extends State<CreateJob> {
   Future<void> _pickIcon() async {
     IconData icon = await FlutterIconPicker.showIconPicker(context,
         iconPackMode: IconPack.cupertino);
-    serializeIcon(icon);
     _icon = Icon(icon);
+
     setState(() {});
 
     debugPrint('Picked Icon:  $icon');
@@ -144,7 +144,7 @@ class CreateJobState extends State<CreateJob> {
           children: <Widget>[
             RaisedButton(
               onPressed: _pickIcon,
-              child: Text('Open IconPicker'),
+              child: Text('Open Icon Picker'),
             ),
             SizedBox(height: 10),
             AnimatedSwitcher(
@@ -379,7 +379,8 @@ class CreateJobState extends State<CreateJob> {
                         'numberOfStudents': _numbStudents,
                         'date': _selectedDate,
                         'time': _selectedTime,
-                        'icon': _icon,
+                        'icon': _icon, //serializeIcon(_icon),
+,
                       });
                     }
                     Navigator.push(
