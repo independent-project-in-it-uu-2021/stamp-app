@@ -279,7 +279,7 @@ class CreateJobState extends State<CreateJob> {
           },
           tooltip: 'Tillbaka',
         ),
-        actions: <Widget>[
+        /*actions: <Widget>[
           IconButton(
             padding: EdgeInsets.only(right: 10),
             onPressed: null,
@@ -289,7 +289,7 @@ class CreateJobState extends State<CreateJob> {
               size: 35,
             ),
           ),
-        ],
+        ],*/
       ),
       body: SingleChildScrollView(
         child: Container(

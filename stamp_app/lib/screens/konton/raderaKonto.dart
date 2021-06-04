@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class raderaKonto extends StatefulWidget {
+class DeleteAccount extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return raderaKontoState();
+    return DeleteAccountState();
   }
 }
 
-class raderaKontoState extends State<raderaKonto> {
+class DeleteAccountState extends State<DeleteAccount> {
   // State parameter
   String _email;
   String _userPassword;

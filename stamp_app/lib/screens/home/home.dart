@@ -40,7 +40,7 @@ class Home extends StatelessWidget {
             ),
           ),
         ),
-        actions: <Widget>[
+        /*actions: <Widget>[
           IconButton(
             padding: EdgeInsets.only(right: 10),
             onPressed: null,
@@ -50,7 +50,7 @@ class Home extends StatelessWidget {
               size: 35,
             ),
           ),
-        ],
+        ],*/
       ),
       body: Container(
         width: double.infinity,
@@ -177,7 +177,7 @@ class Home extends StatelessWidget {
                 onPressed: () => {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => hanteraKonton()),
+                    MaterialPageRoute(builder: (context) => ManageAccount()),
                   )
                 },
                 shape: RoundedRectangleBorder(

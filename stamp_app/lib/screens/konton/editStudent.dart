@@ -11,10 +11,6 @@ class EditStudent extends StatefulWidget {
 }
 
 class EditStudentState extends State<EditStudent> {
-  // State parameter
-  String _email;
-  String _userPassword;
-
   // key to hold the state of the form i.e referens to the form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   //TODO: Check if an email is already used
@@ -226,7 +222,7 @@ class EditStudentState extends State<EditStudent> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => raderaKonto()),
+                              builder: (context) => DeleteAccount()),
                         );
                       }),
                 ),
