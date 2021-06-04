@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:stamp_app/screens/jobb/jobb.dart';
-
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 //import 'package:image_picker/image_picker.dart';
 
 class CreateJob extends StatefulWidget {
@@ -26,6 +27,17 @@ class CreateJobState extends State<CreateJob> {
 
   // Boolean value use to hide the write bio option field
   bool _writeBio = false;
+  Icon _icon;
+
+  _pickIcon() async {
+    IconData icon = await FlutterIconPicker.showIconPicker(context,
+        iconPackMode: IconPack.cupertino);
+
+    _icon = Icon(icon);
+    setState(() {});
+
+    debugPrint('Picked Icon:  $icon');
+  }
 
   Future<void> _show() async {
     final TimeOfDay result = await showTimePicker(
@@ -122,6 +134,24 @@ class CreateJobState extends State<CreateJob> {
           _location = value;
         },
       ),
+    );
+  }
+
+  Widget _chooseIcon() {
+    return Container(
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            RaisedButton(
+              onPressed: _pickIcon,
+              child: Text('Open IconPicker'),
+            ),
+            SizedBox(height: 10),
+            AnimatedSwitcher(
+                duration: Duration(milliseconds: 300),
+                child: _icon != null ? _icon : Container())
+          ]),
     );
   }
 
@@ -311,6 +341,10 @@ class CreateJobState extends State<CreateJob> {
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
+                _chooseIcon(),
+                Padding(
+                  padding: EdgeInsets.only(top: 12),
+                ),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
@@ -345,7 +379,8 @@ class CreateJobState extends State<CreateJob> {
                         'description': _desc,
                         'numberOfStudents': _numbStudents,
                         'date': _selectedDate,
-                        'time': _selectedTime
+                        'time': _selectedTime,
+                        'icon': _icon,
                       });
                     }
                     Navigator.push(
