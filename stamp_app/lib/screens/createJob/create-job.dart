@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -24,16 +25,18 @@ class CreateJobState extends State<CreateJob> {
   String _numbStudents;
   String _selectedDate = "Välj ett datum för jobbet";
   String _selectedTime = "Välj en tid för jobbet";
-  Icon _icon;
+  int _icon;
   // Boolean value use to hide the write bio option field
   bool _writeBio = false;
 
   Future<void> _pickIcon() async {
     IconData icon = await FlutterIconPicker.showIconPicker(context,
         iconPackMode: IconPack.cupertino);
-    _icon = Icon(icon);
 
-    setState(() {});
+    setState(() {
+      int ic = icon.codePoint;
+      _icon = ic;
+    });
 
     debugPrint('Picked Icon:  $icon');
   }
@@ -380,7 +383,6 @@ class CreateJobState extends State<CreateJob> {
                         'date': _selectedDate,
                         'time': _selectedTime,
                         'icon': _icon, //serializeIcon(_icon),
-,
                       });
                     }
                     Navigator.push(
