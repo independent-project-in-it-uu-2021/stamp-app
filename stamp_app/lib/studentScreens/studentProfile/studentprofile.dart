@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:stamp_app/models/user.dart';
 
 import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
 import 'package:stamp_app/services/database.dart';
@@ -26,13 +27,13 @@ class StudentProfileState extends State<StudentProfile> {
   @override
   Widget build(BuildContext context) {
     final _currentUser = Provider.of<User>(context);
-    return StreamBuilder<DocumentSnapshot>(
+    return StreamBuilder<UserData>(
       stream: DatabaseService(userId: _currentUser.uid).userData,
       builder: (context, snapshot) {
-        _userName = snapshot.data['userName'];
-        _userNumber = snapshot.data['userPhoneNumber'];
-        _userEmail = snapshot.data['userEmail'];
-        _userBio = snapshot.data['userProgram'];
+        _userName = snapshot.data.name;
+        _userNumber = snapshot.data.phoneNumer;
+        _userEmail = snapshot.data.email;
+        _userBio = snapshot.data.bio;
         return Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
