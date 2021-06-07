@@ -7,9 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:stamp_app/screens/jobb/jobb.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
-import 'package:flutter_iconpicker/Serialization/iconDataSerialization.dart';
 import 'package:icon_picker/icon_picker.dart';
-//import 'package:image_picker/image_picker.dart';
 
 class CreateJob extends StatefulWidget {
   @override
@@ -29,15 +27,6 @@ class CreateJobState extends State<CreateJob> {
   String _icon;
   // Boolean value use to hide the write bio option field
   bool _writeBio = false;
-
-  Future<void> _pickIcon() async {
-    IconData icon = await FlutterIconPicker.showIconPicker(context,
-        iconPackMode: IconPack.cupertino);
-    //_icon = icon.codePoint;
-    setState(() {});
-
-    debugPrint('Picked Icon:  $icon');
-  }
 
   Future<void> _show() async {
     final TimeOfDay result = await showTimePicker(
