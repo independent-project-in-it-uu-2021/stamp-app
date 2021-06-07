@@ -26,14 +26,14 @@ class CreateJobState extends State<CreateJob> {
   String _numbStudents;
   String _selectedDate = "Välj ett datum för jobbet";
   String _selectedTime = "Välj en tid för jobbet";
-  int _icon;
+  String _icon;
   // Boolean value use to hide the write bio option field
   bool _writeBio = false;
 
   Future<void> _pickIcon() async {
     IconData icon = await FlutterIconPicker.showIconPicker(context,
         iconPackMode: IconPack.cupertino);
-    _icon = icon.codePoint;
+    //_icon = icon.codePoint;
     setState(() {});
 
     debugPrint('Picked Icon:  $icon');
@@ -137,6 +137,10 @@ class CreateJobState extends State<CreateJob> {
     );
   }
 
+  conv(ic) {
+    _icon = ic.toString();
+  }
+
   final Map<String, IconData> myIconCollection = {
     'favorite': Icons.favorite,
     'home': Icons.home,
@@ -155,8 +159,8 @@ class CreateJobState extends State<CreateJob> {
         enableSearch: true,
         searchHint: 'Search icon',
         iconCollection: myIconCollection,
-        onChanged: (val) => print(val),
-        onSaved: (val) => print(val),
+        onChanged: (ic) => print(ic),
+        onSaved: (ic) => conv(ic),
       ),
     );
   }
