@@ -8,6 +8,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:stamp_app/screens/jobb/jobb.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:flutter_iconpicker/Serialization/iconDataSerialization.dart';
+import 'package:icon_picker/icon_picker.dart';
 //import 'package:image_picker/image_picker.dart';
 
 class CreateJob extends StatefulWidget {
@@ -32,11 +33,8 @@ class CreateJobState extends State<CreateJob> {
   Future<void> _pickIcon() async {
     IconData icon = await FlutterIconPicker.showIconPicker(context,
         iconPackMode: IconPack.cupertino);
-
-    setState(() {
-      int ic = icon.codePoint;
-      _icon = ic;
-    });
+    _icon = icon.codePoint;
+    setState(() {});
 
     debugPrint('Picked Icon:  $icon');
   }
@@ -139,21 +137,27 @@ class CreateJobState extends State<CreateJob> {
     );
   }
 
+  final Map<String, IconData> myIconCollection = {
+    'favorite': Icons.favorite,
+    'home': Icons.home,
+    'android': Icons.android,
+    'album': Icons.album,
+    'ac_unit': Icons.ac_unit,
+  };
   Widget _chooseIcon() {
     return Container(
-      child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            RaisedButton(
-              onPressed: _pickIcon,
-              child: Text('Open Icon Picker'),
-            ),
-            SizedBox(height: 10),
-            AnimatedSwitcher(
-                duration: Duration(milliseconds: 300),
-                child: _icon != null ? _icon : Container()),
-          ]),
+      child: IconPicker(
+        initialValue: 'favorite',
+        icon: Icon(Icons.apps),
+        labelText: "Icon",
+        title: "Select an icon",
+        cancelBtn: "CANCEL",
+        enableSearch: true,
+        searchHint: 'Search icon',
+        iconCollection: myIconCollection,
+        onChanged: (val) => print(val),
+        onSaved: (val) => print(val),
+      ),
     );
   }
 

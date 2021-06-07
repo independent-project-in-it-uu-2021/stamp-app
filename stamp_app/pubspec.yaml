@@ -38,6 +38,7 @@ dependencies:
   flutter_datetime_picker: ^1.5.1
   material_design_icons_flutter: ^4.0.5955
   flutter_iconpicker: ^3.0.2
+  icon_picker: ^2.0.0
 
 
 dev_dependencies:
