@@ -8,10 +8,6 @@ class makeAdmin extends StatefulWidget {
 }
 
 class makeAdminState extends State<makeAdmin> {
-  // State parameter
-  String _email;
-  String _userPassword;
-
   // key to hold the state of the form i.e referens to the form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   //TODO: Check if an email is already used
