@@ -129,24 +129,24 @@ class CreateJobState extends State<CreateJob> {
   }
 
   final Map<String, IconData> myIconCollection = {
-    'favorite': Icons.favorite,
+    'standard': Icons.favorite,
     'hem': Icons.home,
     'android': Icons.android,
     'album': Icons.album,
-    'ac_unit': Icons.ac_unit,
+    'snöflinga': Icons.ac_unit,
     'brev': Icons.local_post_office,
   };
 
   Widget _chooseIcon() {
     return Container(
       child: IconPicker(
-        initialValue: 'favorite',
+        initialValue: 'standard',
         icon: Icon(Icons.apps),
-        labelText: "Icon",
-        title: "Select an icon",
-        cancelBtn: "CANCEL",
+        labelText: "Välj en ikon för jobbet",
+        title: "Välj en ikon",
+        cancelBtn: "Avbryt",
         enableSearch: true,
-        searchHint: 'Search icon',
+        searchHint: 'Sök ikon',
         iconCollection: myIconCollection,
         onChanged: (ic) => print(ic),
         onSaved: (ic) => conv(ic),

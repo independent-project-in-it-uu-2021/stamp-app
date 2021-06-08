@@ -15,14 +15,10 @@ class EditStudent extends StatefulWidget {
 class EditStudentState extends State<EditStudent> {
   // key to hold the state of the form i.e referens to the form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  //TODO: Check if an email is already used
 
   _make() {
-    //Future<void>
-    //    DocumentReference docRef = FirebaseFirestore.instance.collection('jobs');
-    print("hej");
+    //Todo: Här nu för att undvika error
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
