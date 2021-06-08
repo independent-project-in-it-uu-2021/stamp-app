@@ -24,7 +24,7 @@ class CreateJobState extends State<CreateJob> {
   String _numbStudents;
   String _selectedDate = "Välj ett datum för jobbet";
   String _selectedTime = "Välj en tid för jobbet";
-  String _icon;
+  Map _icon;
   // Boolean value use to hide the write bio option field
   bool _writeBio = false;
 
@@ -126,18 +126,50 @@ class CreateJobState extends State<CreateJob> {
     );
   }
 
-  conv(ic) {
+  /* conv(ic) {
     _icon = ic.toString();
+  }*/
+
+  _pickIcon() async {
+    IconData icon = await FlutterIconPicker.showIconPicker(context,
+        iconPackMode: IconPack.cupertino);
+
+    //.toString();
+    debugPrint('Picked Icon:  $icon');
+    //_icon = Icon(icon);
+    Icon ic = Icon(icon);
+    setState(() {
+      _icon = serializeIcon(icon);
+    });
   }
 
-  final Map<String, IconData> myIconCollection = {
+  _chooseIcon() {
+    return Container(
+      child: Center(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+            RaisedButton(
+              onPressed: _pickIcon,
+              child: Text('Open IconPicker'),
+            ),
+            SizedBox(height: 10),
+            AnimatedSwitcher(
+                duration: Duration(milliseconds: 300),
+                child: _icon != null ? _icon : Container())
+          ])),
+    );
+  }
+
+  /*final Map<String, IconData> myIconCollection = {
     'favorite': Icons.favorite,
     'home': Icons.home,
     'android': Icons.android,
     'album': Icons.album,
     'ac_unit': Icons.ac_unit,
-  };
-  Widget _chooseIcon() {
+  };*/
+  /*Widget _chooseIcon() {
     return Container(
       child: IconPicker(
         initialValue: 'favorite',
@@ -149,10 +181,10 @@ class CreateJobState extends State<CreateJob> {
         searchHint: 'Search icon',
         iconCollection: myIconCollection,
         onChanged: (ic) => print(ic),
-        onSaved: (ic) => conv(ic),
+        //onSaved: (ic) => conv(ic),
       ),
     );
-  }
+  }*/
 
   Widget _buildStudents() {
     return Container(
@@ -344,6 +376,7 @@ class CreateJobState extends State<CreateJob> {
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
+                //_pickIcon(),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
