@@ -132,10 +132,11 @@ class CreateJobState extends State<CreateJob> {
 
   final Map<String, IconData> myIconCollection = {
     'favorite': Icons.favorite,
-    'home': Icons.home,
+    'hem': Icons.home,
     'android': Icons.android,
     'album': Icons.album,
     'ac_unit': Icons.ac_unit,
+    'brev': Icons.local_post_office,
   };
   Widget _chooseIcon() {
     return Container(
