@@ -4,8 +4,7 @@ import 'package:stamp_app/screens/konton/raderaKonto.dart';
 import 'package:stamp_app/screens/konton/hanteraKonton.dart';
 import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:stamp_app/services/database.dart';
-
+import 'package:stamp_app/services/database.dart' as updateStatus;
 //import 'package:stamp_app/screens/main.dart';
 
 class EditStudent extends StatefulWidget {
@@ -101,7 +100,7 @@ class EditStudentState extends State<EditStudent> {
                   height: 45,
                   width: 230,
                   child: FlatButton(
-                    onPressed: () => {updateUserData(accountType)},
+                    onPressed: () => {updateStatus.DatabaseService},
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15.0))),
                     color: Colors.red.shade900,
