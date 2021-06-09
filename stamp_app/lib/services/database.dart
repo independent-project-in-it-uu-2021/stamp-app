@@ -1,12 +1,16 @@
+import 'dart:js';
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 
 class DatabaseService {
   // Parameter to user id created with firebase autentication
   final String userId;
-
+  final String documentId;
   //Class constracter
-  DatabaseService({this.userId});
-
+  DatabaseService({this.userId, this.documentId});
   // reference to the user collection in firestore database
   final CollectionReference userCollection =
       FirebaseFirestore.instance.collection('users');
@@ -32,8 +36,31 @@ class DatabaseService {
     );
   }
 
+  @override
+  Widget getUser(BuildContext context) {
+    final _currentUser = Provider.of<User>(context);
+    String _accountType = '';
+
+    return StreamBuilder<DocumentSnapshot>(
+      stream: DatabaseService(userId: _currentUser.uid).userData,
+      builder: (context, snapshot) {
+        _accountType = snapshot.data['accountType'];
+
+        if (snapshot.hasError) {
+          return Text('Something went wrong');
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Text("Loading");
+        }
+      },
+    );
+  }
+
 //Updating the accountType of a user
-  Future updateStatus(String accountType) async {
+  Future updateStatus(BuildContext context) async {
+    String accountType = getUser(context).toString();
+    print(accountType);
     if (accountType == 'student') {
       return await userCollection.doc(userId).set(
         {
