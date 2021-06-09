@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:stamp_app/screens/konton/raderaKonto.dart';
-import 'package:stamp_app/screens/konton/makeAdmin.dart';
+import 'package:stamp_app/screens/konton/hanteraKonton.dart';
 import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 //import 'package:stamp_app/screens/main.dart';
 
 class EditStudent extends StatefulWidget {
@@ -15,10 +17,62 @@ class EditStudent extends StatefulWidget {
 class EditStudentState extends State<EditStudent> {
   // key to hold the state of the form i.e referens to the form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  //final String documentId;
+//GetUserName(this.documentId);
 
-  _make() {
-    //Todo: Här nu för att undvika error
+  _getUser(context) {
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    return FutureBuilder<DocumentSnapshot>(
+      future: users.doc('users').get(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return Text("Something went wrong");
+        }
+
+        if (snapshot.hasData && !snapshot.data.exists) {
+          return Text("Document does not exist");
+        }
+
+        if (snapshot.connectionState == ConnectionState.done) {
+          Map<String, dynamic> data = snapshot.data.data();
+          print(data);
+          return Text("Full Name: ${data['userName']} ${data['userBio']}");
+        }
+
+        return Text("loading");
+      },
+    );
+    print(users);
+
+    setState(() {
+      //getIsNewUSer=document['IsNewUser'];
+      print(users);
+    });
+
+    /*FirebaseFirestore.instance
+        .document('users/$uid')
+        .get()
+        .then((DocumentSnapshot document) {
+      print("document_build:$document");
+      setState(() {
+        getIsNewUSer = document['accountType'];
+        print("getIsNewUSe:$getIsNewUSer");
+      });
+    });*/
   }
+/*
+  _makeAdmin() {
+    FirebaseFirestore.instance
+        .collection('users')
+        .document(uid)
+        .updateData({"accountType": "admin"}).then((result) {
+      print("User is now admin");
+    }).catchError((onError) {
+      print("onError");
+    });
+  }*/
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,12 +155,7 @@ class EditStudentState extends State<EditStudent> {
                   height: 45,
                   width: 230,
                   child: FlatButton(
-                    onPressed: () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => _make()),
-                      ),
-                    },
+                    onPressed: () => {_getUser(context)},
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15.0))),
                     color: Colors.red.shade900,
