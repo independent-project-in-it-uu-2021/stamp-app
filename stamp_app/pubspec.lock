@@ -84,21 +84,33 @@ packages:
       name: firebase_auth
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "1.4.0"
+=======
+    version: "1.3.0"
+>>>>>>> 5a74f9ce8e3a4775e918ef27c3a1b54cd6640fe7
   firebase_auth_platform_interface:
     dependency: transitive
     description:
       name: firebase_auth_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "4.3.0"
+=======
+    version: "4.2.4"
+>>>>>>> 5a74f9ce8e3a4775e918ef27c3a1b54cd6640fe7
   firebase_auth_web:
     dependency: transitive
     description:
       name: firebase_auth_web
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "1.3.0"
+=======
+    version: "1.2.0"
+>>>>>>> 5a74f9ce8e3a4775e918ef27c3a1b54cd6640fe7
   firebase_core:
     dependency: "direct main"
     description:
@@ -126,7 +138,11 @@ packages:
       name: firebase_storage
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "8.1.2"
+=======
+    version: "8.1.1"
+>>>>>>> 5a74f9ce8e3a4775e918ef27c3a1b54cd6640fe7
   firebase_storage_platform_interface:
     dependency: transitive
     description:
@@ -153,6 +169,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.5.1"
+  flutter_iconpicker:
+    dependency: "direct main"
+    description:
+      name: flutter_iconpicker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.2"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -177,6 +200,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  font_awesome_flutter:
+    dependency: transitive
+    description:
+      name: font_awesome_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "9.0.0"
   http:
     dependency: transitive
     description:
@@ -198,6 +228,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
+<<<<<<< HEAD
   image_cropper:
     dependency: "direct main"
     description:
@@ -205,6 +236,8 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.0"
+=======
+>>>>>>> 5a74f9ce8e3a4775e918ef27c3a1b54cd6640fe7
   image_picker:
     dependency: "direct main"
     description:
@@ -247,6 +280,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.12.10"
+  material_design_icons_flutter:
+    dependency: "direct main"
+    description:
+      name: material_design_icons_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.5955"
   meta:
     dependency: transitive
     description:

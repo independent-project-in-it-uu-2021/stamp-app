@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:stamp_app/screens/jobb/jobb.dart';
 import 'package:icon_picker/icon_picker.dart';
-//import 'package:image_picker/image_picker.dart';
 
 class CreateJob extends StatefulWidget {
   @override
@@ -24,7 +23,6 @@ class CreateJobState extends State<CreateJob> {
   String _selectedDate = "Välj ett datum för jobbet";
   String _selectedTime = "Välj en tid för jobbet";
   String _icon;
-
   // Boolean value use to hide the write bio option field
   bool _writeBio = false;
 
@@ -381,7 +379,7 @@ class CreateJobState extends State<CreateJob> {
                         'numberOfStudents': _numbStudents,
                         'date': _selectedDate,
                         'time': _selectedTime,
-                        'icon': _icon
+                        'icon': _icon, //serializeIcon(_icon),
                       });
                     }
                     Navigator.push(
