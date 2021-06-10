@@ -334,28 +334,29 @@ class CreateAccountState extends State<CreateAccount> {
                   height: 12,
                 ),
                 ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.white,
-                      alignment: Alignment.center,
-                      //padding: EdgeInsets.only(top: 10),
-                    ),
-                    child: Container(
-                      height: 60,
-                      width: 100,
-                      margin: EdgeInsets.only(top: _changeMarginImage()),
-                      child: _userImage == null
-                          ? Text(
-                              'Ladda upp profilbild',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.black,
-                              ),
-                            )
-                          : Image.file(_userImage),
-                    ),
-                    onPressed: () {
-                      _getImage();
-                    }),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.white,
+                    alignment: Alignment.center,
+                    //padding: EdgeInsets.only(top: 10),
+                  ),
+                  child: Container(
+                    height: 60,
+                    width: 100,
+                    margin: EdgeInsets.only(top: _changeMarginImage()),
+                    child: _userImage == null
+                        ? Text(
+                            'Ladda upp profilbild',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          )
+                        : Image.file(_userImage),
+                  ),
+                  //onPressed: () {
+                  // _getImage();
+                  //}
+                ),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
