@@ -66,7 +66,6 @@ class CreateAccountState extends State<CreateAccount> {
 
   //Upload the image to firebase storage
   Future uploadImage(BuildContext context) async {
-    print('inside uploadImage');
     // Path of the picture
     String fileName = basename(_userImage.path);
 
@@ -81,7 +80,6 @@ class CreateAccountState extends State<CreateAccount> {
     // Url of the file in the storagew
     final String imageUrl = await downloadUrl.ref.getDownloadURL();
     return imageUrl;
-    print(imageUrl);
   }
 
   // key to hold the state of the form i.e referens to the form
@@ -222,7 +220,6 @@ class CreateAccountState extends State<CreateAccount> {
     );
   }
 
-  //Write bio if "Övrigt" is choosen in the dropdown meny
   Widget _buildBio() {
     return Container(
       width: 350,
@@ -347,7 +344,7 @@ class CreateAccountState extends State<CreateAccount> {
                                   )
                                 : Image.file(_userImage),
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             _getImage();
                           }),
                       Padding(
