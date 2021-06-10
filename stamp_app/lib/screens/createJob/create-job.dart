@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:stamp_app/screens/jobb/jobb.dart';
-
+import 'package:icon_picker/icon_picker.dart';
 //import 'package:image_picker/image_picker.dart';
 
 class CreateJob extends StatefulWidget {
@@ -23,6 +23,7 @@ class CreateJobState extends State<CreateJob> {
   String _numbStudents;
   String _selectedDate = "Välj ett datum för jobbet";
   String _selectedTime = "Välj en tid för jobbet";
+  String _icon;
 
   // Boolean value use to hide the write bio option field
   bool _writeBio = false;
@@ -121,6 +122,36 @@ class CreateJobState extends State<CreateJob> {
           print(value);
           _location = value;
         },
+      ),
+    );
+  }
+
+  conv(ic) {
+    _icon = ic.toString();
+  }
+
+  final Map<String, IconData> myIconCollection = {
+    'standard': Icons.favorite,
+    'hem': Icons.home,
+    'android': Icons.android,
+    'album': Icons.album,
+    'snöflinga': Icons.ac_unit,
+    'brev': Icons.local_post_office,
+  };
+
+  Widget _chooseIcon() {
+    return Container(
+      child: IconPicker(
+        initialValue: 'standard',
+        icon: Icon(Icons.apps),
+        labelText: "Välj en ikon för jobbet",
+        title: "Välj en ikon",
+        cancelBtn: "Avbryt",
+        enableSearch: true,
+        searchHint: 'Sök ikon',
+        iconCollection: myIconCollection,
+        onChanged: (ic) => print(ic),
+        onSaved: (ic) => conv(ic),
       ),
     );
   }
@@ -311,6 +342,10 @@ class CreateJobState extends State<CreateJob> {
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
+                _chooseIcon(),
+                Padding(
+                  padding: EdgeInsets.only(top: 12),
+                ),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
@@ -345,7 +380,8 @@ class CreateJobState extends State<CreateJob> {
                         'description': _desc,
                         'numberOfStudents': _numbStudents,
                         'date': _selectedDate,
-                        'time': _selectedTime
+                        'time': _selectedTime,
+                        'icon': _icon
                       });
                     }
                     Navigator.push(
