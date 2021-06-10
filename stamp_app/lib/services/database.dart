@@ -1,4 +1,4 @@
-import 'dart:js';
+//import 'dart:js';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -36,8 +36,26 @@ class DatabaseService {
     );
   }
 
-  @override
-  Widget getUser(BuildContext context) {
+  /*StreamBuilder getUserData(BuildContext context) {
+    final _currentUser = Provider.of<User>(context);
+    String _userName = '';
+    String _userNumber = '';
+    String _userEmail = '';
+    String _userBio = '';
+    String userAccountType = '';
+    return StreamBuilder<DocumentSnapshot>(
+        stream: DatabaseService(userId: _currentUser.uid).userData,
+        builder: (context, snapshot) {
+          _userName = snapshot.data['userName'];
+          _userNumber = snapshot.data['userPhoneNumber'];
+          _userEmail = snapshot.data['userEmail'];
+          _userBio = snapshot.data['userProgram'];
+          userAccountType = snapshot.data['accountType'];
+        });
+  }*/
+
+  /*
+  Future getUser(BuildContext context) async {
     final _currentUser = Provider.of<User>(context);
     String _accountType = '';
 
@@ -54,28 +72,34 @@ class DatabaseService {
           return Text("Loading");
         }
       },
-    );
+    return Scaffold(
+        );
+        );
+  }*/
+  // Get user information stream
+  Stream<DocumentSnapshot> get userData {
+    return userCollection.doc(userId).snapshots();
   }
-
+/*
 //Updating the accountType of a user
   Future updateStatus(BuildContext context) async {
-    String accountType = getUser(context).toString();
-    print(accountType);
-    if (accountType == 'student') {
+    StreamBuilder userData = getUserData(context);
+
+    if (userData.userAccountType == 'student') {
       return await userCollection.doc(userId).set(
         {
           'accountType': 'admin',
         },
       );
     }
-    if (accountType == 'admin') {
+    if (userAccountType == 'admin') {
       return await userCollection.doc(userId).set(
         {
           'accountType': 'student',
         },
       );
     }
-    if (accountType == 'inactive') {
+    if (userAccountType == 'inactive') {
       return await userCollection.doc(userId).set(
         {
           'accountType': 'student',
@@ -84,18 +108,13 @@ class DatabaseService {
     } else {
       return await userCollection.doc(userId).set(
         {
-          'accountType': accountType,
+          'accountType': userAccountType,
         },
       );
     }
   }
+}*/
 
-  // Get user information stream
-  Stream<DocumentSnapshot> get userData {
-    return userCollection.doc(userId).snapshots();
-  }
-}
-         
 //final String documentId;
 //GetUserName(this.documentId);
 /*
@@ -150,3 +169,4 @@ _getUser(context) {
     });
   }*/
   */
+}
