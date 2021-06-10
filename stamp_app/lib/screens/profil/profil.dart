@@ -37,9 +37,10 @@ class ProfilState extends State<Profil> {
           _userEmail = snapshot.data.email;
           _userBio = snapshot.data.bio;
           _profileImageUrl = snapshot.data.imageUrl;
-          if (snapshot.data.phoneNumer == null) {
-            _userNumber = 'Telefonnummer saknas';
-          }
+          snapshot.data.phoneNumer == null
+              ? _userNumber = 'Telefonnummer saknas'
+              : _userNumber = snapshot.data.phoneNumer;
+
           return Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
