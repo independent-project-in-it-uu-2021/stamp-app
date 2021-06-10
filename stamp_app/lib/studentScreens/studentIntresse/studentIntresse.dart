@@ -8,23 +8,24 @@ import 'package:stamp_app/screens/slutval/slutval.dart';
 import 'package:stamp_app/screens/annansProfil/annansProfil.dart';
 import 'package:stamp_app/studentScreens/FinalStudentChoice/finalStudentChoice.dart';
 
-class FinalChoice extends StatelessWidget {
+class StudentChoice extends StatelessWidget {
   final AuthService _firebaseAuth = AuthService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Image.asset('assets/images/uuLogaNew.png', fit: BoxFit.cover),
-        //centerTitle: true,
-        backgroundColor: Colors.red.shade900,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_rounded),
-          //TODO: This does nothing now
-          onPressed: () => Navigator.of(context).pop(),
-          tooltip: 'Tillbaka',
-        ),
-        /*actions: <Widget>[
+            title:
+                Image.asset('assets/images/uuLogaNew.png', fit: BoxFit.cover),
+            //centerTitle: true,
+            backgroundColor: Colors.red.shade900,
+            elevation: 0,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios_rounded),
+              //TODO: This does nothing now
+              onPressed: () => Navigator.of(context).pop(),
+              tooltip: 'Tillbaka',
+            ),
+            /*actions: <Widget>[
               IconButton(
                 padding: EdgeInsets.only(right: 10),
                 onPressed: null,
@@ -35,7 +36,7 @@ class FinalChoice extends StatelessWidget {
                 ),
               ),
             ],*/
-      ),
+          ),
       body: Container(
         width: double.infinity,
         child: SingleChildScrollView(
@@ -87,158 +88,45 @@ class FinalChoice extends StatelessWidget {
                       ],
                     ),
                     Padding(padding: EdgeInsets.only(top: 40)),
+                    Row(
+                      children: [
+                        Padding(padding: EdgeInsets.only(left: 30)),
+                        Expanded(
+                          child: Text(
+                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque porttitor tortor sed lacinia dictum. Mauris auctor massa magna, a consequat neque sodales eget. In ac hendrerit quam. Nullam sollicitudin orci at mauris rutrum scelerisque.',
+                            style: TextStyle(fontSize: 15),
+                            textAlign: TextAlign.left,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 10,
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 40),
                 ),
                 Text(
-                  'Valda',
+                  'Intresseanmälningar',
                   style: TextStyle(
                     fontSize: 30,
                     color: Colors.black,
                   ),
                 ),
 
-                Padding(padding: EdgeInsets.only(top: 20)),
-
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
+                TextButton(
+                  style: TextButton.styleFrom(
+                    textStyle: const TextStyle(fontSize: 26),
+                    primary: Colors.blue,
                   ),
+                  onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => OthersProfile()),
+                    )
+                  },
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                //---------------
-                FlatButton(
-                  onPressed: () => {},
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                  color: Colors.white,
-                  child: Row(
-                    // Replace with a Row for horizontal icon + text
-                    children: <Widget>[
-                      Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
-                      Image.asset(
-                        'assets/images/profilbild.png',
-                        fit: BoxFit.cover,
-                        scale: 3,
-                      ),
-                      Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
-                      Text(
-                        'Kalle Hansson',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                FlatButton(
-                  onPressed: () => {},
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                  color: Colors.white,
-                  child: Row(
-                    // Replace with a Row for horizontal icon + text
-                    children: <Widget>[
-                      Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
-                      Image.asset(
-                        'assets/images/profilbild.png',
-                        fit: BoxFit.cover,
-                        scale: 3,
-                      ),
-                      Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
-                      Text(
-                        'Agnes Brorson',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                FlatButton(
-                  onPressed: () => {},
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                  color: Colors.white,
-                  child: Row(
-                    // Replace with a Row for horizontal icon + text
-                    children: <Widget>[
-                      Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
-                      Image.asset(
-                        'assets/images/profilbild.png',
-                        fit: BoxFit.cover,
-                        scale: 3,
-                      ),
-                      Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
-                      Text(
-                        'Sixten Andersson',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(padding: EdgeInsets.only(top: 20)),
-                Text(
-                  'Reserver',
-                  style: TextStyle(
-                    fontSize: 30,
-                    color: Colors.black,
-                  ),
-                ),
-
-                Padding(padding: EdgeInsets.only(top: 20)),
 
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -382,20 +270,21 @@ class FinalChoice extends StatelessWidget {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 primary: Colors.green[400],
-                padding: EdgeInsets.symmetric(horizontal: 100, vertical: 15),
+                padding: EdgeInsets.symmetric(horizontal: 70, vertical: 15),
               ),
               child: Text(
-                'Bekräfta',
+                'Anmäl intresse',
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                   fontSize: 21,
                 ),
               ),
-
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
+              onPressed: () => {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => FinalStudentChoice()),
+                ),
               },
             ),
             Padding(padding: EdgeInsets.only(bottom: 100))

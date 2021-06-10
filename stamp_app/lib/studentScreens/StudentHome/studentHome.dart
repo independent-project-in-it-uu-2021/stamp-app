@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stamp_app/screens/studentJobb/studentjobb.dart';
+import 'package:stamp_app/studentScreens/studentJobb/studentjobb.dart';
 import 'package:stamp_app/services/auth.dart';
 
 import 'package:stamp_app/screens/jobb/jobb.dart';

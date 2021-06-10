@@ -1,8 +1,12 @@
+import 'dart:ui';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:stamp_app/screens/jobb/jobb.dart';
 
 //import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 
 class CreateJob extends StatefulWidget {
   @override
@@ -13,39 +17,32 @@ class CreateJob extends StatefulWidget {
 
 class CreateJobState extends State<CreateJob> {
   // State parameter
-  String _fullName;
-  String _email;
-  String _mobilnumber;
-  String _userPassword;
-  String _chosenProgram;
+  String _name;
+  String _location;
+  String _desc;
+  String _numbStudents;
+  String _selectedDate = "Välj ett datum för jobbet";
+  String _selectedTime = "Välj en tid för jobbet";
+
   // Boolean value use to hide the write bio option field
   bool _writeBio = false;
 
-  File _userImage;
-/*
-  Future _getImage() async {
-    final pickedImage =
-        await ImagePicker().getImage(source: ImageSource.gallery);
-    setState(() {
-      _userImage = File(pickedImage.path);
-      print('_UserImage: $_userImage');
-    });
-  }
-*/
-  // Method that is used to change the margin when an image is choosen
-  double _changeMarginImage() {
-    double curMargin;
-    setState(() {
-      /*
-      same as if(_userImage == null){
-        curMargin = 10;
-      } else{
-        curMargin = 0;
-      }
-      */
-      curMargin = _userImage == null ? 10 : 0;
-    });
-    return curMargin;
+  Future<void> _show() async {
+    final TimeOfDay result = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      builder: (BuildContext context, Widget child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child,
+        );
+      },
+    );
+    if (result != null) {
+      setState(() {
+        _selectedTime = result.format(context);
+      });
+    }
   }
 
   void showWriteBio() {
@@ -53,8 +50,6 @@ class CreateJobState extends State<CreateJob> {
       _writeBio = !_writeBio;
     });
   }
-
-  //final programList<String> = ['Elektroteknik', 'Energisystem', 'Industriell ekonomi'];
 
   // key to hold the state of the form i.e referens to the form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -65,6 +60,8 @@ class CreateJobState extends State<CreateJob> {
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.name,
+        maxLength: 50,
+
         // Decorate the input field here,
         decoration: InputDecoration(
           filled: true,
@@ -87,7 +84,7 @@ class CreateJobState extends State<CreateJob> {
         // The  form is saved and we tell what to do with the value
         onSaved: (String value) {
           print(value);
-          _fullName = value;
+          _name = value;
         },
       ),
     );
@@ -98,6 +95,8 @@ class CreateJobState extends State<CreateJob> {
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.name,
+        maxLength: 50,
+
         // Decorate the input field here,
         decoration: InputDecoration(
           filled: true,
@@ -120,73 +119,7 @@ class CreateJobState extends State<CreateJob> {
         // The  form is saved and we tell what to do with the value
         onSaved: (String value) {
           print(value);
-          _fullName = value;
-        },
-      ),
-    );
-  }
-
-  Widget _buildDate() {
-    return Container(
-      width: 350,
-      child: TextFormField(
-        keyboardType: TextInputType.name,
-        // Decorate the input field here,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.black12,
-          hintText: 'Datum',
-          counterStyle: TextStyle(color: Colors.red.shade900),
-          errorStyle: TextStyle(color: Colors.red.shade900),
-        ),
-        // The acutal value from the input
-        validator: (String value) {
-          if (value.isEmpty) {
-            return 'Datum är obligatorisk';
-          }
-          if (value.length > 120) {
-            //TODO: Change the text below
-            return 'Datum får inte vara längre än 120 tecken';
-          }
-          return null;
-        },
-        // The  form is saved and we tell what to do with the value
-        onSaved: (String value) {
-          print(value);
-          _fullName = value;
-        },
-      ),
-    );
-  }
-
-  Widget _buildTime() {
-    return Container(
-      width: 350,
-      child: TextFormField(
-        keyboardType: TextInputType.name,
-        // Decorate the input field here,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.black12,
-          hintText: 'Tid',
-          counterStyle: TextStyle(color: Colors.red.shade900),
-          errorStyle: TextStyle(color: Colors.red.shade900),
-        ),
-        // The acutal value from the input
-        validator: (String value) {
-          if (value.isEmpty) {
-            return 'Tid är obligatorisk';
-          }
-          if (value.length > 120) {
-            //TODO: Change the text below
-            return 'Tid får inte vara längre än 120 tecken';
-          }
-          return null;
-        },
-        // The  form is saved and we tell what to do with the value
-        onSaved: (String value) {
-          print(value);
-          _fullName = value;
+          _location = value;
         },
       ),
     );
@@ -196,7 +129,8 @@ class CreateJobState extends State<CreateJob> {
     return Container(
       width: 350,
       child: TextFormField(
-        keyboardType: TextInputType.name,
+        keyboardType: TextInputType.number,
+        inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
         // Decorate the input field here,
         decoration: InputDecoration(
           filled: true,
@@ -219,7 +153,7 @@ class CreateJobState extends State<CreateJob> {
         // The  form is saved and we tell what to do with the value
         onSaved: (String value) {
           print(value);
-          _fullName = value;
+          _numbStudents = value; //TODO Save as int
         },
       ),
     );
@@ -229,7 +163,6 @@ class CreateJobState extends State<CreateJob> {
     return Container(
       width: 350,
       child: TextFormField(
-        keyboardType: TextInputType.name,
         // Decorate the input field here,
         decoration: InputDecoration(
           filled: true,
@@ -238,6 +171,10 @@ class CreateJobState extends State<CreateJob> {
           counterStyle: TextStyle(color: Colors.red.shade900),
           errorStyle: TextStyle(color: Colors.red.shade900),
         ),
+        keyboardType: TextInputType.multiline,
+        maxLines: null,
+        maxLength: 500,
+        textAlignVertical: TextAlignVertical.top,
         // The acutal value from the input
         validator: (String value) {
           if (value.isEmpty) {
@@ -252,8 +189,58 @@ class CreateJobState extends State<CreateJob> {
         // The  form is saved and we tell what to do with the value
         onSaved: (String value) {
           print(value);
-          _fullName = value;
+          _desc = value;
         },
+      ),
+    );
+  }
+
+  //Widget för att välja datum
+  Widget _buildDate() {
+    return Container(
+        width: 300,
+        child: FlatButton(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(15.0))),
+          color: Colors.black12,
+          onPressed: () {
+            DatePicker.showDatePicker(context,
+                showTitleActions: true,
+                minTime: DateTime(DateTime.now().year - 5, 1, 1),
+                maxTime: DateTime(DateTime.now().year + 5, 12, 31),
+                onChanged: (date) {
+              print('change $date');
+            }, onConfirm: (date) {
+              print('confirm $date');
+              if (date != null) {
+                setState(() {
+                  var formattedDate = "${date.day}-${date.month}-${date.year}";
+                  _selectedDate = formattedDate.toString();
+                  print(date.toString());
+                });
+              }
+            }, currentTime: DateTime.now(), locale: LocaleType.sv);
+          },
+          child: Text(
+            "$_selectedDate",
+            style: TextStyle(color: Colors.black),
+          ),
+        ));
+  }
+
+  //Widget för klockan med hjälp av _show
+  Widget _buildTime() {
+    return Container(
+      width: 300,
+      child: FlatButton(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(15.0))),
+        color: Colors.black12,
+        onPressed: _show,
+        child: Text(
+          "$_selectedTime",
+          style: TextStyle(color: Colors.black),
+        ),
       ),
     );
   }
@@ -279,17 +266,6 @@ class CreateJobState extends State<CreateJob> {
           },
           tooltip: 'Tillbaka',
         ),
-        /*actions: <Widget>[
-          IconButton(
-            padding: EdgeInsets.only(right: 10),
-            onPressed: null,
-            icon: Icon(
-              Icons.chat_bubble_rounded,
-              color: Colors.white,
-              size: 35,
-            ),
-          ),
-        ],*/
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -319,15 +295,15 @@ class CreateJobState extends State<CreateJob> {
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
-                _buildDate(),
-                Padding(
-                  padding: EdgeInsets.only(top: 12),
-                ),
                 _buildAbout(),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
                 _buildStudents(),
+                Padding(
+                  padding: EdgeInsets.only(top: 12),
+                ),
+                _buildDate(),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
@@ -362,14 +338,20 @@ class CreateJobState extends State<CreateJob> {
                     // onsave method from above is called
                     if (_formKey.currentState.validate()) {
                       _formKey.currentState.save();
-                      print(_fullName);
-                    }
 
-                    //print(_fullName);
-                    //print(_email);
-                    //print(_mobilnumber);
-                    //print(_userPassword);
-                    //print(_chosenProgram);
+                      FirebaseFirestore.instance.collection('jobs').add({
+                        'jobName': _name,
+                        'location': _location,
+                        'description': _desc,
+                        'numberOfStudents': _numbStudents,
+                        'date': _selectedDate,
+                        'time': _selectedTime
+                      });
+                    }
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Work()),
+                    );
                   },
                 )
               ],
