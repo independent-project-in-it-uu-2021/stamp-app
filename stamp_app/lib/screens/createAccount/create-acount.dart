@@ -92,6 +92,7 @@ class CreateAccountState extends State<CreateAccount> {
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.name,
+        maxLength: 50,
         // Decorate the input field here,
         decoration: textInputDecoration.copyWith(hintText: 'Förnamn Efternamn'),
         // The acutal value from the input
@@ -119,6 +120,7 @@ class CreateAccountState extends State<CreateAccount> {
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.emailAddress,
+        maxLength: 50,
         //maxLength: 255,
         // Decorate the input field here,
         decoration: textInputDecoration.copyWith(hintText: 'E-post'),
@@ -153,6 +155,7 @@ class CreateAccountState extends State<CreateAccount> {
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.number,
+        maxLength: 50,
         // Decorate the input field here,
         decoration:
             textInputDecoration.copyWith(hintText: 'Telefonnummer (Frivillig)'),
@@ -171,6 +174,7 @@ class CreateAccountState extends State<CreateAccount> {
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.visiblePassword,
+        maxLength: 50,
         obscureText: true,
         enableSuggestions: false,
         autocorrect: false,
