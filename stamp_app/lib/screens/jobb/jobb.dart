@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'dart:js';
-
 import 'package:stamp_app/screens/createJob/create-job.dart';
 import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
 import 'package:stamp_app/screens/val/val.dart';
