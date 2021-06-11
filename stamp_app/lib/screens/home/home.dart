@@ -53,160 +53,162 @@ class Home extends StatelessWidget {
           ),
         ],*/
       ),
-      body: Container(
-        width: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
-            ),
+      body: SingleChildScrollView(
+        child: Container(
+          width: double.infinity,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
+              ),
 
-            //Button to go to Job page
-            Container(
-              height: 100,
-              width: 330,
-              child: FlatButton(
-                onPressed: () => {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Works()),
+              //Button to go to Job page
+              Container(
+                height: 100,
+                width: 330,
+                child: FlatButton(
+                  onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Works()),
+                    ),
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                  color: Colors.white,
+                  child: Row(
+                    // Replace with a Row for horizontal icon + text
+                    children: <Widget>[
+                      Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
+                      Icon(
+                        Icons.event_rounded,
+                        size: 60,
+                      ),
+                      Padding(padding: EdgeInsets.fromLTRB(45, 0, 0, 0)),
+                      Text(
+                        "Jobb",
+                        style: TextStyle(
+                          fontSize: 30,
+                        ),
+                      ),
+                    ],
                   ),
-                },
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                color: Colors.white,
-                child: Row(
-                  // Replace with a Row for horizontal icon + text
-                  children: <Widget>[
-                    Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
-                    Icon(
-                      Icons.event_rounded,
-                      size: 60,
-                    ),
-                    Padding(padding: EdgeInsets.fromLTRB(45, 0, 0, 0)),
-                    Text(
-                      "Jobb",
-                      style: TextStyle(
-                        fontSize: 30,
-                      ),
-                    ),
-                  ],
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
-            ),
-            //Button to get to Profile page
-            Container(
-              height: 100,
-              width: 330,
-              child: FlatButton(
-                onPressed: () => {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Profil()),
-                  )
-                },
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                color: Colors.white,
-                child: Row(
-                  // Replace with a Row for horizontal icon + text
-                  children: <Widget>[
-                    Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
-                    Icon(
-                      Icons.person,
-                      size: 60,
-                    ),
-                    Padding(padding: EdgeInsets.fromLTRB(45, 0, 0, 0)),
-                    Text(
-                      "Profil",
-                      style: TextStyle(
-                        fontSize: 30,
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
+              ),
+              //Button to get to Profile page
+              Container(
+                height: 100,
+                width: 330,
+                child: FlatButton(
+                  onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Profil()),
+                    )
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                  color: Colors.white,
+                  child: Row(
+                    // Replace with a Row for horizontal icon + text
+                    children: <Widget>[
+                      Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
+                      Icon(
+                        Icons.person,
+                        size: 60,
                       ),
-                    ),
-                  ],
+                      Padding(padding: EdgeInsets.fromLTRB(45, 0, 0, 0)),
+                      Text(
+                        "Profil",
+                        style: TextStyle(
+                          fontSize: 30,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
-            ),
-            //Button for previous jobs
-            Container(
-              height: 100,
-              width: 330,
-              child: FlatButton(
-                onPressed: () => {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => History()),
-                  )
-                },
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                color: Colors.white,
-                child: Row(
-                  // Replace with a Row for horizontal icon + text
-                  children: <Widget>[
-                    Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
-                    Icon(
-                      Icons.done,
-                      size: 60,
-                    ),
-                    Padding(padding: EdgeInsets.fromLTRB(45, 0, 0, 0)),
-                    Text(
-                      "Historik",
-                      style: TextStyle(
-                        fontSize: 30,
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
+              ),
+              //Button for previous jobs
+              Container(
+                height: 100,
+                width: 330,
+                child: FlatButton(
+                  onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => History()),
+                    )
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                  color: Colors.white,
+                  child: Row(
+                    // Replace with a Row for horizontal icon + text
+                    children: <Widget>[
+                      Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
+                      Icon(
+                        Icons.done,
+                        size: 60,
                       ),
-                    ),
-                  ],
+                      Padding(padding: EdgeInsets.fromLTRB(45, 0, 0, 0)),
+                      Text(
+                        "Historik",
+                        style: TextStyle(
+                          fontSize: 30,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
-            ),
-            //Button for Accounts
-            Container(
-              height: 100,
-              width: 330,
-              child: FlatButton(
-                onPressed: () => {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ManageAccount()),
-                  )
-                },
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                color: Colors.white,
-                child: Row(
-                  // Replace with a Row for horizontal icon + text
-                  children: <Widget>[
-                    Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
-                    Icon(
-                      Icons.person_add,
-                      size: 60,
-                    ),
-                    Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
-                    Text(
-                      "Hantera konton",
-                      style: TextStyle(
-                        fontSize: 30,
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
+              ),
+              //Button for Accounts
+              Container(
+                height: 100,
+                width: 330,
+                child: FlatButton(
+                  onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ManageAccount()),
+                    )
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                  color: Colors.white,
+                  child: Row(
+                    // Replace with a Row for horizontal icon + text
+                    children: <Widget>[
+                      Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
+                      Icon(
+                        Icons.person_add,
+                        size: 60,
                       ),
-                    ),
-                  ],
+                      Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
+                      Text(
+                        "Hantera konton",
+                        style: TextStyle(
+                          fontSize: 30,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(0, 60, 0, 0),
-            ),
-          ],
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 60, 0, 0),
+              ),
+            ],
+          ),
         ),
       ),
     );
