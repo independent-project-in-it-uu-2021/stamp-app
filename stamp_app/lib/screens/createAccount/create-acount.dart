@@ -7,6 +7,8 @@ import 'package:path/path.dart';
 
 import 'package:stamp_app/services/auth.dart';
 import 'package:stamp_app/sharedWidget/inputDecoration.dart';
+import 'package:stamp_app/sharedWidget/loadingScreen.dart';
+import 'package:stamp_app/sharedWidget/dialogWidget.dart';
 
 class CreateAccount extends StatefulWidget {
   final Function toggleFunc;
@@ -31,8 +33,8 @@ class CreateAccountState extends State<CreateAccount> {
       'https://firebasestorage.googleapis.com/v0/b/stamp-db6ad.appspot.com/o/userProfilePicture%2Fprofile-user.png?alt=media&token=170630ba-bccf-4bd7-b50b-9d5e08f01a73';
   String _defaultAccountStatue = 'inactive';
   File _userImage;
+  bool loading = false;
   // Boolean value use to hide the write bio option field
-  bool _writeBio = false;
 
   // Authentication instance used to login
   final AuthService _auth = AuthService();
@@ -65,7 +67,6 @@ class CreateAccountState extends State<CreateAccount> {
 
   //Upload the image to firebase storage
   Future uploadImage(BuildContext context) async {
-    print('inside uploadImage');
     // Path of the picture
     String fileName = basename(_userImage.path);
 
@@ -80,13 +81,6 @@ class CreateAccountState extends State<CreateAccount> {
     // Url of the file in the storagew
     final String imageUrl = await downloadUrl.ref.getDownloadURL();
     return imageUrl;
-    print(imageUrl);
-  }
-
-  void showWriteBio() {
-    setState(() {
-      _writeBio = !_writeBio;
-    });
   }
 
   // key to hold the state of the form i.e referens to the form
@@ -99,6 +93,7 @@ class CreateAccountState extends State<CreateAccount> {
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.name,
+        maxLength: 50,
         // Decorate the input field here,
         decoration: textInputDecoration.copyWith(hintText: 'Förnamn Efternamn'),
         // The acutal value from the input
@@ -126,6 +121,7 @@ class CreateAccountState extends State<CreateAccount> {
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.emailAddress,
+        maxLength: 50,
         //maxLength: 255,
         // Decorate the input field here,
         decoration: textInputDecoration.copyWith(hintText: 'E-post'),
@@ -160,6 +156,7 @@ class CreateAccountState extends State<CreateAccount> {
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.number,
+        maxLength: 50,
         // Decorate the input field here,
         decoration:
             textInputDecoration.copyWith(hintText: 'Telefonnummer (Frivillig)'),
@@ -178,6 +175,7 @@ class CreateAccountState extends State<CreateAccount> {
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.visiblePassword,
+        maxLength: 50,
         obscureText: true,
         enableSuggestions: false,
         autocorrect: false,
@@ -227,7 +225,6 @@ class CreateAccountState extends State<CreateAccount> {
     );
   }
 
-  //Write bio if "Övrigt" is choosen in the dropdown meny
   Widget _buildBio() {
     return Container(
       width: 350,
@@ -265,6 +262,7 @@ class CreateAccountState extends State<CreateAccount> {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     return Scaffold(
       backgroundColor: Colors.red.shade900,
       appBar: AppBar(
@@ -378,43 +376,169 @@ class CreateAccountState extends State<CreateAccount> {
                     if (!_formKey.currentState.validate()) {
                       print('Error: Form is not valid');
                     }
-
-                    // If the form is valid, onSaved method is called
-                    // onsave method from above is called
-                    if (_formKey.currentState.validate()) {
-                      _useDefaultPic
-                          ? _profileImageUrl = _defaultProfilePic
-                          : _profileImageUrl = await uploadImage(context);
-
-                      dynamic result = await _auth.registerWithEmailAndPassword(
-                          _email,
-                          _userPassword,
-                          _fullName,
-                          _mobilnumber,
-                          _chosenProgram,
-                          _profileImageUrl,
-                          _defaultAccountStatue);
-                      print(result);
-                      if (result == null) {
-                        setState(() {
-                          _errorMsg = 'Mejladressen används redan';
-                        });
-                      }
-                    }
-                  },
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                Text(
-                  _errorMsg,
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                )
-              ],
+=======
+    return loading
+        ? LoadingScreen()
+        : Scaffold(
+            backgroundColor: Colors.red.shade900,
+            appBar: AppBar(
+              systemOverlayStyle: SystemUiOverlayStyle(
+                statusBarColor: Colors.transparent,
+              ),
+              title:
+                  Image.asset('assets/images/uuLogaNew.png', fit: BoxFit.cover),
+              centerTitle: true,
+              backgroundColor: Colors.red.shade900,
+              brightness: Brightness.light,
+              elevation: 0,
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back_ios_rounded),
+                onPressed: () {
+                  widget.toggleFunc();
+                },
+                tooltip: 'Tillbaka',
+              ),
             ),
-          ),
-        ),
-      ),
-    );
+            body: SingleChildScrollView(
+              child: Container(
+                width: double.infinity,
+                margin: EdgeInsets.only(top: 60, bottom: 20),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Registrera Konto',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 40,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      _buildName(),
+                      Padding(
+                        padding: EdgeInsets.only(top: 12),
+                      ),
+                      _buildEmail(),
+                      Padding(
+                        padding: EdgeInsets.only(top: 12),
+                      ),
+                      _buildNumber(),
+                      Padding(
+                        padding: EdgeInsets.only(top: 12),
+                      ),
+                      _buildPassword(),
+                      Padding(
+                        padding: EdgeInsets.only(top: 12),
+                      ),
+                      _checkUserPassword(),
+                      Padding(
+                        padding: EdgeInsets.only(top: 12),
+                      ),
+                      _buildBio(),
+                      // adding space
+                      SizedBox(
+                        height: 12,
+                      ),
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.white,
+                            alignment: Alignment.center,
+                            //padding: EdgeInsets.only(top: 10),
+                          ),
+                          child: Container(
+                            height: 60,
+                            width: 100,
+                            margin: EdgeInsets.only(top: _changeMarginImage()),
+                            child: _userImage == null
+                                ? Text(
+                                    'Ladda upp profilbild',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  )
+                                : Image.file(_userImage),
+                          ),
+                          onPressed: () async {
+                            //_getImage();
+                            final userOption =
+                                await Dialogs.dialogAction(context, 'Bild?');
+>>>>>>> 249187d06e884b1be60af968fd0f5969c281b228
+
+                            if (userOption == DialogAction.camera) {
+                              print('Camera');
+                            } else {
+                              print('Gallery');
+                            }
+                          }),
+                      Padding(
+                        padding: EdgeInsets.only(top: 12),
+                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.green[400],
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 90, vertical: 15),
+                        ),
+                        child: Text(
+                          'Registrera',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 21,
+                          ),
+                        ),
+                        onPressed: () async {
+                          // If the form is not valid
+                          if (!_formKey.currentState.validate()) {
+                            print('Error: Form is not valid');
+                          }
+
+                          // If the form is valid, onSaved method is called
+                          // onsave method from above is called
+                          if (_formKey.currentState.validate()) {
+                            //Show loading screen
+                            setState(() => loading = true);
+                            _useDefaultPic
+                                ? _profileImageUrl = _defaultProfilePic
+                                : _profileImageUrl = await uploadImage(context);
+
+                            dynamic result =
+                                await _auth.registerWithEmailAndPassword(
+                                    _email,
+                                    _userPassword,
+                                    _fullName,
+                                    _mobilnumber,
+                                    _chosenProgram,
+                                    _profileImageUrl,
+                                    _defaultAccountStatue);
+                            print(result);
+                            if (result == null) {
+                              setState(() {
+                                loading = false;
+                                _errorMsg = 'Mejladressen används redan';
+                              });
+                            }
+                          }
+                        },
+                      ),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Text(
+                        _errorMsg,
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
   }
 }

@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
+import 'package:stamp_app/models/user.dart';
+
 class DatabaseService {
   // Parameter to user id created with firebase autentication
   final String userId;
@@ -21,7 +23,7 @@ class DatabaseService {
       String userName,
       String userEmail,
       String userPhoneNumber,
-      String userProgram,
+      String userBio,
       String userProfilePicUrl,
       String accountType) async {
     return await userCollection.doc(userId).set(
@@ -29,7 +31,7 @@ class DatabaseService {
         'userName': userName,
         'userEmail': userEmail,
         'userPhoneNumber': userPhoneNumber,
-        'userProgram': userProgram,
+        'userBio': userBio,
         'userProfilePicUrl': userProfilePicUrl,
         'accountType': accountType,
       },
@@ -76,9 +78,21 @@ class DatabaseService {
         );
         );
   }*/
+  UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
+    return UserData(
+      uid: userId,
+      name: snapshot.data()['userName'],
+      email: snapshot.data()['userEmail'],
+      phoneNumer: snapshot.data()['userPhoneNumber'],
+      bio: snapshot.data()['userBio'],
+      imageUrl: snapshot.data()['userProfilePicUrl'],
+      accountType: snapshot.data()['accountType'],
+    );
+  }
+
   // Get user information stream
-  Stream<DocumentSnapshot> get userData {
-    return userCollection.doc(userId).snapshots();
+  Stream<UserData> get userData {
+    return userCollection.doc(userId).snapshots().map(_userDataFromSnapshot);
   }
 /*
 //Updating the accountType of a user

@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:stamp_app/screens/konton/raderaKonto.dart';
 import 'package:stamp_app/screens/konton/hanteraKonton.dart';
+import 'package:stamp_app/screens/konton/deleteAccount.dart';
+import 'package:stamp_app/screens/konton/makeAdmin.dart';
 import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stamp_app/services/database.dart' as updateStatus;
