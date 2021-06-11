@@ -73,6 +73,25 @@ class Work extends StatelessWidget {
           );
         },
       ),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FloatingActionButton(
+              backgroundColor: Colors.red.shade900,
+              foregroundColor: Colors.white,
+              onPressed: () => {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CreateJob()),
+                )
+              },
+              child: Icon(Icons.add),
+            ),
+            Padding(padding: EdgeInsets.only(bottom: 100))
+          ],
+        ),
+      ),
     );
   }
 }
