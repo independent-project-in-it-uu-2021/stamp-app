@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
+import 'package:stamp_app/screens/createAccount/profileImage.dart';
 
 import 'package:stamp_app/services/auth.dart';
 import 'package:stamp_app/sharedWidget/inputDecoration.dart';
@@ -348,7 +349,12 @@ class CreateAccountState extends State<CreateAccount> {
                                 : Image.file(_userImage),
                           ),
                           onPressed: () {
-                            _getImage();
+                            //_getImage();
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  ProfileImage();
+                                });
                           }),
                       Padding(
                         padding: EdgeInsets.only(top: 12),
