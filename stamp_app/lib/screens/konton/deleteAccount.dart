@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:stamp_app/screens/konton/hanteraKonton.dart';
+import 'package:stamp_app/services/database.dart'; // as _userDataFromSnapshot;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:stamp_app/models/user.dart';
+import 'package:provider/provider.dart';
 
 class DeleteAccount extends StatefulWidget {
   @override
@@ -14,6 +20,11 @@ class DeleteAccountState extends State<DeleteAccount> {
 
   @override
   Widget build(BuildContext context) {
+    final _currentUser = Provider.of<User>(context);
+//var collection = FirebaseFirestore.instance.collection('users');
+//var querySnapshots = _currentUser.delete();
+
+    _currentUser.delete();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -69,7 +80,14 @@ class DeleteAccountState extends State<DeleteAccount> {
                   height: 45,
                   width: 230,
                   child: FlatButton(
-                    onPressed: () => {"Radera"},
+                    onPressed: () => {
+                      _currentUser.delete(),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ManageAccount()),
+                      )
+                    },
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15.0))),
                     color: Colors.red.shade900,

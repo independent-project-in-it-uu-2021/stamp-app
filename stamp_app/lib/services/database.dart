@@ -94,6 +94,8 @@ class DatabaseService {
   Stream<UserData> get userData {
     return userCollection.doc(userId).snapshots().map(_userDataFromSnapshot);
   }
+
+
 /*
 //Updating the accountType of a user
   Future updateStatus(BuildContext context) async {
