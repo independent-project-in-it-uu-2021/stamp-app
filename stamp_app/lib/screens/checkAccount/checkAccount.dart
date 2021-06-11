@@ -16,7 +16,12 @@ class CheckAccount extends StatelessWidget {
     print("hej");
     final currentUser = Provider.of<User>(context);
     print(currentUser.uid);
-    return MultiProvider(providers: [
+    return StreamProvider.value(
+      value: DatabaseService(userId: currentUser.uid).userData,
+      initialData: UserData().newDummyUser(),
+      child: Authorization(),
+    );
+    /*return MultiProvider(providers: [
       //StreamProvider for user information
       StreamProvider<UserData>.value(
         value: DatabaseService(userId: currentUser.uid).userData,
@@ -29,6 +34,6 @@ class CheckAccount extends StatelessWidget {
         initialData: [],
         //child: Home(),
       )
-    ], child: Authorization());
+    ], child: Authorization());*/
   }
 }
