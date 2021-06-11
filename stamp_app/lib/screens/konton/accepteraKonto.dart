@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stamp_app/screens/konton/makeAccept.dart';
-import 'package:stamp_app/screens/konton/raderaKonto.dart';
+import 'package:stamp_app/screens/konton/deleteAccount.dart';
 import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
 
 class ConfirmUser extends StatefulWidget {
