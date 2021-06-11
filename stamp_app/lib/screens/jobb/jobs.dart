@@ -34,9 +34,10 @@ List<Map<String, dynamic>> _menuItem = [
   },
 ];
 
-class Work extends StatelessWidget {
+class Works extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print('Inside works build');
     final allJobs = Provider.of<List<Jobs>>(context) ?? [];
 
     return Scaffold(
@@ -55,14 +56,14 @@ class Work extends StatelessWidget {
           ),
         ],*/
       ),
-      body: new ListView.builder(
-        itemCount: _menuItem.length,
+      body: ListView.builder(
+        itemCount: allJobs.length,
         itemBuilder: (BuildContext context, int index) {
-          return new Card(
+          return Card(
             child: ListTile(
-              leading: _menuItem[index]['icon'],
-              title: Text(_menuItem[index]['title']),
-              subtitle: Text(_menuItem[index]['subtitle']),
+              leading: Icon(Icons.people),
+              title: Text(allJobs[index].title),
+              //subtitle: Text(allJobs[index].),
               /*child: Align(
                 alignment: Alignment.topRight,
                 child: Text('TESTING TESTING'),

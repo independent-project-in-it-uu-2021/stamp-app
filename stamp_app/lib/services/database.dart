@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:stamp_app/models/jobsModel.dart';
 import 'package:stamp_app/models/user.dart';
 
 class DatabaseService {
@@ -12,6 +13,8 @@ class DatabaseService {
   // reference to the user collection in firestore database
   final CollectionReference userCollection =
       FirebaseFirestore.instance.collection('users');
+  final CollectionReference jobsCollection =
+      FirebaseFirestore.instance.collection('jobs');
 
 //updateUserData(userName, userPhoneNumber, userProgram, userProfilePic)
   // method to update user data
@@ -34,6 +37,24 @@ class DatabaseService {
     );
   }
 
+  //Job list
+  List<Jobs> _jobsFromDatabase(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return Jobs(
+          title: doc.data()['jobName'],
+          date: doc.data()['date'],
+          time: doc.data()['time'],
+          location: doc.data()['location'],
+          count: doc.data()['numberOfStudents']);
+    }).toList();
+  }
+
+  //Get jobs stream
+  Stream<List<Jobs>> get allJobs {
+    return jobsCollection.snapshots().map(_jobsFromDatabase);
+  }
+
+  // User model for stream
   UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
     return UserData(
       uid: userId,
