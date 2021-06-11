@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:stamp_app/screens/jobb/jobb.dart';
 import 'package:icon_picker/icon_picker.dart';
+import 'package:stamp_app/services/database.dart';
 
 class CreateJob extends StatefulWidget {
   @override
@@ -372,15 +373,9 @@ class CreateJobState extends State<CreateJob> {
                     if (_formKey.currentState.validate()) {
                       _formKey.currentState.save();
 
-                      FirebaseFirestore.instance.collection('jobs').add({
-                        'jobName': _name,
-                        'location': _location,
-                        'description': _desc,
-                        'numberOfStudents': _numbStudents,
-                        'date': _selectedDate,
-                        'time': _selectedTime,
-                        'icon': _icon, //serializeIcon(_icon),
-                      });
+                      //Adding the job to the databas collection
+                      DatabaseService().createJob(_name, _location, _desc,
+                          _numbStudents, _selectedDate, _selectedTime, _icon);
                     }
                     Navigator.push(
                       context,
