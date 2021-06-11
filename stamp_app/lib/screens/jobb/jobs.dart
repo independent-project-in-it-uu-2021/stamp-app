@@ -37,6 +37,7 @@ List<Map<String, dynamic>> _menuItem = [
 class Works extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print('Inside works build');
     final allJobs = Provider.of<List<Jobs>>(context) ?? [];
 
     return Scaffold(
