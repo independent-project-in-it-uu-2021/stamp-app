@@ -34,10 +34,12 @@ class ProfilState extends State<Profil> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           _userName = snapshot.data.name;
-          _userNumber = snapshot.data.phoneNumer;
           _userEmail = snapshot.data.email;
           _userBio = snapshot.data.bio;
           _profileImageUrl = snapshot.data.imageUrl;
+          snapshot.data.phoneNumer == null
+              ? _userNumber = 'Telefonnummer saknas'
+              : _userNumber = snapshot.data.phoneNumer;
 
           return Scaffold(
             backgroundColor: Colors.white,

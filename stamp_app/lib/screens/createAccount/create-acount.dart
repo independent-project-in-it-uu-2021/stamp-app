@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
-import 'package:stamp_app/screens/createAccount/profileImage.dart';
+//import 'package:stamp_app/screens/createAccount/profileImage.dart';
 
 import 'package:stamp_app/services/auth.dart';
 import 'package:stamp_app/sharedWidget/inputDecoration.dart';
@@ -67,7 +67,6 @@ class CreateAccountState extends State<CreateAccount> {
 
   //Upload the image to firebase storage
   Future uploadImage(BuildContext context) async {
-    print('inside uploadImage');
     // Path of the picture
     String fileName = basename(_userImage.path);
 
@@ -82,7 +81,6 @@ class CreateAccountState extends State<CreateAccount> {
     // Url of the file in the storagew
     final String imageUrl = await downloadUrl.ref.getDownloadURL();
     return imageUrl;
-    print(imageUrl);
   }
 
   // key to hold the state of the form i.e referens to the form
@@ -95,6 +93,7 @@ class CreateAccountState extends State<CreateAccount> {
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.name,
+        maxLength: 50,
         // Decorate the input field here,
         decoration: textInputDecoration.copyWith(hintText: 'Förnamn Efternamn'),
         // The acutal value from the input
@@ -122,6 +121,7 @@ class CreateAccountState extends State<CreateAccount> {
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.emailAddress,
+        maxLength: 50,
         //maxLength: 255,
         // Decorate the input field here,
         decoration: textInputDecoration.copyWith(hintText: 'E-post'),
@@ -156,6 +156,7 @@ class CreateAccountState extends State<CreateAccount> {
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.number,
+        maxLength: 50,
         // Decorate the input field here,
         decoration:
             textInputDecoration.copyWith(hintText: 'Telefonnummer (Frivillig)'),
@@ -174,6 +175,7 @@ class CreateAccountState extends State<CreateAccount> {
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.visiblePassword,
+        maxLength: 50,
         obscureText: true,
         enableSuggestions: false,
         autocorrect: false,
@@ -223,7 +225,6 @@ class CreateAccountState extends State<CreateAccount> {
     );
   }
 
-  //Write bio if "Övrigt" is choosen in the dropdown meny
   Widget _buildBio() {
     return Container(
       width: 350,
@@ -348,13 +349,8 @@ class CreateAccountState extends State<CreateAccount> {
                                   )
                                 : Image.file(_userImage),
                           ),
-                          onPressed: () {
-                            //_getImage();
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  ProfileImage();
-                                });
+                          onPressed: () async {
+                            _getImage();
                           }),
                       Padding(
                         padding: EdgeInsets.only(top: 12),
