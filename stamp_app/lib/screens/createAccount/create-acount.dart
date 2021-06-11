@@ -4,11 +4,11 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
-//import 'package:stamp_app/screens/createAccount/profileImage.dart';
 
 import 'package:stamp_app/services/auth.dart';
 import 'package:stamp_app/sharedWidget/inputDecoration.dart';
 import 'package:stamp_app/sharedWidget/loadingScreen.dart';
+import 'package:stamp_app/sharedWidget/dialogWidget.dart';
 
 class CreateAccount extends StatefulWidget {
   final Function toggleFunc;
@@ -350,7 +350,15 @@ class CreateAccountState extends State<CreateAccount> {
                                 : Image.file(_userImage),
                           ),
                           onPressed: () async {
-                            _getImage();
+                            //_getImage();
+                            final userOption =
+                                await Dialogs.dialogAction(context, 'Bild?');
+
+                            if (userOption == DialogAction.camera) {
+                              print('Camera');
+                            } else {
+                              print('Gallery');
+                            }
                           }),
                       Padding(
                         padding: EdgeInsets.only(top: 12),
