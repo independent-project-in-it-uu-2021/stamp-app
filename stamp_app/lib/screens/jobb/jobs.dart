@@ -8,32 +8,6 @@ import 'package:stamp_app/services/auth.dart';
 import 'package:stamp_app/studentScreens/studentJobs/studentjobs.dart';
 import 'package:stamp_app/models/jobsModel.dart';
 
-var icon = ''; //TODO: oklart hur detta ska fungera
-var title = 'Lego Workshop';
-var date = '2017-07-11';
-var time = '13:00 - 15:00';
-var location = 'Uppsala';
-var count = '3/4 st';
-
-//Detta ska egentligen hämtas från databasen
-List<Map<String, dynamic>> _menuItem = [
-  {
-    'title': '$title',
-    'icon': Icon(Icons.home),
-    'subtitle': '$date \n$time \n$location \n$count',
-  },
-  {
-    'title': 'Teams',
-    'icon': Icon(Icons.people),
-    'subtitle': '$date \n$time \n$location \n$count',
-  },
-  {
-    'title': 'Test',
-    'icon': Icon(Icons.lightbulb),
-    'subtitle': '$date \n$time \n$location \n$count',
-  },
-];
-
 class Work extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -59,10 +33,15 @@ class Work extends StatelessWidget {
       body: ListView.builder(
         itemCount: allJobs.length,
         itemBuilder: (BuildContext context, int index) {
+          var date = allJobs[index].date;
+          var time = allJobs[index].time;
+          var location = allJobs[index].location;
+          var count = allJobs[index].count;
           return Card(
             child: ListTile(
               leading: Icon(Icons.people),
               title: Text(allJobs[index].title),
+              subtitle: Text('$date \n$time \n$location \n$count'),
               //subtitle: Text(allJobs[index].),
               /*child: Align(
                 alignment: Alignment.topRight,
