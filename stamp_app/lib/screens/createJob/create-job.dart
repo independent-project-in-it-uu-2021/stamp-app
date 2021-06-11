@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:stamp_app/screens/jobb/jobb.dart';
+import 'package:stamp_app/screens/jobb/jobs.dart';
 
 //import 'package:image_picker/image_picker.dart';
 
