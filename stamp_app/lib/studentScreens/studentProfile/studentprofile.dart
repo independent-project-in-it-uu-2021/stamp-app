@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:stamp_app/models/user.dart';
 
 import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
+import 'package:stamp_app/screens/konton/deleteAccount.dart';
 import 'package:stamp_app/services/database.dart';
 import 'package:stamp_app/sharedWidget/loadingScreen.dart';
 
@@ -307,6 +308,25 @@ class StudentProfileState extends State<StudentProfile> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => ProfileEdit()),
+                              );
+                            }),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 50),
+                        child: TextButton(
+                            child: Text(
+                              'Radera Konto',
+                              style: TextStyle(
+                                fontSize: 20,
+                                decoration: TextDecoration.underline,
+                                color: Colors.black,
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => DeleteAccount()),
                               );
                             }),
                       ),

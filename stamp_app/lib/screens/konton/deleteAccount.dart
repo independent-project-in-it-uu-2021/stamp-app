@@ -81,7 +81,11 @@ class DeleteAccountState extends State<DeleteAccount> {
                   width: 230,
                   child: FlatButton(
                     onPressed: () => {
-                      _currentUser.delete(),
+                      FirebaseFirestore.instance
+                          .collection("users")
+                          .doc(_currentUser.toString())
+                          .delete(), //.then((_currentUser),
+                      //_currentUser.delete(),
                       Navigator.push(
                         context,
                         MaterialPageRoute(
