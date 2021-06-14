@@ -13,7 +13,6 @@ class CheckAccount extends StatelessWidget {
   //Checks which type of account it is when user logged in.
   @override
   Widget build(BuildContext context) {
-    print("hej");
     final currentUser = Provider.of<User>(context);
     print(currentUser.uid);
     return StreamProvider.value(
@@ -21,19 +20,5 @@ class CheckAccount extends StatelessWidget {
       initialData: UserData().newDummyUser(),
       child: Authorization(),
     );
-    /*return MultiProvider(providers: [
-      //StreamProvider for user information
-      StreamProvider<UserData>.value(
-        value: DatabaseService(userId: currentUser.uid).userData,
-        initialData: UserData().newDummyUser(),
-        //child: Authorization(),
-      ),
-      //StreamProvider for all the jobs
-      StreamProvider<List<Jobs>>.value(
-        value: DatabaseService().allJobs,
-        initialData: [],
-        //child: Home(),
-      )
-    ], child: Authorization());*/
   }
 }

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path/path.dart';
+import 'package:stamp_app/services/locator.dart';
 
 import 'package:stamp_app/services/auth.dart';
+import 'package:stamp_app/services/storage.dart';
 import 'package:stamp_app/sharedWidget/inputDecoration.dart';
 import 'package:stamp_app/sharedWidget/loadingScreen.dart';
 import 'package:stamp_app/sharedWidget/dialogWidget.dart';
@@ -28,13 +28,13 @@ class CreateAccountState extends State<CreateAccount> {
   String _chosenProgram;
   String _errorMsg = '';
   String _profileImageUrl;
-  bool _useDefaultPic = true;
-  String _defaultProfilePic =
-      'https://firebasestorage.googleapis.com/v0/b/stamp-db6ad.appspot.com/o/userProfilePicture%2Fprofile-user.png?alt=media&token=170630ba-bccf-4bd7-b50b-9d5e08f01a73';
+
   String _defaultAccountStatue = 'inactive';
   File _userImage;
-  bool loading = false;
-  // Boolean value use to hide the write bio option field
+  bool _loading = false;
+  PickedFile _pickedImage;
+
+  // Boolan value use to hide the write bio option field
 
   // Authentication instance used to login
   final AuthService _auth = AuthService();
@@ -54,35 +54,6 @@ class CreateAccountState extends State<CreateAccount> {
     return curMargin;
   }
 
-  // Getting the image from the phone
-  Future _getImage() async {
-    final pickedImage =
-        await ImagePicker().getImage(source: ImageSource.gallery);
-    _useDefaultPic = false;
-    setState(() {
-      _userImage = File(pickedImage.path);
-      print('_UserImage: $_userImage');
-    });
-  }
-
-  //Upload the image to firebase storage
-  Future uploadImage(BuildContext context) async {
-    // Path of the picture
-    String fileName = basename(_userImage.path);
-
-    // Referene to the firebase storage or reference to the bucket
-    Reference storageReference =
-        FirebaseStorage.instance.ref().child('userProfilePicture/$fileName');
-
-    // Put the file in the bucket above
-    final UploadTask uploadTask = storageReference.putFile(_userImage);
-    // Getting image url
-    final TaskSnapshot downloadUrl = (await uploadTask);
-    // Url of the file in the storagew
-    final String imageUrl = await downloadUrl.ref.getDownloadURL();
-    return imageUrl;
-  }
-
   // key to hold the state of the form i.e referens to the form
   // this is a global form key
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -93,7 +64,6 @@ class CreateAccountState extends State<CreateAccount> {
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.name,
-        maxLength: 50,
         // Decorate the input field here,
         decoration: textInputDecoration.copyWith(hintText: 'Förnamn Efternamn'),
         // The acutal value from the input
@@ -121,8 +91,6 @@ class CreateAccountState extends State<CreateAccount> {
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.emailAddress,
-        maxLength: 50,
-        //maxLength: 255,
         // Decorate the input field here,
         decoration: textInputDecoration.copyWith(hintText: 'E-post'),
         // The acutal value from the input
@@ -130,8 +98,8 @@ class CreateAccountState extends State<CreateAccount> {
           if (value.isEmpty) {
             return 'E-post är obligatorisk';
           }
-          if (value.length > 255) {
-            return 'Mejladressen får inte vara längre än 255 tecken';
+          if (value.length > 120) {
+            return 'Mejladressen får inte vara längre än 120 tecken';
           }
           // Check valid character for email
           if (!RegExp(
@@ -156,7 +124,6 @@ class CreateAccountState extends State<CreateAccount> {
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.number,
-        maxLength: 50,
         // Decorate the input field here,
         decoration:
             textInputDecoration.copyWith(hintText: 'Telefonnummer (Frivillig)'),
@@ -175,7 +142,6 @@ class CreateAccountState extends State<CreateAccount> {
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.visiblePassword,
-        maxLength: 50,
         obscureText: true,
         enableSuggestions: false,
         autocorrect: false,
@@ -262,7 +228,7 @@ class CreateAccountState extends State<CreateAccount> {
 
   @override
   Widget build(BuildContext context) {
-    return loading
+    return _loading
         ? LoadingScreen()
         : Scaffold(
             backgroundColor: Colors.red.shade900,
@@ -351,13 +317,28 @@ class CreateAccountState extends State<CreateAccount> {
                           ),
                           onPressed: () async {
                             //_getImage();
-                            final userOption =
-                                await Dialogs.dialogAction(context, 'Bild?');
+                            final userOption = await Dialogs.dialogAction(
+                                context, 'Profilbild (Frivillig)');
 
                             if (userOption == DialogAction.camera) {
-                              print('Camera');
-                            } else {
-                              print('Gallery');
+                              _pickedImage = await ImagePicker()
+                                  .getImage(source: ImageSource.camera);
+                              _userImage = File(_pickedImage.path);
+                            } else if (userOption == DialogAction.gallery) {
+                              print('Från mobil');
+                              try {
+                                _pickedImage = await ImagePicker()
+                                    .getImage(source: ImageSource.gallery);
+                              } catch (e) {
+                                print('Choose picture: $e');
+                              }
+                              setState(() {
+                                print('Inside setState');
+
+                                _userImage = File(_pickedImage.path);
+
+                                print(_userImage);
+                              });
                             }
                           }),
                       Padding(
@@ -387,10 +368,13 @@ class CreateAccountState extends State<CreateAccount> {
                           // onsave method from above is called
                           if (_formKey.currentState.validate()) {
                             //Show loading screen
-                            setState(() => loading = true);
-                            _useDefaultPic
-                                ? _profileImageUrl = _defaultProfilePic
-                                : _profileImageUrl = await uploadImage(context);
+                            setState(() => _loading = true);
+
+                            _userImage != null
+                                ? _profileImageUrl = await locator
+                                    .get<StorageServices>()
+                                    .uploadProfileImage(_userImage)
+                                : _profileImageUrl = null;
 
                             dynamic result =
                                 await _auth.registerWithEmailAndPassword(
@@ -404,7 +388,7 @@ class CreateAccountState extends State<CreateAccount> {
                             print(result);
                             if (result == null) {
                               setState(() {
-                                loading = false;
+                                _loading = false;
                                 _errorMsg = 'Mejladressen används redan';
                               });
                             }

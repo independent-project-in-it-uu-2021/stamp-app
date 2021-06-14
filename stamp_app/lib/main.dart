@@ -7,10 +7,15 @@ import 'package:stamp_app/screens/wrapper.dart';
 import 'package:stamp_app/services/auth.dart';
 import 'package:stamp_app/services/database.dart';
 import 'package:stamp_app/models/jobsModel.dart';
+import 'package:stamp_app/services/locator.dart';
 
 void main() async {
   // Needed inorder to use firebase authentication. init firebase connection here
   WidgetsFlutterBinding.ensureInitialized();
+
+  //GetIt() library function
+  locatorSetUpServices();
+
   await Firebase.initializeApp();
   runApp(MyApp());
 }

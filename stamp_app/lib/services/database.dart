@@ -37,6 +37,27 @@ class DatabaseService {
     );
   }
 
+  //Create job
+  Future createJob(
+    String name,
+    String location,
+    String desc,
+    String numOfStudents,
+    String date,
+    String time,
+    String icon,
+  ) async {
+    return await jobsCollection.add({
+      'jobName': name,
+      'location': location,
+      'description': desc,
+      'numberOfStudents': numOfStudents,
+      'date': date,
+      'time': time,
+      'icon': icon,
+    }); //serializeIcon(_icon),})
+  }
+
   //Job list
   List<Jobs> _jobsFromDatabase(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
