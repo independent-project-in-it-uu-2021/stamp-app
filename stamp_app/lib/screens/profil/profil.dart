@@ -7,6 +7,7 @@ import 'package:stamp_app/models/user.dart';
 import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
 import 'package:stamp_app/services/database.dart';
 import 'package:stamp_app/sharedWidget/loadingScreen.dart';
+import 'package:stamp_app/sharedWidget/profileImage.dart';
 
 class Profil extends StatefulWidget {
   @override
@@ -21,10 +22,15 @@ class ProfilState extends State<Profil> {
   String _userEmail = '';
   String _userBio = '';
   String _profileImageUrl = '';
+  bool noProfileImage = false;
 
   // key to hold the state of the form i.e referens to the form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  //TODO: Check if an email is already used
+
+  Widget profilePic() {
+    return ProfileImage(profileImagUrl: _profileImageUrl);
+  }
+
   @override
   Widget build(BuildContext context) {
     final _currentUser = Provider.of<User>(context);
@@ -36,7 +42,13 @@ class ProfilState extends State<Profil> {
           _userName = snapshot.data.name;
           _userEmail = snapshot.data.email;
           _userBio = snapshot.data.bio;
-          _profileImageUrl = snapshot.data.imageUrl;
+
+          //If user has not profile picture
+          snapshot.data.imageUrl == null
+              ? noProfileImage = true
+              : _profileImageUrl = snapshot.data.imageUrl;
+
+          //If user has no phonenummer
           snapshot.data.phoneNumer == null
               ? _userNumber = 'Telefonnummer saknas'
               : _userNumber = snapshot.data.phoneNumer;
@@ -110,21 +122,8 @@ class ProfilState extends State<Profil> {
                       SizedBox(
                         height: 20,
                       ),
-                      Container(
-                        height: 160,
-                        width: 160,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(
-                              _profileImageUrl,
-                            ),
-                          ),
-                          border: Border.all(
-                            color: Colors.red.shade900,
-                            width: 4,
-                          ),
-                        ),
-                      ),
+                      profilePic(),
+                      //_profilePicture(),
                       Padding(
                         padding: EdgeInsets.only(top: 20),
                       ),
