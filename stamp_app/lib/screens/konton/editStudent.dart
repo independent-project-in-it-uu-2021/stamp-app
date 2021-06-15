@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:stamp_app/screens/konton/raderaKonto.dart';
 import 'package:stamp_app/screens/konton/makeAdmin.dart';
 import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
+//import 'package:stamp_app/screens/main.dart';
 
 class EditStudent extends StatefulWidget {
   @override
@@ -13,8 +15,10 @@ class EditStudent extends StatefulWidget {
 class EditStudentState extends State<EditStudent> {
   // key to hold the state of the form i.e referens to the form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  //TODO: Check if an email is already used
 
+  _make() {
+    //Todo: Här nu för att undvika error
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,7 +104,7 @@ class EditStudentState extends State<EditStudent> {
                     onPressed: () => {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => makeAdmin()),
+                        MaterialPageRoute(builder: (context) => _make()),
                       ),
                     },
                     shape: RoundedRectangleBorder(

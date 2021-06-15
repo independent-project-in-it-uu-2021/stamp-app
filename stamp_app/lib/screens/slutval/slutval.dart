@@ -3,7 +3,7 @@ import 'package:stamp_app/services/auth.dart';
 
 import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
 import 'package:stamp_app/screens/home/home.dart';
-import 'package:stamp_app/screens/jobb/jobs.dart';
+import 'package:stamp_app/screens/jobb/jobb.dart';
 import 'package:stamp_app/screens/slutval/slutval.dart';
 import 'package:stamp_app/screens/annansProfil/annansProfil.dart';
 import 'package:stamp_app/studentScreens/FinalStudentChoice/finalStudentChoice.dart';

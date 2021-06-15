@@ -39,7 +39,7 @@ class Work extends StatelessWidget {
           var count = allJobs[index].count;
           return Card(
             child: ListTile(
-              trailing: Icon(Icons.arrow_forward_ios),
+              leading: Icon(Icons.arrow_forward_ios),
               title: Text('$date $title'), //Aligna med hjälp av textspan
               subtitle: Text('$date \n$time - 13:30 \n$location \n$count'),
               onTap: () => {

@@ -97,12 +97,7 @@ class EditAdminState extends State<EditAdmin> {
                   height: 45,
                   width: 230,
                   child: FlatButton(
-                    onPressed: () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => makeStudent()),
-                      ),
-                    },
+                    onPressed: () => {},
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15.0))),
                     color: Colors.red.shade900,
