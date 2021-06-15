@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-//import 'package:image_picker/image_picker.dart';
-import 'dart:io';
-
 class ProfileEdit extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -20,41 +17,6 @@ class ProfileEditState extends State<ProfileEdit> {
   String _chosenProgram;
   // Boolean value use to hide the write bio option field
   bool _writeBio = false;
-
-  File _userImage;
-/*
-  Future _getImage() async {
-    final pickedImage =
-        await ImagePicker().getImage(source: ImageSource.gallery);
-    setState(() {
-      _userImage = File(pickedImage.path);
-      print('_UserImage: $_userImage');
-    });
-  }
-*/
-  // Method that is used to change the margin when an image is choosen
-  double _changeMarginImage() {
-    double curMargin;
-    setState(() {
-      /*
-      same as if(_userImage == null){
-        curMargin = 10;
-      } else{
-        curMargin = 0;
-      }
-      */
-      curMargin = _userImage == null ? 10 : 0;
-    });
-    return curMargin;
-  }
-
-  void showWriteBio() {
-    setState(() {
-      _writeBio = !_writeBio;
-    });
-  }
-
-  //final programList<String> = ['Elektroteknik', 'Energisystem', 'Industriell ekonomi'];
 
   // key to hold the state of the form i.e referens to the form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -208,64 +170,13 @@ class ProfileEditState extends State<ProfileEdit> {
         validator: (String value) {
           if (value.isEmpty) {
             return 'Upprepa lösenord är obligatorisk';
-          }
-          if (value != _userPassword) {
-            print('Value inside checkpassword');
-            print(value);
-            // TODO: Change the text below
-            return 'Lösenord är inte samma';
+          } else if (value != _userPassword) {
+            return 'Vänligen ange samma lösenord';
+          } else if (value.length < 6) {
+            return 'Lösenord behöver vara minst 6 tecken';
           }
           return null;
         },
-      ),
-    );
-  }
-
-  // Choose program from dropdown
-  Widget _program() {
-    return Container(
-      width: 350,
-      height: 60,
-      child: DropdownButtonFormField(
-        //TODO: Change the position of the list to above
-        items: <String>[
-          'One',
-          'Two',
-          'Three',
-          'Övrigt',
-        ].map<DropdownMenuItem<String>>((String value) {
-          return new DropdownMenuItem(
-            value: value,
-            child: Row(
-              children: <Widget>[
-                //TODO: Check with the grupp maybe change the icon
-                Icon(Icons.arrow_right),
-                Text(value),
-              ],
-            ),
-          );
-        }).toList(),
-        onChanged: (String newValue) {
-          print('Inside dropdown');
-          print(newValue);
-          if (newValue == 'Övrigt') {
-            showWriteBio();
-          } else {
-            //showWriteBio();
-            _chosenProgram = newValue;
-          }
-        },
-        decoration: InputDecoration(
-            border: new OutlineInputBorder(
-                borderRadius:
-                    const BorderRadius.all(const Radius.circular(30.0))),
-            contentPadding: EdgeInsets.only(left: 15, top: 15),
-            errorStyle: TextStyle(color: Colors.black, fontSize: 13),
-            filled: true,
-            fillColor: Colors.black12,
-            hintText: 'Program',
-            //TODO: Change the text below
-            errorText: 'Vänligen välj en program'),
       ),
     );
   }
@@ -274,39 +185,34 @@ class ProfileEditState extends State<ProfileEdit> {
   Widget _buildBio() {
     return Container(
       width: 350,
-      child: Visibility(
-        visible: _writeBio,
-        child: TextFormField(
-          keyboardType: TextInputType.name,
-          // Decorate the input field here,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-
-            //TODO: Change the text below
-            hintText: 'Din roll?',
-            counterStyle: TextStyle(color: Colors.red.shade900),
-            errorStyle: TextStyle(color: Colors.red.shade900),
-          ),
-          // The acutal value from the input
-          validator: (String value) {
-            if (value.isEmpty) {
-              return 'Bio är obligatorisk';
-            }
-            if (value.length > 150) {
-              //TODO: Change the text below
-              return 'Bio får inte vara längre än 120 tecken';
-            }
-            return null;
-          },
-          // The  form is saved and we tell what to do with the value
-          onSaved: (String value) {
-            print('Inside _buildbio');
-            print(value);
-            print(_chosenProgram);
-            _chosenProgram = value;
-          },
+      child: TextFormField(
+        keyboardType: TextInputType.name,
+        maxLength: 300,
+        // Decorate the input field here,
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.fromLTRB(15, 10, 0, 40),
+          filled: true,
+          fillColor: Colors.black12,
+          hintText: 'Kort bio',
+          counterStyle: TextStyle(color: Colors.white),
+          errorStyle: TextStyle(color: Colors.white),
         ),
+        // The acutal value from the input
+        validator: (String value) {
+          if (value.isEmpty) {
+            return 'Bio är obligatorisk';
+          }
+          if (value.length > 300) {
+            return 'Bio får inte vara längre än 300 tecken';
+          }
+          return null;
+        },
+        // The  form is saved and we tell what to do with the value
+        onChanged: (String value) {
+          setState(() {
+            _chosenProgram = value;
+          });
+        },
       ),
     );
   }
@@ -373,7 +279,6 @@ class ProfileEditState extends State<ProfileEdit> {
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
-                _program(),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
@@ -381,32 +286,6 @@ class ProfileEditState extends State<ProfileEdit> {
                 // adding space
                 SizedBox(
                   height: 12,
-                ),
-                OutlineButton(
-                  color: Colors.white,
-                  borderSide: BorderSide(
-                    color: Colors.black,
-                  ),
-                  /*style: ElevatedButton.styleFrom(
-                    primary: Colors.white,
-                    alignment: Alignment.center,
-                    //padding: EdgeInsets.only(top: 10),
-                  ),*/
-                  child: Container(
-                    height: 60,
-                    width: 100,
-                    margin: EdgeInsets.only(top: _changeMarginImage()),
-                    child: _userImage == null
-                        ? Text(
-                            'Ladda upp profilbild',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
-                          )
-                        : Image.file(_userImage),
-                  ),
-                  onPressed: () => null,
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
