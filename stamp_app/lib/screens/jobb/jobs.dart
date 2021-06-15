@@ -13,7 +13,6 @@ class Work extends StatelessWidget {
   Widget build(BuildContext context) {
     print('Inside works build');
     final allJobs = Provider.of<List<Jobs>>(context) ?? [];
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Jobb'),
@@ -33,20 +32,17 @@ class Work extends StatelessWidget {
       body: ListView.builder(
         itemCount: allJobs.length,
         itemBuilder: (BuildContext context, int index) {
+          var title = allJobs[index].title;
           var date = allJobs[index].date;
           var time = allJobs[index].time;
           var location = allJobs[index].location;
           var count = allJobs[index].count;
           return Card(
             child: ListTile(
-              leading: Icon(Icons.people),
-              title: Text(allJobs[index].title),
-              subtitle: Text('$date \n$time \n$location \n$count'),
-              //subtitle: Text(allJobs[index].),
-              /*child: Align(
-                alignment: Alignment.topRight,
-                child: Text('TESTING TESTING'),
-              ),*/
+              trailing: Icon(Icons.arrow_forward_ios),
+              title: Text('$date $title'), //Aligna med hjälp av textspan
+              subtitle: Text(
+                  '\t\t$date \n\t\t$time - 13:30 \n\t\t$location \n\t\t$count'),
               onTap: () => {
                 Navigator.push(
                   context,
@@ -57,24 +53,16 @@ class Work extends StatelessWidget {
           );
         },
       ),
-      bottomNavigationBar: BottomAppBar(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            FloatingActionButton(
-              backgroundColor: Colors.red.shade900,
-              foregroundColor: Colors.white,
-              onPressed: () => {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CreateJob()),
-                )
-              },
-              child: Icon(Icons.add),
-            ),
-            Padding(padding: EdgeInsets.only(bottom: 100))
-          ],
-        ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.red.shade900,
+        foregroundColor: Colors.white,
+        onPressed: () => {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CreateJob()),
+          )
+        },
+        child: Icon(Icons.add),
       ),
     );
   }
