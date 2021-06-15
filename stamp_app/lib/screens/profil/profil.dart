@@ -216,7 +216,12 @@ class ProfilState extends State<Profil> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ProfileEdit()),
+                                    builder: (context) => ProfileEdit(
+                                          userName: _userName,
+                                          userEmail: _userEmail,
+                                          userNumber: _userNumber,
+                                          userBio: _userBio,
+                                        )),
                               );
                             }),
                       ),

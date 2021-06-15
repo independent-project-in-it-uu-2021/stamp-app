@@ -9,6 +9,11 @@ import 'package:stamp_app/services/database.dart';
 import 'package:stamp_app/sharedWidget/loadingScreen.dart';
 
 class ProfileEdit extends StatefulWidget {
+  final String userName;
+  final String userNumber;
+  final String userEmail;
+  final String userBio;
+  ProfileEdit({this.userName, this.userNumber, this.userEmail, this.userBio});
   @override
   State<StatefulWidget> createState() {
     return ProfileEditState();
@@ -23,6 +28,15 @@ class ProfileEditState extends State<ProfileEdit> {
   String _userBio = '';
   String _userPassword = '';
 
+  @override
+  void initState() {
+    super.initState();
+    _userName = widget.userName;
+    _userEmail = widget.userEmail;
+    _userNumber = widget.userNumber;
+    _userBio = widget.userBio;
+  }
+
   // key to hold the state of the form i.e referens to the form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -31,7 +45,7 @@ class ProfileEditState extends State<ProfileEdit> {
     return Container(
       width: 350,
       child: TextFormField(
-        initialValue: _userName,
+        initialValue: widget.userName,
         keyboardType: TextInputType.name,
         // Decorate the input field here,
         decoration:
@@ -48,7 +62,6 @@ class ProfileEditState extends State<ProfileEdit> {
         },
         // The  form is saved and we tell what to do with the value
         onSaved: (String value) {
-          print(value);
           _userName = value;
         },
       ),
@@ -59,7 +72,7 @@ class ProfileEditState extends State<ProfileEdit> {
     return Container(
       width: 350,
       child: TextFormField(
-        initialValue: _userEmail,
+        initialValue: widget.userEmail,
         keyboardType: TextInputType.emailAddress,
         decoration: editProfileInputDecoration.copyWith(hintText: 'E-post'),
         // The acutal value from the input
@@ -90,7 +103,7 @@ class ProfileEditState extends State<ProfileEdit> {
     return Container(
       width: 350,
       child: TextFormField(
-        initialValue: _userNumber,
+        initialValue: widget.userNumber,
         keyboardType: TextInputType.number,
         // Decorate the input field here,
         decoration: editProfileInputDecoration.copyWith(
@@ -123,7 +136,7 @@ class ProfileEditState extends State<ProfileEdit> {
         },
         //TODO: Password requirements
         // The  form is saved and we tell what to do with the value
-        onSaved: (String value) {
+        onChanged: (String value) {
           _userPassword = value;
         },
       ),
@@ -161,7 +174,7 @@ class ProfileEditState extends State<ProfileEdit> {
     return Container(
       width: 350,
       child: TextFormField(
-        initialValue: _userBio,
+        initialValue: widget.userBio,
         keyboardType: TextInputType.name,
         maxLength: 300,
         // Decorate the input field here,
@@ -188,135 +201,115 @@ class ProfileEditState extends State<ProfileEdit> {
 
   @override
   Widget build(BuildContext context) {
-    final currentUser = Provider.of<User>(context);
-    return StreamBuilder<UserData>(
-      stream: DatabaseService(userId: currentUser.uid).userData,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          _userName = snapshot.data.name;
-          _userEmail = snapshot.data.email;
-          _userBio = snapshot.data.bio;
-
-          //If user has no phonenummer
-          snapshot.data.phoneNumer == null || snapshot.data.phoneNumer.isEmpty
-              ? _userNumber = 'Telefonnummer saknas'
-              : _userNumber = snapshot.data.phoneNumer;
-
-          return Scaffold(
-            backgroundColor: Colors.white,
-            appBar: AppBar(
-              systemOverlayStyle: SystemUiOverlayStyle(
-                statusBarColor: Colors.transparent,
-              ),
-              title:
-                  Image.asset('assets/images/uuLogaNew.png', fit: BoxFit.cover),
-              centerTitle: true,
-              backgroundColor: Colors.red.shade900,
-              brightness: Brightness.light,
-              elevation: 0,
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back_ios_rounded),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                tooltip: 'Tillbaka',
-              ),
-            ),
-            body: SingleChildScrollView(
-              child: Container(
-                width: double.infinity,
-                margin: EdgeInsets.only(top: 60, bottom: 20),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        'Redigera profil',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 40,
-                          color: Colors.black,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      _buildName(),
-                      Padding(
-                        padding: EdgeInsets.only(top: 12),
-                      ),
-                      _buildEmail(),
-                      Padding(
-                        padding: EdgeInsets.only(top: 12),
-                      ),
-                      _buildNumber(),
-                      Padding(
-                        padding: EdgeInsets.only(top: 12),
-                      ),
-                      _buildPassword(),
-                      Padding(
-                        padding: EdgeInsets.only(top: 12),
-                      ),
-                      _checkUserPassword(),
-                      Padding(
-                        padding: EdgeInsets.only(top: 12),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 12),
-                      ),
-                      _buildBio(),
-                      // adding space
-                      SizedBox(
-                        height: 12,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 12),
-                      ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.green[400],
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 90, vertical: 15),
-                        ),
-                        child: Text(
-                          'Spara',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 21,
-                          ),
-                        ),
-                        onPressed: () {
-                          // If the form is not valid
-
-                          if (!_formKey.currentState.validate()) {
-                            return;
-                          }
-
-                          // If the form is valid, onSaved method is called
-                          // onsave method from above is called
-                          if (_formKey.currentState.validate()) {
-                            _formKey.currentState.save();
-                          }
-
-                          //print(_fullName);
-                          //print(_email);
-                          //print(_mobilnumber);
-                          //print(_userPassword);
-                          //print(_chosenProgram);
-                        },
-                      )
-                    ],
+    //final currentUser = Provider.of<User>(context);
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+        ),
+        title: Image.asset('assets/images/uuLogaNew.png', fit: BoxFit.cover),
+        centerTitle: true,
+        backgroundColor: Colors.red.shade900,
+        brightness: Brightness.light,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_rounded),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          tooltip: 'Tillbaka',
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          width: double.infinity,
+          margin: EdgeInsets.only(top: 60, bottom: 20),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'Redigera profil',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 40,
+                    color: Colors.black,
                   ),
                 ),
-              ),
+                SizedBox(
+                  height: 20,
+                ),
+                _buildName(),
+                Padding(
+                  padding: EdgeInsets.only(top: 12),
+                ),
+                _buildEmail(),
+                Padding(
+                  padding: EdgeInsets.only(top: 12),
+                ),
+                _buildNumber(),
+                Padding(
+                  padding: EdgeInsets.only(top: 12),
+                ),
+                _buildPassword(),
+                Padding(
+                  padding: EdgeInsets.only(top: 12),
+                ),
+                _checkUserPassword(),
+                Padding(
+                  padding: EdgeInsets.only(top: 12),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 12),
+                ),
+                _buildBio(),
+                // adding space
+                SizedBox(
+                  height: 12,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 12),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.green[400],
+                    padding: EdgeInsets.symmetric(horizontal: 90, vertical: 15),
+                  ),
+                  child: Text(
+                    'Spara',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 21,
+                    ),
+                  ),
+                  onPressed: () {
+                    // If the form is not valid
+
+                    if (!_formKey.currentState.validate()) {
+                      return;
+                    }
+
+                    // If the form is valid, onSaved method is called
+                    // onsave method from above is called
+                    if (_formKey.currentState.validate()) {
+                      _formKey.currentState.save();
+                    }
+
+                    //print(_fullName);
+                    //print(_email);
+                    //print(_mobilnumber);
+                    //print(_userPassword);
+                    //print(_chosenProgram);
+                  },
+                )
+              ],
             ),
-          );
-        } else {
-          return LoadingScreen();
-        }
-      },
+          ),
+        ),
+      ),
     );
   }
 }
