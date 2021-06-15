@@ -37,6 +37,12 @@ class DatabaseService {
     );
   }
 
+  Future updateProfileImgUrl(String userID, String imgUrl) async {
+    return await userCollection
+        .doc(userID)
+        .update({'userProfilePicUrl': imgUrl});
+  }
+
   //Create job
   Future createJob(
     String name,

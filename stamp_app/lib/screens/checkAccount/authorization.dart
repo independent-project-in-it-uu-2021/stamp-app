@@ -1,8 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stamp_app/models/user.dart';
 
+import 'package:stamp_app/models/user.dart';
 import 'package:stamp_app/screens/home/home.dart';
 import 'package:stamp_app/screens/inactiveHome/inactiveHome.dart';
 import 'package:stamp_app/sharedWidget/loadingScreen.dart';

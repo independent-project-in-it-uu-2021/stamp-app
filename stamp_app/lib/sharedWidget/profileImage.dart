@@ -1,4 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:stamp_app/services/database.dart';
+import 'dart:io';
+
+import 'package:stamp_app/services/storage.dart';
+import 'package:stamp_app/sharedWidget/dialogWidget.dart';
+import 'package:stamp_app/services/locator.dart';
 
 class ProfileImage extends StatefulWidget {
   final String profileImagUrl;
@@ -9,18 +18,29 @@ class ProfileImage extends StatefulWidget {
 }
 
 class ProfileImageState extends State<ProfileImage> {
+  PickedFile _pickedImage;
+  File _newImage;
   @override
   Widget build(BuildContext context) {
+    final currentUser = Provider.of<User>(context);
     return SizedBox(
-      //height: 115,
-      //width: 115,
       child: Stack(
         children: [
           CircleAvatar(
-            backgroundImage: NetworkImage(widget.profileImagUrl),
-            minRadius: 60,
-            maxRadius: 80,
-          ),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return Icon(
+                    Icons.account_circle,
+                    size: constraints.biggest.height,
+                    color: Colors.black,
+                  );
+                },
+              ),
+
+              //backgroundImage: NetworkImage(widget.profileImagUrl),
+              minRadius: 60,
+              maxRadius: 80,
+              backgroundColor: Colors.white),
           Positioned(
             bottom: 0,
             right: -25,
@@ -34,7 +54,44 @@ class ProfileImageState extends State<ProfileImage> {
               ),
               padding: EdgeInsets.all(7.0),
               shape: CircleBorder(),
-              onPressed: () {},
+              onPressed: () async {
+                final userOption = await Dialogs.dialogAction(
+                    context, 'Profilbild (Frivillig)');
+                if (userOption == DialogAction.gallery) {
+                  try {
+                    _pickedImage = await ImagePicker()
+                        .getImage(source: ImageSource.gallery);
+                    _newImage = File(_pickedImage.path);
+
+                    final imageUrl = await locator
+                        .get<StorageServices>()
+                        .deleteAndUploadImg(widget.profileImagUrl, _newImage);
+
+                    await locator
+                        .get<DatabaseService>()
+                        .updateProfileImgUrl(currentUser.uid, imageUrl);
+                  } catch (e) {
+                    print(e);
+                  }
+                } else {
+                  //TODO: Test this
+                  try {
+                    _pickedImage = await ImagePicker()
+                        .getImage(source: ImageSource.camera);
+                    _newImage = File(_pickedImage.path);
+
+                    final imageUrl = await locator
+                        .get<StorageServices>()
+                        .deleteAndUploadImg(widget.profileImagUrl, _newImage);
+
+                    await locator
+                        .get<DatabaseService>()
+                        .updateProfileImgUrl(currentUser.uid, imageUrl);
+                  } catch (e) {
+                    print(e);
+                  }
+                }
+              },
             ),
           ),
         ],

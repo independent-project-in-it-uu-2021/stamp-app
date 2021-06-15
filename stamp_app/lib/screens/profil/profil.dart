@@ -27,6 +27,7 @@ class ProfilState extends State<Profil> {
   // key to hold the state of the form i.e referens to the form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  // reuseable profile image widget
   Widget profilePic() {
     return ProfileImage(profileImagUrl: _profileImageUrl);
   }
@@ -49,7 +50,7 @@ class ProfilState extends State<Profil> {
               : _profileImageUrl = snapshot.data.imageUrl;
 
           //If user has no phonenummer
-          snapshot.data.phoneNumer == null
+          snapshot.data.phoneNumer == null || snapshot.data.phoneNumer.isEmpty
               ? _userNumber = 'Telefonnummer saknas'
               : _userNumber = snapshot.data.phoneNumer;
 
@@ -66,6 +67,7 @@ class ProfilState extends State<Profil> {
                 onPressed: () => Navigator.of(context).pop(),
                 tooltip: 'Tillbaka',
               ),
+              //TODO: Chat icon future implementation
               /*actions: <Widget>[
               IconButton(
                 padding: EdgeInsets.only(right: 10),

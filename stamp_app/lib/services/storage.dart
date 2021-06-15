@@ -5,19 +5,37 @@ import 'dart:io';
 class StorageServices {
   //Upload user profile method
   Future<String> uploadProfileImage(File image) async {
-    // Path of the picture
-    String fileName = basename(image.path);
+    String imageUrl;
+    try {
+      // Path of the picture
+      String fileName = basename(image.path);
 
-    // Referene to the firebase storage or reference to the bucket
-    Reference storageReference =
-        FirebaseStorage.instance.ref().child('userProfilePicture/$fileName');
+      // Referene to the firebase storage or reference to the bucket
+      Reference storageReference =
+          FirebaseStorage.instance.ref().child('userProfilePicture/$fileName');
 
-    // Put the file in the bucket above
-    final UploadTask uploadTask = storageReference.putFile(image);
-    // Getting image url
-    final TaskSnapshot downloadUrl = (await uploadTask);
-    // Url of the file in the storage
-    final String imageUrl = await downloadUrl.ref.getDownloadURL();
+      // Put the file in the bucket above
+      final UploadTask uploadTask = storageReference.putFile(image);
+      // Getting image url
+      final TaskSnapshot downloadUrl = (await uploadTask);
+      // Url of the file in the storage
+      imageUrl = await downloadUrl.ref.getDownloadURL();
+    } catch (e) {
+      print(e);
+    }
     return imageUrl;
+  }
+
+  //Deletes and uploads image to storage
+  Future<String> deleteAndUploadImg(String imageUrl, File image) async {
+    String newImageUrl;
+    try {
+      final storageRef = FirebaseStorage.instance.refFromURL(imageUrl);
+      await storageRef.delete();
+      newImageUrl = await uploadProfileImage(image);
+    } catch (e) {
+      print(e);
+    }
+    return newImageUrl;
   }
 }

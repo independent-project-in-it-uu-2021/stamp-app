@@ -12,11 +12,10 @@ import 'package:stamp_app/services/locator.dart';
 void main() async {
   // Needed inorder to use firebase authentication. init firebase connection here
   WidgetsFlutterBinding.ensureInitialized();
-
+  await Firebase.initializeApp();
   //GetIt() library function
   locatorSetUpServices();
 
-  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -43,16 +42,5 @@ class MyApp extends StatelessWidget {
         home: Wrapper(),
       ),
     );
-
-    /*return StreamProvider<User>.value(
-      // Initial data that is used until stream emits a value
-      initialData: null,
-      value: AuthService().curUser,
-      child: MaterialApp(
-        showSemanticsDebugger: false,
-        title: 'Registrera konto',
-        home: Wrapper(),
-      ),
-    );*/
   }
 }
