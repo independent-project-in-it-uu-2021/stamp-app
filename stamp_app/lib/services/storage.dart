@@ -31,8 +31,10 @@ class StorageServices {
   Future<String> deleteAndUploadImg(String imageUrl, File image) async {
     String newImageUrl;
     try {
-      final storageRef = FirebaseStorage.instance.refFromURL(imageUrl);
-      await storageRef.delete();
+      if (imageUrl != 'noImage') {
+        final storageRef = FirebaseStorage.instance.refFromURL(imageUrl);
+        await storageRef.delete();
+      }
       newImageUrl = await uploadProfileImage(image);
     } catch (e) {
       print(e);
