@@ -27,6 +27,7 @@ class StorageServices {
   }
 
   //Deletes and uploads image to storage
+  //Calls the function uploadProfileImage()
   Future<String> deleteAndUploadImg(String imageUrl, File image) async {
     String newImageUrl;
     try {

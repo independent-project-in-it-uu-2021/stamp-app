@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:stamp_app/models/user.dart';
 
+import 'package:stamp_app/models/user.dart';
 import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
 import 'package:stamp_app/services/database.dart';
 import 'package:stamp_app/sharedWidget/loadingScreen.dart';
@@ -22,7 +21,6 @@ class ProfilState extends State<Profil> {
   String _userEmail = '';
   String _userBio = '';
   String _profileImageUrl = '';
-  bool noProfileImage = false;
 
   // key to hold the state of the form i.e referens to the form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -46,7 +44,7 @@ class ProfilState extends State<Profil> {
 
           //If user has not profile picture
           snapshot.data.imageUrl == null
-              ? noProfileImage = true
+              ? _profileImageUrl = 'noImage'
               : _profileImageUrl = snapshot.data.imageUrl;
 
           //If user has no phonenummer

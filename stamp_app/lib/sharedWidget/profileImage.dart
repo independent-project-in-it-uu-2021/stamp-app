@@ -20,27 +20,42 @@ class ProfileImage extends StatefulWidget {
 class ProfileImageState extends State<ProfileImage> {
   PickedFile _pickedImage;
   File _newImage;
+
+  // Show an icon if user has no profile pic otherwise
+  // the profile image
+  Widget _imageWidget() {
+    if (widget.profileImagUrl == 'noImage') {
+      return CircleAvatar(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return Icon(
+                Icons.account_circle,
+                size: constraints.biggest.height,
+                color: Colors.black,
+              );
+            },
+          ),
+          minRadius: 60,
+          maxRadius: 80,
+          backgroundColor: Colors.white);
+    } else {
+      return CircleAvatar(
+          backgroundImage: NetworkImage(widget.profileImagUrl),
+          minRadius: 60,
+          maxRadius: 80,
+          backgroundColor: Colors.white);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentUser = Provider.of<User>(context);
     return SizedBox(
       child: Stack(
         children: [
-          CircleAvatar(
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  return Icon(
-                    Icons.account_circle,
-                    size: constraints.biggest.height,
-                    color: Colors.black,
-                  );
-                },
-              ),
-
-              //backgroundImage: NetworkImage(widget.profileImagUrl),
-              minRadius: 60,
-              maxRadius: 80,
-              backgroundColor: Colors.white),
+          // Show an icon if user has no profile pic otherwise
+          // the profile image
+          _imageWidget(),
           Positioned(
             bottom: 0,
             right: -25,
