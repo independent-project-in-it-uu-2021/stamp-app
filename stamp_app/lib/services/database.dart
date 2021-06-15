@@ -18,7 +18,7 @@ class DatabaseService {
 
 //updateUserData(userName, userPhoneNumber, userProgram, userProfilePic)
   // method to update user data
-  Future updateUserData(
+  Future createUserData(
       String userName,
       String userEmail,
       String userPhoneNumber,
@@ -37,10 +37,26 @@ class DatabaseService {
     );
   }
 
+  // Change profileimage url
   Future updateProfileImgUrl(String userID, String imgUrl) async {
     return await userCollection
         .doc(userID)
         .update({'userProfilePicUrl': imgUrl});
+  }
+
+  Future updateUserData(
+    String userID,
+    String userName,
+    String userEmail,
+    String userPhoneNumber,
+    String userBio,
+  ) async {
+    return await userCollection.doc(userID).update({
+      'userName': userName,
+      'userEmail': userEmail,
+      'userPhoneNumber': userPhoneNumber,
+      'userBio': userBio,
+    });
   }
 
   //Create job

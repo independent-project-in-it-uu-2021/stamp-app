@@ -63,7 +63,7 @@ class AuthService {
           await _firebaseAuth.createUserWithEmailAndPassword(
               email: userEmail, password: userPassword);
       // Create a empty document inside user collection in the db
-      await DatabaseService(userId: result.user.uid).updateUserData(
+      await DatabaseService(userId: result.user.uid).createUserData(
           userName,
           userEmail,
           userPhoneNumber,

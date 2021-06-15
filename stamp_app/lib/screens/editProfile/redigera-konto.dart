@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
-import 'package:stamp_app/models/user.dart';
 import 'package:stamp_app/sharedWidget/editProfileDecoration.dart';
+import 'package:stamp_app/services/locator.dart';
 import 'package:stamp_app/services/database.dart';
 import 'package:stamp_app/sharedWidget/loadingScreen.dart';
 
 class ProfileEdit extends StatefulWidget {
+  final String userID;
   final String userName;
   final String userNumber;
   final String userEmail;
   final String userBio;
-  ProfileEdit({this.userName, this.userNumber, this.userEmail, this.userBio});
+  ProfileEdit(
+      {this.userID,
+      this.userName,
+      this.userNumber,
+      this.userEmail,
+      this.userBio});
   @override
   State<StatefulWidget> createState() {
     return ProfileEditState();
@@ -22,15 +26,18 @@ class ProfileEdit extends StatefulWidget {
 
 class ProfileEditState extends State<ProfileEdit> {
   // State parameter
+  String _userID = '';
   String _userName = '';
   String _userNumber = '';
   String _userEmail = '';
   String _userBio = '';
   String _userPassword = '';
+  bool changePassword = false;
 
   @override
   void initState() {
     super.initState();
+    _userID = widget.userID;
     _userName = widget.userName;
     _userEmail = widget.userEmail;
     _userNumber = widget.userNumber;
@@ -62,6 +69,7 @@ class ProfileEditState extends State<ProfileEdit> {
         },
         // The  form is saved and we tell what to do with the value
         onSaved: (String value) {
+          print(value);
           _userName = value;
         },
       ),
@@ -92,7 +100,7 @@ class ProfileEditState extends State<ProfileEdit> {
           return null;
         },
         // The  form is saved and we tell what to do with the value
-        onSaved: (String value) {
+        onChanged: (String value) {
           _userEmail = value;
         },
       ),
@@ -128,15 +136,21 @@ class ProfileEditState extends State<ProfileEdit> {
         // Decorate the input field here,
         decoration: editProfileInputDecoration.copyWith(hintText: 'Lösenord'),
         // The acutal value from the input
+
         validator: (String value) {
-          if (value.isEmpty) {
-            return 'Lösenord är obligatorisk';
+          if (changePassword == true) {
+            if (value.isEmpty) {
+              return 'Lösenord är obligatorisk';
+            } else if (value.length < 6) {
+              return 'Lösenord behöver vara minst 6 tecken';
+            }
           }
           return null;
         },
-        //TODO: Password requirements
-        // The  form is saved and we tell what to do with the value
         onChanged: (String value) {
+          print('hej');
+          print(value);
+          changePassword = true;
           _userPassword = value;
         },
       ),
@@ -156,12 +170,14 @@ class ProfileEditState extends State<ProfileEdit> {
             editProfileInputDecoration.copyWith(hintText: 'Upprepa lösenord'),
         // The acutal value from the input
         validator: (String value) {
-          if (value.isEmpty) {
-            return 'Upprepa lösenord är obligatorisk';
-          } else if (value != _userPassword) {
-            return 'Vänligen ange samma lösenord';
-          } else if (value.length < 6) {
-            return 'Lösenord behöver vara minst 6 tecken';
+          if (changePassword == true) {
+            if (value.isEmpty) {
+              return 'Upprepa lösenord är obligatorisk';
+            } else if (value != _userPassword) {
+              return 'Vänligen ange samma lösenord';
+            } else if (value.length < 6) {
+              return 'Lösenord behöver vara minst 6 tecken';
+            }
           }
           return null;
         },
@@ -285,24 +301,23 @@ class ProfileEditState extends State<ProfileEdit> {
                       fontSize: 21,
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     // If the form is not valid
-
-                    if (!_formKey.currentState.validate()) {
-                      return;
-                    }
 
                     // If the form is valid, onSaved method is called
                     // onsave method from above is called
                     if (_formKey.currentState.validate()) {
                       _formKey.currentState.save();
+                      try {
+                        await locator.get<DatabaseService>().updateUserData(
+                              _userID,
+                              _userName,
+                              _userEmail,
+                              _userNumber,
+                              _userBio,
+                            );
+                      } catch (e) {}
                     }
-
-                    //print(_fullName);
-                    //print(_email);
-                    //print(_mobilnumber);
-                    //print(_userPassword);
-                    //print(_chosenProgram);
                   },
                 )
               ],
