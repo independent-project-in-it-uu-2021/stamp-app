@@ -41,8 +41,7 @@ class Work extends StatelessWidget {
             child: ListTile(
               trailing: Icon(Icons.arrow_forward_ios),
               title: Text('$date $title'), //Aligna med hjälp av textspan
-              subtitle: Text(
-                  '\t\t$date \n\t\t$time - 13:30 \n\t\t$location \n\t\t$count'),
+              subtitle: Text('$date \n$time - 13:30 \n$location \n$count'),
               onTap: () => {
                 Navigator.push(
                   context,
