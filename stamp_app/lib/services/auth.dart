@@ -19,7 +19,7 @@ class AuthService {
     return _firebaseAuth.authStateChanges();
   }
 
-  // Sign in anon method for testing. Async method
+  // NOT USED: Sign in anon method for testing. Async method
   Future signInAnon() async {
     try {
       // Signing in anon and getting a usercredential object
@@ -73,6 +73,31 @@ class AuthService {
       return result.user;
     } catch (e) {
       print(e.toString());
+    }
+  }
+
+  //Update user email
+  Future updateEmail(String userEmail) async {
+    //try {
+    final curUser = _firebaseAuth.currentUser;
+    final result = await curUser.updateEmail(userEmail);
+    return result;
+    //} on FirebaseAuthException catch (e) {
+    //print('inside auth.dart');
+    //print(e);
+    //return e;
+    //}
+  }
+
+  //Update user password
+  Future updatePassword(String userPassword) async {
+    try {
+      final result = _firebaseAuth.currentUser.updatePassword(userPassword);
+      print(result);
+      return result;
+    } on FirebaseAuthException catch (e) {
+      print(e);
+      return e;
     }
   }
 

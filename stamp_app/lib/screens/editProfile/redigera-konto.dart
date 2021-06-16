@@ -1,10 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:stamp_app/services/auth.dart';
 
 import 'package:stamp_app/sharedWidget/editProfileDecoration.dart';
 import 'package:stamp_app/services/locator.dart';
+import 'package:stamp_app/sharedWidget/errorMsg.dart';
 import 'package:stamp_app/services/database.dart';
-import 'package:stamp_app/sharedWidget/loadingScreen.dart';
 
 class ProfileEdit extends StatefulWidget {
   final String userID;
@@ -33,6 +35,8 @@ class ProfileEditState extends State<ProfileEdit> {
   String _userBio = '';
   String _userPassword = '';
   bool changePassword = false;
+  bool changeEmail = false;
+  String errorMsg = '';
 
   @override
   void initState() {
@@ -85,22 +89,25 @@ class ProfileEditState extends State<ProfileEdit> {
         decoration: editProfileInputDecoration.copyWith(hintText: 'E-post'),
         // The acutal value from the input
         validator: (String value) {
-          if (value.isEmpty) {
-            return 'E-post är obligatorisk';
-          }
-          if (value.length > 120) {
-            return 'Mejladress får inte vara längre än 120 tecken';
-          }
-          // Check valid character for email
-          if (!RegExp(
-                  r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
-              .hasMatch(value)) {
-            return 'Ogiltig mejladress';
+          if (changeEmail = true) {
+            if (value.isEmpty) {
+              return 'E-post är obligatorisk';
+            }
+            if (value.length > 120) {
+              return 'Mejladress får inte vara längre än 120 tecken';
+            }
+            // Check valid character for email
+            if (!RegExp(
+                    r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+                .hasMatch(value)) {
+              return 'Ogiltig mejladress';
+            }
           }
           return null;
         },
         // The  form is saved and we tell what to do with the value
         onChanged: (String value) {
+          changeEmail = true;
           _userEmail = value;
         },
       ),
@@ -306,20 +313,50 @@ class ProfileEditState extends State<ProfileEdit> {
 
                     // If the form is valid, onSaved method is called
                     // onsave method from above is called
-                    if (_formKey.currentState.validate()) {
-                      _formKey.currentState.save();
-                      try {
-                        await locator.get<DatabaseService>().updateUserData(
-                              _userID,
-                              _userName,
-                              _userEmail,
-                              _userNumber,
-                              _userBio,
-                            );
-                      } catch (e) {}
+
+                    _formKey.currentState.save();
+                    try {
+                      if (changePassword) {
+                        await locator
+                            .get<AuthService>()
+                            .updatePassword(_userPassword);
+                      }
+                      if (changeEmail) {
+                        try {
+                          final result = await locator
+                              .get<AuthService>()
+                              .updateEmail(_userEmail);
+                          print('result');
+                          print(result);
+                        } on FirebaseAuthException catch (e) {
+                          print('Edit profile');
+                          errorMsg = ErrorMessage(errorMsg: e.code)
+                              .getMessageFromErrorCode();
+                          //print(errorMsg);
+                          print(e.code);
+                        }
+                      }
+                      /*await locator.get<DatabaseService>().updateUserData(
+                            _userID,
+                            _userName,
+                            _userEmail,
+                            _userNumber,
+                            _userBio,
+                          );*/
+                      //Navigator.pop(context);
+                    } catch (e) {
+                      print(e);
                     }
                   },
-                )
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  errorMsg,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.red, fontSize: 16),
+                ),
               ],
             ),
           ),
