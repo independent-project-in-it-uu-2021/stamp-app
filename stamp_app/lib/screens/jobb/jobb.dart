@@ -35,17 +35,18 @@ class Work extends StatelessWidget {
           var title = allJobs[index].title;
           var date = allJobs[index].date;
           var time = allJobs[index].time;
+          var endTime = allJobs[index].endTime;
           var location = allJobs[index].location;
           var count = allJobs[index].count;
-          var maxCount = allJobs[index].maxCount; //Temporärt värde
-          var reserveCount = 2; //Temporärt värde
+          var maxCount = allJobs[index].maxCount;
+          var reserveCount = allJobs[index].reserveCount;
 
           return Card(
             child: ListTile(
               leading: Icon(Icons.arrow_forward_ios),
               title: Text('$date $title'), //Aligna med hjälp av textspan
               subtitle: Text(
-                  '$time - 13:30 \n$location \nStudenter: $count/$maxCount \nReserver: $reserveCount'),
+                  '$time - $endTime \n$location \nStudenter: $count/$maxCount \nReserver: $reserveCount'),
               onTap: () => {
                 Navigator.push(
                   context,

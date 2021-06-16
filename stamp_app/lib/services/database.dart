@@ -45,9 +45,11 @@ class DatabaseService {
         description: doc.data()['description'],
         date: doc.data()['date'],
         time: doc.data()['time'],
+        endTime: doc.data()['endTime'],
         location: doc.data()['location'],
         count: doc.data()['numberOfStudents'],
         maxCount: doc.data()['maxStudents'],
+        reserveCount: doc.data()['currentReserve'],
       );
     }).toList();
   }

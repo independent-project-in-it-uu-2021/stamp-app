@@ -7,7 +7,7 @@ class Jobs {
   String location;
   int count;
   int maxCount;
-  String reserveCount;
+  int reserveCount;
 
   //TODO: Icon attribute
 
@@ -33,7 +33,7 @@ class Jobs {
         location: 'location',
         count: count,
         maxCount: maxCount,
-        reserveCount: 'reserveCount',
+        reserveCount: reserveCount,
       )
     ];
   }
