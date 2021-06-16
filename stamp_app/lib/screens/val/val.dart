@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:stamp_app/services/auth.dart';
+import 'package:provider/provider.dart';
 
 import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
 import 'package:stamp_app/screens/home/home.dart';
 import 'package:stamp_app/screens/jobb/jobb.dart';
 import 'package:stamp_app/screens/slutval/slutval.dart';
 import 'package:stamp_app/screens/annansProfil/annansProfil.dart';
+import 'package:stamp_app/models/jobsModel.dart';
 
 bool _pressedButton1 = false;
 bool _pressedButton2 = false;
@@ -25,6 +27,7 @@ class ChoiceState extends State<Choice> {
   final AuthService _firebaseAuth = AuthService();
   @override
   Widget build(BuildContext context) {
+    final allJobs = Provider.of<List<Jobs>>(context) ?? [];
     return Scaffold(
       appBar: AppBar(
         title: Text('Välj Studentambassadörer'),
