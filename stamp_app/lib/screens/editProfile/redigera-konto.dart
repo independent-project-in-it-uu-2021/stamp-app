@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:stamp_app/services/auth.dart';
 
 import 'package:stamp_app/sharedWidget/editProfileDecoration.dart';
@@ -34,9 +35,10 @@ class ProfileEditState extends State<ProfileEdit> {
   String _userEmail = '';
   String _userBio = '';
   String _userPassword = '';
-  bool changePassword = false;
-  bool changeEmail = false;
-  String errorMsg = '';
+  bool _changePassword = false;
+  bool _changeEmail = false;
+  String _msgShown = '';
+  String _currentEmailAdress;
 
   @override
   void initState() {
@@ -73,7 +75,6 @@ class ProfileEditState extends State<ProfileEdit> {
         },
         // The  form is saved and we tell what to do with the value
         onSaved: (String value) {
-          print(value);
           _userName = value;
         },
       ),
@@ -81,6 +82,7 @@ class ProfileEditState extends State<ProfileEdit> {
   }
 
   Widget _buildEmail() {
+    _currentEmailAdress = _userEmail;
     return Container(
       width: 350,
       child: TextFormField(
@@ -89,7 +91,7 @@ class ProfileEditState extends State<ProfileEdit> {
         decoration: editProfileInputDecoration.copyWith(hintText: 'E-post'),
         // The acutal value from the input
         validator: (String value) {
-          if (changeEmail = true) {
+          if (_changeEmail = true) {
             if (value.isEmpty) {
               return 'E-post är obligatorisk';
             }
@@ -107,7 +109,7 @@ class ProfileEditState extends State<ProfileEdit> {
         },
         // The  form is saved and we tell what to do with the value
         onChanged: (String value) {
-          changeEmail = true;
+          _changeEmail = true;
           _userEmail = value;
         },
       ),
@@ -145,7 +147,7 @@ class ProfileEditState extends State<ProfileEdit> {
         // The acutal value from the input
 
         validator: (String value) {
-          if (changePassword == true) {
+          if (_changePassword == true) {
             if (value.isEmpty) {
               return 'Lösenord är obligatorisk';
             } else if (value.length < 6) {
@@ -155,7 +157,7 @@ class ProfileEditState extends State<ProfileEdit> {
           return null;
         },
         onChanged: (String value) {
-          changePassword = true;
+          _changePassword = true;
           _userPassword = value;
         },
       ),
@@ -175,7 +177,7 @@ class ProfileEditState extends State<ProfileEdit> {
             editProfileInputDecoration.copyWith(hintText: 'Upprepa lösenord'),
         // The acutal value from the input
         validator: (String value) {
-          if (changePassword == true) {
+          if (_changePassword == true) {
             if (value.isEmpty) {
               return 'Upprepa lösenord är obligatorisk';
             } else if (value != _userPassword) {
@@ -223,6 +225,9 @@ class ProfileEditState extends State<ProfileEdit> {
   @override
   Widget build(BuildContext context) {
     //final currentUser = Provider.of<User>(context);
+    final currentUser = Provider.of<User>(context);
+    print('Current user email');
+    print(currentUser.email);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -237,7 +242,7 @@ class ProfileEditState extends State<ProfileEdit> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_rounded),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.of(context).pop();
           },
           tooltip: 'Tillbaka',
         ),
@@ -294,71 +299,86 @@ class ProfileEditState extends State<ProfileEdit> {
                   padding: EdgeInsets.only(top: 12),
                 ),
                 ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.green[400],
-                    padding: EdgeInsets.symmetric(horizontal: 90, vertical: 15),
-                  ),
-                  child: Text(
-                    'Spara',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 21,
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.green[400],
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 90, vertical: 15),
                     ),
-                  ),
-                  onPressed: () async {
-                    // If the form is not valid
+                    child: Text(
+                      'Spara',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 21,
+                      ),
+                    ),
+                    onPressed: () async {
+                      // If the form is not valid
 
-                    // If the form is valid, onSaved method is called
-                    // onsave method from above is called
+                      // If the form is valid, onSaved method is called
+                      // onsave method from above is called
+                      _formKey.currentState.save();
 
-                    _formKey.currentState.save();
-                    try {
-                      if (changePassword) {
+                      // Check if the user has changed password
+                      if (_changePassword) {
                         try {
                           await locator
                               .get<AuthService>()
                               .updatePassword(_userPassword);
                         } on FirebaseAuthException catch (e) {
                           print(e.code);
-                          errorMsg = ErrorMessage(errorMsg: e.code)
-                              .getMessageFromErrorCode();
+                          _msgShown = ErrorMessage(errorMsg: e.code)
+                              .erroMessageEditProfile();
                         }
                       }
-                      if (changeEmail) {
+                      // Checks if the user has changed the email
+                      if (_changeEmail) {
                         try {
                           final result = await locator
                               .get<AuthService>()
                               .updateEmail(_userEmail);
-                          print('result');
-                          print(result);
+                          setState(() => _msgShown = 'Ändring sparades');
                         } on FirebaseAuthException catch (e) {
-                          print('Edit profile');
-                          errorMsg = ErrorMessage(errorMsg: e.code)
-                              .getMessageFromErrorCode();
-                          //print(errorMsg);
-                          print(e.code);
+                          setState(() {
+                            _msgShown = ErrorMessage(errorMsg: e.code)
+                                .erroMessageEditProfile();
+                          });
                         }
                       }
-                      /*await locator.get<DatabaseService>().updateUserData(
-                            _userID,
-                            _userName,
-                            _userEmail,
-                            _userNumber,
-                            _userBio,
-                          );*/
-                      //Navigator.pop(context);
-                    } on FirebaseException catch (e) {
-                      errorMsg = ErrorMessage(errorMsg: e.code)
-                          .getMessageFromErrorCode();
-                    }
-                  },
-                ),
+                      //print('After changeEmail');
+                      //print(currentUser.email);
+                      //print(_currentEmailAdress);
+                      // Changes email in the database if no exception is thrown
+                      // from authentication
+                      if (currentUser.email != _currentEmailAdress) {
+                        print('Inside if statement');
+                        print(currentUser.email);
+                        print(_userEmail);
+                        await locator
+                            .get<DatabaseService>()
+                            .updaterUserEmailInDatabase(_userID, _userEmail);
+                      }
+
+                      // Updates user information in the database
+                      try {
+                        await locator.get<DatabaseService>().updateUserData(
+                              _userID,
+                              _userName,
+                              //_userEmail,
+                              _userNumber,
+                              _userBio,
+                            );
+                        //Navigator.pop(context);
+                      } on FirebaseException catch (e) {
+                        _msgShown = ErrorMessage(errorMsg: e.code)
+                            .erroMessageEditProfile();
+                      }
+                    }),
                 SizedBox(
                   height: 10,
                 ),
                 Text(
-                  errorMsg,
+                  _msgShown,
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.red, fontSize: 16),
                 ),

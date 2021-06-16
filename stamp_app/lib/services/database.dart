@@ -44,19 +44,26 @@ class DatabaseService {
         .update({'userProfilePicUrl': imgUrl});
   }
 
+  // Updates user information used in editprofile view
   Future updateUserData(
     String userID,
     String userName,
-    String userEmail,
+    //String userEmail,
     String userPhoneNumber,
     String userBio,
   ) async {
     return await userCollection.doc(userID).update({
       'userName': userName,
-      'userEmail': userEmail,
+      //'userEmail': userEmail,
       'userPhoneNumber': userPhoneNumber,
       'userBio': userBio,
     });
+  }
+
+  //Updates user email in the database when email is changed
+  //in Autentication
+  Future updaterUserEmailInDatabase(String userID, String userEmail) async {
+    return await userCollection.doc(userID).update({'userEmail': userEmail});
   }
 
   //Create job
