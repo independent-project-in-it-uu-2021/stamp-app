@@ -38,7 +38,6 @@ class ProfileEditState extends State<ProfileEdit> {
   bool _changePassword = false;
   bool _changeEmail = false;
   String _msgShown = '';
-  String _currentEmailAdress;
 
   @override
   void initState() {
@@ -82,7 +81,6 @@ class ProfileEditState extends State<ProfileEdit> {
   }
 
   Widget _buildEmail() {
-    _currentEmailAdress = _userEmail;
     return Container(
       width: 350,
       child: TextFormField(
@@ -224,10 +222,6 @@ class ProfileEditState extends State<ProfileEdit> {
 
   @override
   Widget build(BuildContext context) {
-    //final currentUser = Provider.of<User>(context);
-    final currentUser = Provider.of<User>(context);
-    print('Current user email');
-    print(currentUser.email);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -242,7 +236,7 @@ class ProfileEditState extends State<ProfileEdit> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_rounded),
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.pop(context);
           },
           tooltip: 'Tillbaka',
         ),
@@ -345,26 +339,11 @@ class ProfileEditState extends State<ProfileEdit> {
                           });
                         }
                       }
-                      //print('After changeEmail');
-                      //print(currentUser.email);
-                      //print(_currentEmailAdress);
-                      // Changes email in the database if no exception is thrown
-                      // from authentication
-                      if (currentUser.email != _currentEmailAdress) {
-                        print('Inside if statement');
-                        print(currentUser.email);
-                        print(_userEmail);
-                        await locator
-                            .get<DatabaseService>()
-                            .updaterUserEmailInDatabase(_userID, _userEmail);
-                      }
-
                       // Updates user information in the database
                       try {
                         await locator.get<DatabaseService>().updateUserData(
                               _userID,
                               _userName,
-                              //_userEmail,
                               _userNumber,
                               _userBio,
                             );

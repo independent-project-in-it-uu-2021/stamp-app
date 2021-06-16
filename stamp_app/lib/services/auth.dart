@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:stamp_app/models/user.dart';
 import 'package:stamp_app/services/database.dart';
+import 'package:stamp_app/services/locator.dart';
 
 class AuthService {
   // Connecting to the firebase authentication (instance of firebaseauth)
@@ -77,6 +78,11 @@ class AuthService {
     //try {
     final curUser = _firebaseAuth.currentUser;
     final result = await curUser.updateEmail(userEmail);
+
+    // Update email adress in the database
+    final upp = await locator
+        .get<DatabaseService>()
+        .updaterUserEmailInDatabase(curUser.uid, userEmail);
     return result;
     //} on FirebaseAuthException catch (e) {
     //print('inside auth.dart');
