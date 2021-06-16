@@ -155,8 +155,6 @@ class ProfileEditState extends State<ProfileEdit> {
           return null;
         },
         onChanged: (String value) {
-          print('hej');
-          print(value);
           changePassword = true;
           _userPassword = value;
         },
@@ -317,9 +315,15 @@ class ProfileEditState extends State<ProfileEdit> {
                     _formKey.currentState.save();
                     try {
                       if (changePassword) {
-                        await locator
-                            .get<AuthService>()
-                            .updatePassword(_userPassword);
+                        try {
+                          await locator
+                              .get<AuthService>()
+                              .updatePassword(_userPassword);
+                        } on FirebaseAuthException catch (e) {
+                          print(e.code);
+                          errorMsg = ErrorMessage(errorMsg: e.code)
+                              .getMessageFromErrorCode();
+                        }
                       }
                       if (changeEmail) {
                         try {
@@ -344,8 +348,9 @@ class ProfileEditState extends State<ProfileEdit> {
                             _userBio,
                           );*/
                       //Navigator.pop(context);
-                    } catch (e) {
-                      print(e);
+                    } on FirebaseException catch (e) {
+                      errorMsg = ErrorMessage(errorMsg: e.code)
+                          .getMessageFromErrorCode();
                     }
                   },
                 ),

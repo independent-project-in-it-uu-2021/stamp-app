@@ -6,11 +6,11 @@ class ErrorMessage {
     switch (errorMsg) {
       case 'ERROR_REQUIRES_RECENT_LOGIN':
       case 'requires-recent-login':
-        return 'Vänligen logga in på nytt för kunna ändra mejladress';
+        return 'Vänligen logga in på nytt för kunna ändra';
         break;
 
       default:
-        return 'Inloggning misslyckades';
+        return 'Ändring misslyckades';
         break;
     }
   }
