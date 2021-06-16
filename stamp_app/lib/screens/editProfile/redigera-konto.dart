@@ -89,7 +89,7 @@ class ProfileEditState extends State<ProfileEdit> {
         decoration: editProfileInputDecoration.copyWith(hintText: 'E-post'),
         // The acutal value from the input
         validator: (String value) {
-          if (_changeEmail = true) {
+          if (_changeEmail == true) {
             if (value.isEmpty) {
               return 'E-post är obligatorisk';
             }
@@ -107,7 +107,7 @@ class ProfileEditState extends State<ProfileEdit> {
         },
         // The  form is saved and we tell what to do with the value
         onChanged: (String value) {
-          _changeEmail = true;
+          setState(() => _changeEmail = true);
           _userEmail = value;
         },
       ),
@@ -155,7 +155,8 @@ class ProfileEditState extends State<ProfileEdit> {
           return null;
         },
         onChanged: (String value) {
-          _changePassword = true;
+          setState(() => _changePassword = true);
+          //_changePassword = true;
           _userPassword = value;
         },
       ),
@@ -307,50 +308,52 @@ class ProfileEditState extends State<ProfileEdit> {
                       ),
                     ),
                     onPressed: () async {
-                      // If the form is not valid
+                      if (_formKey.currentState.validate()) {
+                        // If the form is valid, onSaved method is called
+                        // onsave method from above is called
+                        _formKey.currentState.save();
 
-                      // If the form is valid, onSaved method is called
-                      // onsave method from above is called
-                      _formKey.currentState.save();
-
-                      // Check if the user has changed password
-                      if (_changePassword) {
+                        // Check if the user has changed password
+                        if (_changePassword) {
+                          try {
+                            final result = await locator
+                                .get<AuthService>()
+                                .updatePassword(_userPassword);
+                            setState(() => _msgShown = 'Ändring sparades');
+                          } on FirebaseAuthException catch (e) {
+                            setState(() {
+                              _msgShown = ErrorMessage(errorMsg: e.code)
+                                  .erroMessageEditProfile();
+                            });
+                          }
+                        }
+                        // Checks if the user has changed the email
+                        if (_changeEmail == true) {
+                          try {
+                            final result = await locator
+                                .get<AuthService>()
+                                .updateEmail(_userEmail);
+                            setState(() => _msgShown = 'Ändring sparades');
+                          } on FirebaseAuthException catch (e) {
+                            setState(() {
+                              _msgShown = ErrorMessage(errorMsg: e.code)
+                                  .erroMessageEditProfile();
+                            });
+                          }
+                        }
+                        // Updates user information in the database
                         try {
-                          await locator
-                              .get<AuthService>()
-                              .updatePassword(_userPassword);
-                        } on FirebaseAuthException catch (e) {
-                          print(e.code);
+                          await locator.get<DatabaseService>().updateUserData(
+                                _userID,
+                                _userName,
+                                _userNumber,
+                                _userBio,
+                              );
+                          //Navigator.pop(context);
+                        } on FirebaseException catch (e) {
                           _msgShown = ErrorMessage(errorMsg: e.code)
                               .erroMessageEditProfile();
                         }
-                      }
-                      // Checks if the user has changed the email
-                      if (_changeEmail) {
-                        try {
-                          final result = await locator
-                              .get<AuthService>()
-                              .updateEmail(_userEmail);
-                          setState(() => _msgShown = 'Ändring sparades');
-                        } on FirebaseAuthException catch (e) {
-                          setState(() {
-                            _msgShown = ErrorMessage(errorMsg: e.code)
-                                .erroMessageEditProfile();
-                          });
-                        }
-                      }
-                      // Updates user information in the database
-                      try {
-                        await locator.get<DatabaseService>().updateUserData(
-                              _userID,
-                              _userName,
-                              _userNumber,
-                              _userBio,
-                            );
-                        //Navigator.pop(context);
-                      } on FirebaseException catch (e) {
-                        _msgShown = ErrorMessage(errorMsg: e.code)
-                            .erroMessageEditProfile();
                       }
                     }),
                 SizedBox(
