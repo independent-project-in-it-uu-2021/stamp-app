@@ -1,13 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:stamp_app/services/auth.dart';
 
 import 'package:stamp_app/sharedWidget/editProfileDecoration.dart';
 import 'package:stamp_app/services/locator.dart';
 import 'package:stamp_app/sharedWidget/errorMsg.dart';
 import 'package:stamp_app/services/database.dart';
+import 'package:stamp_app/sharedWidget/dialogWidget.dart';
 
 class ProfileEdit extends StatefulWidget {
   final String userID;
@@ -357,13 +357,34 @@ class ProfileEditState extends State<ProfileEdit> {
                       }
                     }),
                 SizedBox(
-                  height: 10,
+                  height: 12,
                 ),
                 Text(
                   _msgShown,
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.red, fontSize: 16),
                 ),
+                Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: TextButton(
+                    child: Text(
+                      'Radera konto',
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          decoration: TextDecoration.underline),
+                    ),
+                    onPressed: () async {
+                      final askQuestion = await Dialogs.dialogAction(
+                          context, 'Är du säker?', 'Ja', 'Nej');
+                      if (askQuestion == DialogAction.option1) {
+                        print('Ja');
+                      } else if (askQuestion == DialogAction.option2) {
+                        print('Nej');
+                      }
+                    },
+                  ),
+                )
               ],
             ),
           ),

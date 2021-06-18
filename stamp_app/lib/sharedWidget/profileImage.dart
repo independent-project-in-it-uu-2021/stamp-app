@@ -71,8 +71,8 @@ class ProfileImageState extends State<ProfileImage> {
               shape: CircleBorder(),
               onPressed: () async {
                 final userOption = await Dialogs.dialogAction(
-                    context, 'Profilbild (Frivillig)');
-                if (userOption == DialogAction.gallery) {
+                    context, 'Profilbild (Frivillig)', 'Från mobil', 'Ta bild');
+                if (userOption == DialogAction.option1) {
                   try {
                     _pickedImage = await ImagePicker()
                         .getImage(source: ImageSource.gallery);

@@ -318,17 +318,20 @@ class CreateAccountState extends State<CreateAccount> {
                           onPressed: () async {
                             //_getImage();
                             final userOption = await Dialogs.dialogAction(
-                                context, 'Profilbild (Frivillig)');
+                                context,
+                                'Profilbild (Frivillig)',
+                                'Från mobil',
+                                'Ta bild');
 
-                            if (userOption == DialogAction.camera) {
+                            if (userOption == DialogAction.option1) {
                               _pickedImage = await ImagePicker()
-                                  .getImage(source: ImageSource.camera);
+                                  .getImage(source: ImageSource.gallery);
                               _userImage = File(_pickedImage.path);
-                            } else if (userOption == DialogAction.gallery) {
+                            } else if (userOption == DialogAction.option2) {
                               print('Från mobil');
                               try {
                                 _pickedImage = await ImagePicker()
-                                    .getImage(source: ImageSource.gallery);
+                                    .getImage(source: ImageSource.camera);
                               } catch (e) {
                                 print('Choose picture: $e');
                               }
