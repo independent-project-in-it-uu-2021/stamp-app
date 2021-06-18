@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:stamp_app/services/auth.dart';
 
+import 'package:stamp_app/services/auth.dart';
 import 'package:stamp_app/sharedWidget/editProfileDecoration.dart';
 import 'package:stamp_app/services/locator.dart';
 import 'package:stamp_app/sharedWidget/errorMsg.dart';
@@ -15,12 +15,14 @@ class ProfileEdit extends StatefulWidget {
   final String userNumber;
   final String userEmail;
   final String userBio;
+  final String userProfileImgUrl;
   ProfileEdit(
       {this.userID,
       this.userName,
       this.userNumber,
       this.userEmail,
-      this.userBio});
+      this.userBio,
+      this.userProfileImgUrl});
   @override
   State<StatefulWidget> createState() {
     return ProfileEditState();
@@ -38,6 +40,8 @@ class ProfileEditState extends State<ProfileEdit> {
   bool _changePassword = false;
   bool _changeEmail = false;
   String _msgShown = '';
+  String _errorMsgDeleteAccount = '';
+  final AuthService _firebaseAuth = AuthService();
 
   @override
   void initState() {
@@ -115,10 +119,13 @@ class ProfileEditState extends State<ProfileEdit> {
   }
 
   Widget _buildNumber() {
+    if (widget.userNumber == 'Telefonnummer saknas') {
+      _userNumber = '';
+    }
     return Container(
       width: 350,
       child: TextFormField(
-        initialValue: widget.userNumber,
+        initialValue: _userNumber,
         keyboardType: TextInputType.number,
         // Decorate the input field here,
         decoration: editProfileInputDecoration.copyWith(
@@ -349,6 +356,7 @@ class ProfileEditState extends State<ProfileEdit> {
                                 _userNumber,
                                 _userBio,
                               );
+                          setState(() => _msgShown = 'Ändring sparades');
                           //Navigator.pop(context);
                         } on FirebaseException catch (e) {
                           _msgShown = ErrorMessage(errorMsg: e.code)
@@ -378,13 +386,30 @@ class ProfileEditState extends State<ProfileEdit> {
                       final askQuestion = await Dialogs.dialogAction(
                           context, 'Är du säker?', 'Ja', 'Nej');
                       if (askQuestion == DialogAction.option1) {
-                        print('Ja');
-                      } else if (askQuestion == DialogAction.option2) {
-                        print('Nej');
-                      }
+                        try {
+                          await locator
+                              .get<AuthService>()
+                              .deleteAccount(_userID, widget.userProfileImgUrl);
+                          await _firebaseAuth.signOutUser();
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                        } on FirebaseAuthException catch (e) {
+                          setState(() {
+                            print(e);
+                            _errorMsgDeleteAccount =
+                                ErrorMessage(errorMsg: e.code)
+                                    .erroMessageEditProfile();
+                          });
+                        }
+                      } else if (askQuestion == DialogAction.option2) {}
                     },
                   ),
-                )
+                ),
+                Text(
+                  _errorMsgDeleteAccount,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.red, fontSize: 16),
+                ),
               ],
             ),
           ),

@@ -6,7 +6,7 @@ class ErrorMessage {
   String erroMessageEditProfile() {
     switch (errorMsg) {
       case 'requires-recent-login':
-        return 'Vänligen logga in på nytt för kunna ändra';
+        return 'Vänligen logga in på nytt för kunna utföra ändringen';
         break;
       case 'email-already-in-use':
         return 'Mejladressen används redan';

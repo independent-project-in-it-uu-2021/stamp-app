@@ -117,6 +117,12 @@ class DatabaseService {
     );
   }
 
+  // Deteles user info from databas, if called from deleteAccount method
+  // in auth aka when user wants to delete account
+  Future deleteUserInfo(String userID) async {
+    await userCollection.doc(userID).delete();
+  }
+
   // Get user information stream
   Stream<UserData> get userData {
     return userCollection.doc(userId).snapshots().map(_userDataFromSnapshot);

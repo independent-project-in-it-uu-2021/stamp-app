@@ -41,4 +41,14 @@ class StorageServices {
     }
     return newImageUrl;
   }
+
+  // Deteler profile img, called from deleteAccount method in auth
+  Future deleteImg(String imageUrl) async {
+    // If user has no profile image if-statement is false
+    if (imageUrl != 'noImage') {
+      final storageRef = FirebaseStorage.instance.refFromURL(imageUrl);
+      final result = await storageRef.delete();
+      return result;
+    }
+  }
 }

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:stamp_app/models/user.dart';
 import 'package:stamp_app/services/database.dart';
 import 'package:stamp_app/services/locator.dart';
+import 'package:stamp_app/services/storage.dart';
 
 class AuthService {
   // Connecting to the firebase authentication (instance of firebaseauth)
@@ -84,22 +85,32 @@ class AuthService {
         .get<DatabaseService>()
         .updaterUserEmailInDatabase(curUser.uid, userEmail);
     return result;
-    //} on FirebaseAuthException catch (e) {
-    //print('inside auth.dart');
-    //print(e);
-    //return e;
-    //}
   }
 
   //Update user password
   Future updatePassword(String userPassword) async {
     try {
       final result = _firebaseAuth.currentUser.updatePassword(userPassword);
-      print(result);
       return result;
     } on FirebaseAuthException catch (e) {
       print(e);
       return e;
+    }
+  }
+
+  // When user wants to delete the acount this method is called
+  Future deleteAccount(String userId, String userProfilePicUrl) async {
+    try {
+      final _curUser = _firebaseAuth.currentUser;
+
+      await _curUser.delete();
+      //await _firebaseAuth.signOut();
+      print(userProfilePicUrl);
+      await locator.get<StorageServices>().deleteImg(userProfilePicUrl);
+      await locator.get<DatabaseService>().deleteUserInfo(userId);
+    } catch (e) {
+      print('deleteAccount');
+      print(e);
     }
   }
 
@@ -109,7 +120,6 @@ class AuthService {
       return await _firebaseAuth.signOut();
     } catch (e) {
       print(e.toString());
-      return null;
     }
   }
 }
