@@ -71,18 +71,27 @@ class DatabaseService {
     String name,
     String location,
     String desc,
-    String numOfStudents,
+    String maxStudents,
     String date,
     String time,
+    String endTime,
     String icon,
   ) async {
+    Map reserveList;
+    Map acceptedList;
+    Map interestList;
     return await jobsCollection.add({
       'jobName': name,
       'location': location,
       'description': desc,
-      'numberOfStudents': numOfStudents,
-      'date': date,
+      'numberOfStudents': maxStudents,
+      'data': date,
       'time': time,
+      'endTime': endTime,
+      'completed': false,
+      'currentReserve': reserveList,
+      'currentAccepted': acceptedList,
+      'currentInterest': interestList,
       'icon': icon,
     }); //serializeIcon(_icon),})
   }

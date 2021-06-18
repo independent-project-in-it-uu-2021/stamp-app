@@ -44,17 +44,22 @@ class Works extends StatelessWidget {
       appBar: AppBar(
         title: Text('Jobb'),
         backgroundColor: Colors.red.shade900,
-        /*actions: <Widget>[
+        actions: <Widget>[
           IconButton(
             padding: EdgeInsets.only(right: 10),
-            onPressed: null,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CreateJob()),
+              );
+            },
             icon: Icon(
               Icons.chat_bubble_rounded,
               color: Colors.white,
               size: 35,
             ),
           ),
-        ],*/
+        ],
       ),
       body: ListView.builder(
         itemCount: allJobs.length,

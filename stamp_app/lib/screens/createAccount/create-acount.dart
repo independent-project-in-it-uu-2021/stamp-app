@@ -336,11 +336,7 @@ class CreateAccountState extends State<CreateAccount> {
                               }
                             }
                             setState(() {
-                              print('Inside setState');
-
                               _userImage = File(_pickedImage.path);
-
-                              print(_userImage);
                             });
                           }),
                       Padding(
