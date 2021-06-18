@@ -77,9 +77,9 @@ class DatabaseService {
     String endTime,
     String icon,
   ) async {
-    Map reserveList;
-    Map acceptedList;
-    Map interestList;
+    Map reserveList = {};
+    Map acceptedList = {};
+    Map interestList = {};
     return await jobsCollection.add({
       'jobName': name,
       'location': location,
