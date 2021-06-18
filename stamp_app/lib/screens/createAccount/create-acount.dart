@@ -43,13 +43,7 @@ class CreateAccountState extends State<CreateAccount> {
   double _changeMarginImage() {
     double curMargin;
     setState(() {
-      if (_userImage == null) {
-        curMargin = 10;
-      } else {
-        curMargin = 0;
-      }
-
-      curMargin = _userImage == null ? 10 : 0;
+      _userImage == null ? curMargin = 10 : curMargin = 0;
     });
     return curMargin;
   }
@@ -310,10 +304,15 @@ class CreateAccountState extends State<CreateAccount> {
                                     'Ladda upp profilbild',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
+                                      //decorationStyle: TextAlign.center,
                                       color: Colors.black,
                                     ),
                                   )
-                                : Image.file(_userImage),
+                                : Container(
+                                    width: 100,
+                                    height: 100,
+                                    child: Image.file(_userImage),
+                                  ),
                           ),
                           onPressed: () async {
                             //_getImage();
@@ -335,14 +334,14 @@ class CreateAccountState extends State<CreateAccount> {
                               } catch (e) {
                                 print('Choose picture: $e');
                               }
-                              setState(() {
-                                print('Inside setState');
-
-                                _userImage = File(_pickedImage.path);
-
-                                print(_userImage);
-                              });
                             }
+                            setState(() {
+                              print('Inside setState');
+
+                              _userImage = File(_pickedImage.path);
+
+                              print(_userImage);
+                            });
                           }),
                       Padding(
                         padding: EdgeInsets.only(top: 12),

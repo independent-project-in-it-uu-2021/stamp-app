@@ -22,7 +22,6 @@ class ProfilState extends State<Profil> {
   String _userEmail = '';
   String _userBio = '';
   String _profileImageUrl = '';
-  final AuthService _firebaseAuth = AuthService();
 
   // key to hold the state of the form i.e referens to the form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
