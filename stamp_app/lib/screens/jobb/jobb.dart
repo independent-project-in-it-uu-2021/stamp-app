@@ -33,6 +33,7 @@ class Work extends StatelessWidget {
         itemCount: allJobs.length,
         itemBuilder: (BuildContext context, int index) {
           var title = allJobs[index].title;
+          var description = allJobs[index].description;
           var date = allJobs[index].date;
           var time = allJobs[index].time;
           var endTime = allJobs[index].endTime;
@@ -50,7 +51,17 @@ class Work extends StatelessWidget {
               onTap: () => {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Choice()),
+                  MaterialPageRoute(
+                      builder: (context) => Choice(
+                          title: title,
+                          description: description,
+                          date: date,
+                          time: time,
+                          endTime: endTime,
+                          location: location,
+                          count: count,
+                          maxCount: maxCount,
+                          reserveCount: reserveCount)),
                 )
               },
             ),

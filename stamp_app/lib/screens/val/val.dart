@@ -17,6 +17,28 @@ bool _pressedButton5 = false;
 bool _pressedButton6 = false;
 
 class Choice extends StatefulWidget {
+  final title;
+  final description;
+  final date;
+  final time;
+  final endTime;
+  final location;
+  final count;
+  final maxCount;
+  final reserveCount;
+
+  Choice({
+    Key key,
+    @required this.title,
+    @required this.description,
+    @required this.date,
+    @required this.time,
+    @required this.endTime,
+    @required this.location,
+    @required this.count,
+    @required this.maxCount,
+    @required this.reserveCount,
+  }) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return ChoiceState();
@@ -67,27 +89,25 @@ class ChoiceState extends State<Choice> {
                         Column(
                           children: [
                             Text(
-                              'Lego workshop',
+                              widget.title.toString(),
                               style: TextStyle(
-                                fontSize: 30,
+                                fontSize: 24,
                                 color: Colors.black,
                               ),
                             ),
                             Text(
-                              '2021-07-11',
+                              widget.date.toString(),
                               style: TextStyle(fontSize: 20),
                               textAlign: TextAlign.left,
                             ),
                             Text(
-                              '13:00 - 15:00',
+                              widget.time.toString() +
+                                  ' - ' +
+                                  widget.endTime.toString(),
                               style: TextStyle(fontSize: 20),
                             ),
                             Text(
-                              'Uppsala',
-                              style: TextStyle(fontSize: 20),
-                            ),
-                            Text(
-                              '3/4 st',
+                              widget.location.toString(),
                               style: TextStyle(fontSize: 20),
                             ),
                           ],
@@ -100,7 +120,7 @@ class ChoiceState extends State<Choice> {
                         Padding(padding: EdgeInsets.only(left: 30)),
                         Expanded(
                           child: Text(
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque porttitor tortor sed lacinia dictum. Mauris auctor massa magna, a consequat neque sodales eget. In ac hendrerit quam. Nullam sollicitudin orci at mauris rutrum scelerisque.',
+                            widget.description.toString(),
                             style: TextStyle(fontSize: 15),
                             textAlign: TextAlign.left,
                             overflow: TextOverflow.ellipsis,
@@ -112,14 +132,26 @@ class ChoiceState extends State<Choice> {
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 40),
+                  padding: EdgeInsets.only(top: 30),
                 ),
+
                 Text(
                   'Intresseanmälningar',
                   style: TextStyle(
-                    fontSize: 30,
+                    fontSize: 22,
                     color: Colors.black,
                   ),
+                ),
+                Text(
+                  'Studenter: ' +
+                      widget.count.toString() +
+                      ' / ' +
+                      widget.maxCount.toString(),
+                  style: TextStyle(fontSize: 20),
+                ),
+                Text(
+                  'Reserver: ' + widget.reserveCount.toString(),
+                  style: TextStyle(fontSize: 20),
                 ),
 
                 TextButton(
@@ -134,7 +166,6 @@ class ChoiceState extends State<Choice> {
                     )
                   },
                 ),
-
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
                   child: Container(
@@ -144,7 +175,7 @@ class ChoiceState extends State<Choice> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 //---------------
                 Row(
@@ -253,7 +284,7 @@ class ChoiceState extends State<Choice> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -264,7 +295,7 @@ class ChoiceState extends State<Choice> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 Row(
                   children: [
@@ -371,7 +402,7 @@ class ChoiceState extends State<Choice> {
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -382,7 +413,7 @@ class ChoiceState extends State<Choice> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 Row(
                   children: [
@@ -490,7 +521,7 @@ class ChoiceState extends State<Choice> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -501,7 +532,7 @@ class ChoiceState extends State<Choice> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
               ],
             ),
