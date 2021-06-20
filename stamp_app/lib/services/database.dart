@@ -18,7 +18,7 @@ class DatabaseService {
 
 //updateUserData(userName, userPhoneNumber, userProgram, userProfilePic)
   // method to update user data
-  Future updateUserData(
+  Future createUserData(
       String userName,
       String userEmail,
       String userPhoneNumber,
@@ -35,6 +35,65 @@ class DatabaseService {
         'accountType': accountType,
       },
     );
+  }
+
+  // Change profileimage url
+  Future updateProfileImgUrl(String userID, String imgUrl) async {
+    return await userCollection
+        .doc(userID)
+        .update({'userProfilePicUrl': imgUrl});
+  }
+
+  // Updates user information used in editprofile view
+  Future updateUserData(
+    String userID,
+    String userName,
+    //String userEmail,
+    String userPhoneNumber,
+    String userBio,
+  ) async {
+    return await userCollection.doc(userID).update({
+      'userName': userName,
+      //'userEmail': userEmail,
+      'userPhoneNumber': userPhoneNumber,
+      'userBio': userBio,
+    });
+  }
+
+  //Updates user email in the database when email is changed
+  //in Autentication
+  Future updaterUserEmailInDatabase(String userID, String userEmail) async {
+    return await userCollection.doc(userID).update({'userEmail': userEmail});
+  }
+
+  //Create job
+  Future createJob(
+    String name,
+    String location,
+    String desc,
+    String maxStudents,
+    String date,
+    String time,
+    String endTime,
+    String icon,
+  ) async {
+    Map reserveList = {};
+    Map acceptedList = {};
+    Map interestList = {};
+    return await jobsCollection.add({
+      'jobName': name,
+      'location': location,
+      'description': desc,
+      'numberOfStudents': maxStudents,
+      'data': date,
+      'time': time,
+      'endTime': endTime,
+      'completed': false,
+      'currentReserve': reserveList,
+      'currentAccepted': acceptedList,
+      'currentInterest': interestList,
+      'icon': icon,
+    }); //serializeIcon(_icon),})
   }
 
   //Job list
@@ -70,6 +129,12 @@ class DatabaseService {
       imageUrl: snapshot.data()['userProfilePicUrl'],
       accountType: snapshot.data()['accountType'],
     );
+  }
+
+  // Deteles user info from databas, if called from deleteAccount method
+  // in auth aka when user wants to delete account
+  Future deleteUserInfo(String userID) async {
+    await userCollection.doc(userID).delete();
   }
 
   // Get user information stream

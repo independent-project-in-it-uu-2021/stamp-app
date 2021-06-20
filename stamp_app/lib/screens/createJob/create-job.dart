@@ -7,6 +7,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 import 'package:stamp_app/screens/jobb/jobb.dart';
 import 'package:icon_picker/icon_picker.dart';
+import 'package:stamp_app/services/database.dart';
 
 class CreateJob extends StatefulWidget {
   @override
@@ -21,8 +22,9 @@ class CreateJobState extends State<CreateJob> {
   String _location;
   String _desc;
   String _numbStudents;
-  String _selectedDate = "Välj ett datum för jobbet";
-  String _selectedTime = "Välj en tid för jobbet";
+  String _selectedDate = 'Välj datum';
+  String _selectedTime = 'Välj starttid';
+  String _selectedEndTime = 'Välj sluttid';
   String _icon;
   // Boolean value use to hide the write bio option field
   bool _writeBio = false;
@@ -275,6 +277,22 @@ class CreateJobState extends State<CreateJob> {
     );
   }
 
+  Widget _buildEndTime() {
+    return Container(
+      width: 300,
+      child: FlatButton(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(15.0))),
+        color: Colors.black12,
+        onPressed: _show,
+        child: Text(
+          "$_selectedEndTime",
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -300,7 +318,7 @@ class CreateJobState extends State<CreateJob> {
       body: SingleChildScrollView(
         child: Container(
           width: double.infinity,
-          margin: EdgeInsets.only(top: 60, bottom: 20),
+          margin: EdgeInsets.only(top: 20, bottom: 20),
           child: Form(
             key: _formKey,
             child: Column(
@@ -341,6 +359,10 @@ class CreateJobState extends State<CreateJob> {
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
+                _buildEndTime(),
+                Padding(
+                  padding: EdgeInsets.only(top: 12),
+                ),
                 _chooseIcon(),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
@@ -373,15 +395,16 @@ class CreateJobState extends State<CreateJob> {
                     if (_formKey.currentState.validate()) {
                       _formKey.currentState.save();
 
-                      FirebaseFirestore.instance.collection('jobs').add({
-                        'jobName': _name,
-                        'location': _location,
-                        'description': _desc,
-                        'numberOfStudents': _numbStudents,
-                        'date': _selectedDate,
-                        'time': _selectedTime,
-                        'icon': _icon, //serializeIcon(_icon),
-                      });
+                      //Adding the job to the databas collection
+                      DatabaseService().createJob(
+                          _name,
+                          _location,
+                          _desc,
+                          _numbStudents,
+                          _selectedDate,
+                          _selectedTime,
+                          _selectedEndTime,
+                          _icon);
                     }
                     Navigator.push(
                       context,

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:stamp_app/models/user.dart';
 
 import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
 import 'package:stamp_app/services/database.dart';
 import 'package:stamp_app/sharedWidget/loadingScreen.dart';
+import 'package:stamp_app/sharedWidget/profileImage.dart';
+import 'package:stamp_app/models/user.dart';
 
 class StudentProfile extends StatefulWidget {
   @override
@@ -20,11 +20,14 @@ class StudentProfileState extends State<StudentProfile> {
   String _userNumber = '';
   String _userEmail = '';
   String _userBio = '';
-  String _profilePicUrl = '';
+  String _profileImageUrl = '';
 
   // key to hold the state of the form i.e referens to the form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  //TODO: Check if an email is already used
+  // reuseable profile image widget
+  Widget profilePic() {
+    return ProfileImage(profileImagUrl: _profileImageUrl);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,24 +37,33 @@ class StudentProfileState extends State<StudentProfile> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           _userName = snapshot.data.name;
-          _userNumber = snapshot.data.phoneNumer;
           _userEmail = snapshot.data.email;
           _userBio = snapshot.data.bio;
-          _profilePicUrl = snapshot.data.imageUrl;
+
+          //If user has not profile picture
+          snapshot.data.imageUrl == null
+              ? _profileImageUrl = 'noImage'
+              : _profileImageUrl = snapshot.data.imageUrl;
+
+          //If user has no phonenummer
+          snapshot.data.phoneNumer == null || snapshot.data.phoneNumer.isEmpty
+              ? _userNumber = 'Telefonnummer saknas'
+              : _userNumber = snapshot.data.phoneNumer;
+
           return Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
               title:
                   Image.asset('assets/images/uuLogaNew.png', fit: BoxFit.cover),
-              //centerTitle: true,
+              centerTitle: true,
               backgroundColor: Colors.red.shade900,
               elevation: 0,
               leading: IconButton(
                 icon: Icon(Icons.arrow_back_ios_rounded),
-                //TODO: This does nothing now
                 onPressed: () => Navigator.of(context).pop(),
                 tooltip: 'Tillbaka',
               ),
+              //TODO: Chat icon future implementation
               /*actions: <Widget>[
               IconButton(
                 padding: EdgeInsets.only(right: 10),
@@ -108,28 +120,8 @@ class StudentProfileState extends State<StudentProfile> {
                       SizedBox(
                         height: 20,
                       ),
-                      Container(
-                        height: 160,
-                        width: 160,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(
-                              _profilePicUrl,
-                            ),
-                          ),
-                          border: Border.all(
-                            color: Colors.red.shade900,
-                            width: 4,
-                          ),
-                        ),
-                      ),
-                      /*Image.network(
-                        _profilePicUrl,
-                        fit: BoxFit.cover,
-                        scale: 1,
-                        width: 160,
-                        height: 160,
-                      ),*/
+                      profilePic(),
+                      //_profilePicture(),
                       Padding(
                         padding: EdgeInsets.only(top: 20),
                       ),

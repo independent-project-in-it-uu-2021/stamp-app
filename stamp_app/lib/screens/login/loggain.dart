@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:stamp_app/services/auth.dart';
 import 'package:stamp_app/sharedWidget/inputDecoration.dart';
 import 'package:stamp_app/sharedWidget/loadingScreen.dart';
+import 'package:stamp_app/sharedWidget/errorMsg.dart';
 
 class LogIn extends StatefulWidget {
   final Function toggleFunc;
@@ -156,17 +158,16 @@ class LogInState extends State<LogIn> {
                               setState(() => loading = true);
                               _formKey.currentState.save();
                               // sign in method from auth.dart file is called here
-                              dynamic result =
-                                  await _auth.signInWithEmailAndPassword(
-                                      _email, _userPassword);
-                              print(result);
-                              if (result == null) {
+                              try {
+                                dynamic result =
+                                    await _auth.signInWithEmailAndPassword(
+                                        _email, _userPassword);
+                              } on FirebaseAuthException catch (e) {
                                 setState(() {
                                   loading = false;
-                                  _erroMsg =
-                                      'E-post eller lösenord är felaktig';
+                                  _erroMsg = ErrorMessage(errorMsg: e.code)
+                                      .errorMessageLogin();
                                 });
-                                print(_erroMsg);
                               }
                             }
                           },

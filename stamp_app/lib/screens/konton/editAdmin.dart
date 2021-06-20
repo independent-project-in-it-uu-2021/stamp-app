@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stamp_app/screens/konton/raderaKonto.dart';
+import 'package:stamp_app/screens/konton/deleteAccount.dart';
 import 'package:stamp_app/screens/konton/makeStudent.dart';
 import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
 
