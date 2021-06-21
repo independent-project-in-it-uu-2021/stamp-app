@@ -65,7 +65,7 @@ class ProfileImageState extends State<ProfileImage> {
               child: Icon(
                 Icons.camera_alt_outlined,
                 color: Colors.white,
-                //ize: 10,
+                //size: 10,
               ),
               padding: EdgeInsets.all(7.0),
               shape: CircleBorder(),

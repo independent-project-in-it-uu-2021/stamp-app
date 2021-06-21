@@ -31,6 +31,7 @@ class StudentProfileState extends State<StudentProfile> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData _mediQuearyData = MediaQuery.of(context);
     final _currentUser = Provider.of<User>(context);
     return StreamBuilder<UserData>(
       stream: DatabaseService(userId: _currentUser.uid).userData,
@@ -87,22 +88,51 @@ class StudentProfileState extends State<StudentProfile> {
                       Padding(
                         padding: EdgeInsets.only(top: 30),
                       ),
-                      Text(
-                        'Din profil',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 40,
-                          color: Colors.black,
-                        ),
+                      Stack(
+                        children: [
+                          Text(
+                            'Din profil',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 40,
+                              color: Colors.black,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 215,
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: _mediQuearyData.size.width * -0.05,
+                            child: RawMaterialButton(
+                                child: Icon(Icons.edit_rounded, size: 33),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProfileEdit(
+                                        userID: _currentUser.uid,
+                                        userName: _userName,
+                                        userEmail: _userEmail,
+                                        userNumber: _userNumber,
+                                        userBio: _userBio,
+                                        userProfileImgUrl: _profileImageUrl,
+                                      ),
+                                    ),
+                                  );
+                                }),
+                          )
+                        ],
                       ),
+
                       Padding(
                         padding: EdgeInsets.only(top: 15),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0),
                         child: Container(
-                          height: MediaQuery.of(context).size.height * 0.001,
-                          width: MediaQuery.of(context).size.width * 0.83,
+                          height: _mediQuearyData.size.height * 0.001,
+                          width: _mediQuearyData.size.width * 0.83,
                           color: Colors.black12,
                         ),
                       ),
@@ -128,8 +158,8 @@ class StudentProfileState extends State<StudentProfile> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0),
                         child: Container(
-                          height: MediaQuery.of(context).size.height * 0.001,
-                          width: MediaQuery.of(context).size.width * 0.83,
+                          height: _mediQuearyData.size.height * 0.001,
+                          width: _mediQuearyData.size.width * 0.83,
                           color: Colors.black12,
                         ),
                       ),
@@ -149,8 +179,8 @@ class StudentProfileState extends State<StudentProfile> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0),
                         child: Container(
-                          height: MediaQuery.of(context).size.height * 0.001,
-                          width: MediaQuery.of(context).size.width * 0.83,
+                          height: _mediQuearyData.size.height * 0.001,
+                          width: _mediQuearyData.size.width * 0.83,
                           color: Colors.black12,
                         ),
                       ),
@@ -170,8 +200,8 @@ class StudentProfileState extends State<StudentProfile> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0),
                         child: Container(
-                          height: MediaQuery.of(context).size.height * 0.001,
-                          width: MediaQuery.of(context).size.width * 0.83,
+                          height: _mediQuearyData.size.height * 0.001,
+                          width: _mediQuearyData.size.width * 0.83,
                           color: Colors.black12,
                         ),
                       ),
@@ -191,8 +221,8 @@ class StudentProfileState extends State<StudentProfile> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0),
                         child: Container(
-                          height: MediaQuery.of(context).size.height * 0.001,
-                          width: MediaQuery.of(context).size.width * 0.83,
+                          height: _mediQuearyData.size.height * 0.001,
+                          width: _mediQuearyData.size.width * 0.83,
                           color: Colors.black12,
                         ),
                       ),
@@ -212,8 +242,8 @@ class StudentProfileState extends State<StudentProfile> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0),
                         child: Container(
-                          height: MediaQuery.of(context).size.height * 0.001,
-                          width: MediaQuery.of(context).size.width * 0.83,
+                          height: _mediQuearyData.size.height * 0.001,
+                          width: _mediQuearyData.size.width * 0.83,
                           color: Colors.black12,
                         ),
                       ),
@@ -233,8 +263,8 @@ class StudentProfileState extends State<StudentProfile> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0),
                         child: Container(
-                          height: MediaQuery.of(context).size.height * 0.001,
-                          width: MediaQuery.of(context).size.width * 0.83,
+                          height: _mediQuearyData.size.height * 0.001,
+                          width: _mediQuearyData.size.width * 0.83,
                           color: Colors.black12,
                         ),
                       ),
@@ -254,8 +284,8 @@ class StudentProfileState extends State<StudentProfile> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0),
                         child: Container(
-                          height: MediaQuery.of(context).size.height * 0.001,
-                          width: MediaQuery.of(context).size.width * 0.83,
+                          height: _mediQuearyData.size.height * 0.001,
+                          width: _mediQuearyData.size.width * 0.83,
                           color: Colors.black12,
                         ),
                       ),
@@ -275,8 +305,8 @@ class StudentProfileState extends State<StudentProfile> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0),
                         child: Container(
-                          height: MediaQuery.of(context).size.height * 0.001,
-                          width: MediaQuery.of(context).size.width * 0.83,
+                          height: _mediQuearyData.size.height * 0.001,
+                          width: _mediQuearyData.size.width * 0.83,
                           color: Colors.black12,
                         ),
                       ),
@@ -298,7 +328,15 @@ class StudentProfileState extends State<StudentProfile> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ProfileEdit()),
+                                  builder: (context) => ProfileEdit(
+                                    userID: _currentUser.uid,
+                                    userName: _userName,
+                                    userEmail: _userEmail,
+                                    userNumber: _userNumber,
+                                    userBio: _userBio,
+                                    userProfileImgUrl: _profileImageUrl,
+                                  ),
+                                ),
                               );
                             }),
                       ),
