@@ -87,6 +87,7 @@ class ChoiceState extends State<Choice> {
                         ),
                         Padding(padding: EdgeInsets.only(left: 20)),
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               widget.title.toString(),
@@ -94,45 +95,59 @@ class ChoiceState extends State<Choice> {
                                 fontSize: 24,
                                 color: Colors.black,
                               ),
-                            ),
-                            Text(
-                              widget.date.toString(),
-                              style: TextStyle(fontSize: 20),
                               textAlign: TextAlign.left,
                             ),
                             Text(
-                              widget.time.toString() +
-                                  ' - ' +
-                                  widget.endTime.toString(),
-                              style: TextStyle(fontSize: 20),
+                                'Tid: ' +
+                                    widget.time.toString() +
+                                    '-' +
+                                    widget.endTime.toString(),
+                                style: TextStyle(fontSize: 18),
+                                textAlign: TextAlign.left),
+                            Text('Datum: ' + widget.date.toString(),
+                                style: TextStyle(fontSize: 18),
+                                textAlign: TextAlign.left),
+                            Text(
+                              'Studenter: ' +
+                                  widget.count.toString() +
+                                  '/' +
+                                  widget.maxCount.toString() +
+                                  ' st',
+                              style: TextStyle(fontSize: 18),
+                              textAlign: TextAlign.left,
                             ),
                             Text(
-                              widget.location.toString(),
-                              style: TextStyle(fontSize: 20),
+                              'Reserver: ' +
+                                  widget.reserveCount.toString() +
+                                  ' st',
+                              style: TextStyle(fontSize: 18),
+                              textAlign: TextAlign.left,
                             ),
                           ],
                         ),
+                        Padding(padding: EdgeInsets.only(left: 20)),
                       ],
                     ),
-                    Padding(padding: EdgeInsets.only(top: 40)),
+                    Padding(padding: EdgeInsets.only(top: 20)),
                     Row(
                       children: [
                         Padding(padding: EdgeInsets.only(left: 30)),
                         Expanded(
                           child: Text(
                             widget.description.toString(),
-                            style: TextStyle(fontSize: 15),
+                            style: TextStyle(fontSize: 14),
                             textAlign: TextAlign.left,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 10,
                           ),
                         ),
+                        Padding(padding: EdgeInsets.only(right: 10)),
                       ],
                     ),
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
 
                 Text(
@@ -142,18 +157,6 @@ class ChoiceState extends State<Choice> {
                     color: Colors.black,
                   ),
                 ),
-                Text(
-                  'Studenter: ' +
-                      widget.count.toString() +
-                      ' / ' +
-                      widget.maxCount.toString(),
-                  style: TextStyle(fontSize: 20),
-                ),
-                Text(
-                  'Reserver: ' + widget.reserveCount.toString(),
-                  style: TextStyle(fontSize: 20),
-                ),
-
                 /*TextButton(
                   style: TextButton.styleFrom(
                     textStyle: const TextStyle(fontSize: 26),

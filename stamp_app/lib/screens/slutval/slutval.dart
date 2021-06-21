@@ -79,26 +79,41 @@ class FinalChoice extends StatelessWidget {
                         ),
                         Padding(padding: EdgeInsets.only(left: 20)),
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              this.title,
+                              this.title.toString(),
                               style: TextStyle(
-                                fontSize: 30,
+                                fontSize: 24,
                                 color: Colors.black,
                               ),
-                            ),
-                            Text(
-                              this.date,
-                              style: TextStyle(fontSize: 20),
                               textAlign: TextAlign.left,
                             ),
                             Text(
-                              this.time + ' - ' + this.endTime,
-                              style: TextStyle(fontSize: 20),
+                                'Tid: ' +
+                                    this.time.toString() +
+                                    '-' +
+                                    this.endTime.toString(),
+                                style: TextStyle(fontSize: 18),
+                                textAlign: TextAlign.left),
+                            Text('Datum: ' + this.date.toString(),
+                                style: TextStyle(fontSize: 18),
+                                textAlign: TextAlign.left),
+                            Text(
+                              'Studenter: ' +
+                                  this.count.toString() +
+                                  '/' +
+                                  this.maxCount.toString() +
+                                  ' st',
+                              style: TextStyle(fontSize: 18),
+                              textAlign: TextAlign.left,
                             ),
                             Text(
-                              this.location,
-                              style: TextStyle(fontSize: 20),
+                              'Reserver: ' +
+                                  this.reserveCount.toString() +
+                                  ' st',
+                              style: TextStyle(fontSize: 18),
+                              textAlign: TextAlign.left,
                             ),
                           ],
                         ),
@@ -108,7 +123,25 @@ class FinalChoice extends StatelessWidget {
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
+                ),
+                Row(
+                  children: [
+                    Padding(padding: EdgeInsets.only(left: 30)),
+                    Expanded(
+                      child: Text(
+                        this.description.toString(),
+                        style: TextStyle(fontSize: 14),
+                        textAlign: TextAlign.left,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 10,
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.only(right: 10)),
+                  ],
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 Text(
                   'Valda',
@@ -116,17 +149,6 @@ class FinalChoice extends StatelessWidget {
                     fontSize: 24,
                     color: Colors.black,
                   ),
-                ),
-                Text(
-                  'Studenter: ' +
-                      this.count.toString() +
-                      ' / ' +
-                      this.maxCount.toString(),
-                  style: TextStyle(fontSize: 20),
-                ),
-                Text(
-                  'Reserver: ' + this.reserveCount.toString(),
-                  style: TextStyle(fontSize: 20),
                 ),
 
                 //Padding(padding: EdgeInsets.only(top: 20)),
