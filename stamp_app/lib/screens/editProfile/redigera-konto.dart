@@ -1,10 +1,28 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-//import 'package:image_picker/image_picker.dart';
-import 'dart:io';
+import 'package:stamp_app/services/auth.dart';
+import 'package:stamp_app/sharedWidget/editProfileDecoration.dart';
+import 'package:stamp_app/services/locator.dart';
+import 'package:stamp_app/sharedWidget/errorMsg.dart';
+import 'package:stamp_app/services/database.dart';
+import 'package:stamp_app/sharedWidget/dialogWidget.dart';
 
 class ProfileEdit extends StatefulWidget {
+  final String userID;
+  final String userName;
+  final String userNumber;
+  final String userEmail;
+  final String userBio;
+  final String userProfileImgUrl;
+  ProfileEdit(
+      {this.userID,
+      this.userName,
+      this.userNumber,
+      this.userEmail,
+      this.userBio,
+      this.userProfileImgUrl});
   @override
   State<StatefulWidget> createState() {
     return ProfileEditState();
@@ -13,48 +31,27 @@ class ProfileEdit extends StatefulWidget {
 
 class ProfileEditState extends State<ProfileEdit> {
   // State parameter
-  String _fullName;
-  String _email;
-  String _mobilnumber;
-  String _userPassword;
-  String _chosenProgram;
-  // Boolean value use to hide the write bio option field
-  bool _writeBio = false;
+  String _userID = '';
+  String _userName = '';
+  String _userNumber = '';
+  String _userEmail = '';
+  String _userBio = '';
+  String _userPassword = '';
+  bool _changePassword = false;
+  bool _changeEmail = false;
+  String _msgShown = '';
+  String _errorMsgDeleteAccount = '';
+  final AuthService _firebaseAuth = AuthService();
 
-  File _userImage;
-/*
-  Future _getImage() async {
-    final pickedImage =
-        await ImagePicker().getImage(source: ImageSource.gallery);
-    setState(() {
-      _userImage = File(pickedImage.path);
-      print('_UserImage: $_userImage');
-    });
+  @override
+  void initState() {
+    super.initState();
+    _userID = widget.userID;
+    _userName = widget.userName;
+    _userEmail = widget.userEmail;
+    _userNumber = widget.userNumber;
+    _userBio = widget.userBio;
   }
-*/
-  // Method that is used to change the margin when an image is choosen
-  double _changeMarginImage() {
-    double curMargin;
-    setState(() {
-      /*
-      same as if(_userImage == null){
-        curMargin = 10;
-      } else{
-        curMargin = 0;
-      }
-      */
-      curMargin = _userImage == null ? 10 : 0;
-    });
-    return curMargin;
-  }
-
-  void showWriteBio() {
-    setState(() {
-      _writeBio = !_writeBio;
-    });
-  }
-
-  //final programList<String> = ['Elektroteknik', 'Energisystem', 'Industriell ekonomi'];
 
   // key to hold the state of the form i.e referens to the form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -64,93 +61,79 @@ class ProfileEditState extends State<ProfileEdit> {
     return Container(
       width: 350,
       child: TextFormField(
+        initialValue: widget.userName,
         keyboardType: TextInputType.name,
         // Decorate the input field here,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.black12,
-          hintText: 'Förnamn Efternamn',
-          counterStyle: TextStyle(color: Colors.red.shade900),
-          errorStyle: TextStyle(color: Colors.red.shade900),
-        ),
+        decoration:
+            editProfileInputDecoration.copyWith(hintText: 'Förnamn Efternamn'),
         // The acutal value from the input
         validator: (String value) {
           if (value.isEmpty) {
             return 'Namn är obligatorisk';
           }
           if (value.length > 120) {
-            //TODO: Change the text below
             return 'Namn får inte vara längre än 120 tecken';
           }
           return null;
         },
         // The  form is saved and we tell what to do with the value
         onSaved: (String value) {
-          print(value);
-          _fullName = value;
+          _userName = value;
         },
       ),
     );
   }
 
-  //TODO: Check if a email is already used
   Widget _buildEmail() {
     return Container(
       width: 350,
       child: TextFormField(
+        initialValue: widget.userEmail,
         keyboardType: TextInputType.emailAddress,
-        //maxLength: 255,
-        // Decorate the input field here,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.black12,
-          hintText: 'E-post',
-          counterStyle: TextStyle(color: Colors.red.shade900),
-          errorStyle: TextStyle(color: Colors.red.shade900),
-        ),
+        decoration: editProfileInputDecoration.copyWith(hintText: 'E-post'),
         // The acutal value from the input
         validator: (String value) {
-          if (value.isEmpty) {
-            return 'E-post är obligatorisk';
-          }
-          if (value.length > 255) {
-            //TODO: Change the text below
-            return 'Mejladress får inte vara längre än 255 tecken';
-          }
-
-          // Check valid character for email
-          if (!RegExp(
-                  r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
-              .hasMatch(value)) {
-            return 'Ogiltig mejladress';
+          if (_changeEmail == true) {
+            if (value.isEmpty) {
+              return 'E-post är obligatorisk';
+            }
+            if (value.length > 120) {
+              return 'Mejladress får inte vara längre än 120 tecken';
+            }
+            // Check valid character for email
+            if (!RegExp(
+                    r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+                .hasMatch(value)) {
+              return 'Ogiltig mejladress';
+            }
           }
           return null;
         },
         // The  form is saved and we tell what to do with the value
-        onSaved: (String value) {
-          _email = value;
+        onChanged: (String value) {
+          setState(() => _changeEmail = true);
+          _userEmail = value;
         },
       ),
     );
   }
 
   Widget _buildNumber() {
+    if (widget.userNumber == 'Telefonnummer saknas') {
+      _userNumber = '';
+    }
     return Container(
       width: 350,
       child: TextFormField(
+        initialValue: _userNumber,
         keyboardType: TextInputType.number,
         // Decorate the input field here,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.black12,
-          hintText: 'Telefonnummer (Frivilligt)',
-          counterStyle: TextStyle(color: Colors.red.shade900),
-          errorStyle: TextStyle(color: Colors.red.shade900),
-        ),
+        decoration: editProfileInputDecoration.copyWith(
+            hintText: 'Telefonnummer (Frivilligt)'),
 
         // The  form is saved and we tell what to do with the value
         onSaved: (String value) {
-          _mobilnumber = value;
+          _userNumber = value;
         },
       ),
     );
@@ -165,23 +148,22 @@ class ProfileEditState extends State<ProfileEdit> {
         enableSuggestions: false,
         autocorrect: false,
         // Decorate the input field here,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.black12,
-          hintText: 'Lösenord',
-          counterStyle: TextStyle(color: Colors.red.shade900),
-          errorStyle: TextStyle(color: Colors.red.shade900),
-        ),
+        decoration: editProfileInputDecoration.copyWith(hintText: 'Lösenord'),
         // The acutal value from the input
+
         validator: (String value) {
-          if (value.isEmpty) {
-            return 'Lösenord är obligatorisk';
+          if (_changePassword == true) {
+            if (value.isEmpty) {
+              return 'Lösenord är obligatorisk';
+            } else if (value.length < 6) {
+              return 'Lösenord behöver vara minst 6 tecken';
+            }
           }
           return null;
         },
-        //TODO: Password requirements
-        // The  form is saved and we tell what to do with the value
-        onSaved: (String value) {
+        onChanged: (String value) {
+          setState(() => _changePassword = true);
+          //_changePassword = true;
           _userPassword = value;
         },
       ),
@@ -197,75 +179,21 @@ class ProfileEditState extends State<ProfileEdit> {
         autocorrect: false,
         keyboardType: TextInputType.visiblePassword,
         // Decorate the input field here,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.black12,
-          hintText: 'Upprepa lösenord',
-          counterStyle: TextStyle(color: Colors.red.shade900),
-          errorStyle: TextStyle(color: Colors.red.shade900),
-        ),
+        decoration:
+            editProfileInputDecoration.copyWith(hintText: 'Upprepa lösenord'),
         // The acutal value from the input
         validator: (String value) {
-          if (value.isEmpty) {
-            return 'Upprepa lösenord är obligatorisk';
-          }
-          if (value != _userPassword) {
-            print('Value inside checkpassword');
-            print(value);
-            // TODO: Change the text below
-            return 'Lösenord är inte samma';
+          if (_changePassword == true) {
+            if (value.isEmpty) {
+              return 'Upprepa lösenord är obligatorisk';
+            } else if (value != _userPassword) {
+              return 'Vänligen ange samma lösenord';
+            } else if (value.length < 6) {
+              return 'Lösenord behöver vara minst 6 tecken';
+            }
           }
           return null;
         },
-      ),
-    );
-  }
-
-  // Choose program from dropdown
-  Widget _program() {
-    return Container(
-      width: 350,
-      height: 60,
-      child: DropdownButtonFormField(
-        //TODO: Change the position of the list to above
-        items: <String>[
-          'One',
-          'Two',
-          'Three',
-          'Övrigt',
-        ].map<DropdownMenuItem<String>>((String value) {
-          return new DropdownMenuItem(
-            value: value,
-            child: Row(
-              children: <Widget>[
-                //TODO: Check with the grupp maybe change the icon
-                Icon(Icons.arrow_right),
-                Text(value),
-              ],
-            ),
-          );
-        }).toList(),
-        onChanged: (String newValue) {
-          print('Inside dropdown');
-          print(newValue);
-          if (newValue == 'Övrigt') {
-            showWriteBio();
-          } else {
-            //showWriteBio();
-            _chosenProgram = newValue;
-          }
-        },
-        decoration: InputDecoration(
-            border: new OutlineInputBorder(
-                borderRadius:
-                    const BorderRadius.all(const Radius.circular(30.0))),
-            contentPadding: EdgeInsets.only(left: 15, top: 15),
-            errorStyle: TextStyle(color: Colors.black, fontSize: 13),
-            filled: true,
-            fillColor: Colors.black12,
-            hintText: 'Program',
-            //TODO: Change the text below
-            errorText: 'Vänligen välj en program'),
       ),
     );
   }
@@ -274,39 +202,28 @@ class ProfileEditState extends State<ProfileEdit> {
   Widget _buildBio() {
     return Container(
       width: 350,
-      child: Visibility(
-        visible: _writeBio,
-        child: TextFormField(
-          keyboardType: TextInputType.name,
-          // Decorate the input field here,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-
-            //TODO: Change the text below
-            hintText: 'Din roll?',
-            counterStyle: TextStyle(color: Colors.red.shade900),
-            errorStyle: TextStyle(color: Colors.red.shade900),
-          ),
-          // The acutal value from the input
-          validator: (String value) {
-            if (value.isEmpty) {
-              return 'Bio är obligatorisk';
-            }
-            if (value.length > 150) {
-              //TODO: Change the text below
-              return 'Bio får inte vara längre än 120 tecken';
-            }
-            return null;
-          },
-          // The  form is saved and we tell what to do with the value
-          onSaved: (String value) {
-            print('Inside _buildbio');
-            print(value);
-            print(_chosenProgram);
-            _chosenProgram = value;
-          },
-        ),
+      child: TextFormField(
+        initialValue: widget.userBio,
+        keyboardType: TextInputType.name,
+        maxLength: 300,
+        // Decorate the input field here,
+        decoration: editProfileInputDecoration.copyWith(hintText: 'Kort bio'),
+        // The acutal value from the input
+        validator: (String value) {
+          if (value.isEmpty) {
+            return 'Bio är obligatorisk';
+          }
+          if (value.length > 300) {
+            return 'Bio får inte vara längre än 300 tecken';
+          }
+          return null;
+        },
+        // The  form is saved and we tell what to do with the value
+        onChanged: (String value) {
+          setState(() {
+            _userBio = value;
+          });
+        },
       ),
     );
   }
@@ -326,7 +243,6 @@ class ProfileEditState extends State<ProfileEdit> {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_rounded),
-          // TODO: Change this (Does nothing right now)
           onPressed: () {
             Navigator.pop(context);
           },
@@ -373,7 +289,6 @@ class ProfileEditState extends State<ProfileEdit> {
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
-                _program(),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
@@ -382,69 +297,119 @@ class ProfileEditState extends State<ProfileEdit> {
                 SizedBox(
                   height: 12,
                 ),
-                OutlineButton(
-                  color: Colors.white,
-                  borderSide: BorderSide(
-                    color: Colors.black,
-                  ),
-                  /*style: ElevatedButton.styleFrom(
-                    primary: Colors.white,
-                    alignment: Alignment.center,
-                    //padding: EdgeInsets.only(top: 10),
-                  ),*/
-                  child: Container(
-                    height: 60,
-                    width: 100,
-                    margin: EdgeInsets.only(top: _changeMarginImage()),
-                    child: _userImage == null
-                        ? Text(
-                            'Ladda upp profilbild',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
-                          )
-                        : Image.file(_userImage),
-                  ),
-                  onPressed: () => null,
-                ),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
                 ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.green[400],
-                    padding: EdgeInsets.symmetric(horizontal: 90, vertical: 15),
-                  ),
-                  child: Text(
-                    'Spara',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 21,
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.green[400],
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 90, vertical: 15),
                     ),
+                    child: Text(
+                      'Spara',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 21,
+                      ),
+                    ),
+                    onPressed: () async {
+                      if (_formKey.currentState.validate()) {
+                        // If the form is valid, onSaved method is called
+                        // onsave method from above is called
+                        _formKey.currentState.save();
+
+                        // Check if the user has changed password
+                        if (_changePassword) {
+                          try {
+                            final result = await locator
+                                .get<AuthService>()
+                                .updatePassword(_userPassword);
+                            setState(() => _msgShown = 'Ändring sparades');
+                          } on FirebaseAuthException catch (e) {
+                            setState(() {
+                              _msgShown = ErrorMessage(errorMsg: e.code)
+                                  .erroMessageEditProfile();
+                            });
+                          }
+                        }
+                        // Checks if the user has changed the email
+                        if (_changeEmail == true) {
+                          try {
+                            final result = await locator
+                                .get<AuthService>()
+                                .updateEmail(_userEmail);
+                            setState(() => _msgShown = 'Ändring sparades');
+                          } on FirebaseAuthException catch (e) {
+                            setState(() {
+                              _msgShown = ErrorMessage(errorMsg: e.code)
+                                  .erroMessageEditProfile();
+                            });
+                          }
+                        }
+                        // Updates user information in the database
+                        try {
+                          await locator.get<DatabaseService>().updateUserData(
+                                _userID,
+                                _userName,
+                                _userNumber,
+                                _userBio,
+                              );
+                          setState(() => _msgShown = 'Ändring sparades');
+                          //Navigator.pop(context);
+                        } on FirebaseException catch (e) {
+                          _msgShown = ErrorMessage(errorMsg: e.code)
+                              .erroMessageEditProfile();
+                        }
+                      }
+                    }),
+                SizedBox(
+                  height: 12,
+                ),
+                Text(
+                  _msgShown,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.red, fontSize: 16),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: TextButton(
+                    child: Text(
+                      'Radera konto',
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          decoration: TextDecoration.underline),
+                    ),
+                    onPressed: () async {
+                      final askQuestion = await Dialogs.dialogAction(
+                          context, 'Är du säker?', 'Ja', 'Nej');
+                      if (askQuestion == DialogAction.option1) {
+                        try {
+                          await locator
+                              .get<AuthService>()
+                              .deleteAccount(_userID, widget.userProfileImgUrl);
+                          await _firebaseAuth.signOutUser();
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                        } on FirebaseAuthException catch (e) {
+                          setState(() {
+                            print(e);
+                            _errorMsgDeleteAccount =
+                                ErrorMessage(errorMsg: e.code)
+                                    .erroMessageEditProfile();
+                          });
+                        }
+                      } else if (askQuestion == DialogAction.option2) {}
+                    },
                   ),
-                  onPressed: () {
-                    // If the form is not valid
-
-                    if (!_formKey.currentState.validate()) {
-                      return;
-                    }
-
-                    // If the form is valid, onSaved method is called
-                    // onsave method from above is called
-                    if (_formKey.currentState.validate()) {
-                      _formKey.currentState.save();
-                      print(_fullName);
-                    }
-
-                    //print(_fullName);
-                    //print(_email);
-                    //print(_mobilnumber);
-                    //print(_userPassword);
-                    //print(_chosenProgram);
-                  },
-                )
+                ),
+                Text(
+                  _errorMsgDeleteAccount,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.red, fontSize: 16),
+                ),
               ],
             ),
           ),

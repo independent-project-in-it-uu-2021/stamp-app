@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:stamp_app/models/user.dart';
 import 'package:stamp_app/services/database.dart';
+import 'package:stamp_app/services/locator.dart';
+import 'package:stamp_app/services/storage.dart';
 
 class AuthService {
   // Connecting to the firebase authentication (instance of firebaseauth)
@@ -19,7 +21,7 @@ class AuthService {
     return _firebaseAuth.authStateChanges();
   }
 
-  // Sign in anon method for testing. Async method
+  // NOT USED: Sign in anon method for testing. Async method
   Future signInAnon() async {
     try {
       // Signing in anon and getting a usercredential object
@@ -39,13 +41,9 @@ class AuthService {
   // signing in with email & password
   Future signInWithEmailAndPassword(
       String userEmail, String userPassword) async {
-    try {
-      UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(
-          email: userEmail, password: userPassword);
-      return result.user;
-    } catch (e) {
-      print(e.toString());
-    }
+    UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(
+        email: userEmail, password: userPassword);
+    return result.user;
   }
 
   // register with email and password
@@ -63,7 +61,7 @@ class AuthService {
           await _firebaseAuth.createUserWithEmailAndPassword(
               email: userEmail, password: userPassword);
       // Create a empty document inside user collection in the db
-      await DatabaseService(userId: result.user.uid).updateUserData(
+      await DatabaseService(userId: result.user.uid).createUserData(
           userName,
           userEmail,
           userPhoneNumber,
@@ -76,13 +74,52 @@ class AuthService {
     }
   }
 
+  //Update user email
+  Future updateEmail(String userEmail) async {
+    //try {
+    final curUser = _firebaseAuth.currentUser;
+    final result = await curUser.updateEmail(userEmail);
+
+    // Update email adress in the database
+    final upp = await locator
+        .get<DatabaseService>()
+        .updaterUserEmailInDatabase(curUser.uid, userEmail);
+    return result;
+  }
+
+  //Update user password
+  Future updatePassword(String userPassword) async {
+    try {
+      final result = _firebaseAuth.currentUser.updatePassword(userPassword);
+      return result;
+    } on FirebaseAuthException catch (e) {
+      print(e);
+      return e;
+    }
+  }
+
+  // When user wants to delete the acount this method is called
+  Future deleteAccount(String userId, String userProfilePicUrl) async {
+    try {
+      final _curUser = _firebaseAuth.currentUser;
+
+      await _curUser.delete();
+      //await _firebaseAuth.signOut();
+      print(userProfilePicUrl);
+      await locator.get<StorageServices>().deleteImg(userProfilePicUrl);
+      await locator.get<DatabaseService>().deleteUserInfo(userId);
+    } catch (e) {
+      print('deleteAccount');
+      print(e);
+    }
+  }
+
   // sign out
   Future signOutUser() async {
     try {
       return await _firebaseAuth.signOut();
     } catch (e) {
       print(e.toString());
-      return null;
     }
   }
 }

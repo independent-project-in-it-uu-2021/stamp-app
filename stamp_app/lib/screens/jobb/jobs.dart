@@ -34,35 +34,41 @@ List<Map<String, dynamic>> _menuItem = [
   },
 ];
 
-class Work extends StatelessWidget {
+class Works extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print('Inside works build');
     final allJobs = Provider.of<List<Jobs>>(context) ?? [];
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Jobb'),
         backgroundColor: Colors.red.shade900,
-        /*actions: <Widget>[
+        actions: <Widget>[
           IconButton(
             padding: EdgeInsets.only(right: 10),
-            onPressed: null,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CreateJob()),
+              );
+            },
             icon: Icon(
               Icons.chat_bubble_rounded,
               color: Colors.white,
               size: 35,
             ),
           ),
-        ],*/
+        ],
       ),
-      body: new ListView.builder(
-        itemCount: _menuItem.length,
+      body: ListView.builder(
+        itemCount: allJobs.length,
         itemBuilder: (BuildContext context, int index) {
-          return new Card(
+          return Card(
             child: ListTile(
-              leading: _menuItem[index]['icon'],
-              title: Text(_menuItem[index]['title']),
-              subtitle: Text(_menuItem[index]['subtitle']),
+              leading: Icon(Icons.people),
+              title: Text(allJobs[index].title),
+              //subtitle: Text(allJobs[index].),
               /*child: Align(
                 alignment: Alignment.topRight,
                 child: Text('TESTING TESTING'),

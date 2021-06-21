@@ -27,13 +27,11 @@ class UserData {
 
   UserData newDummyUser() {
     return UserData(
-        uid: 'Användare Id',
+        uid: '6vDpKqvPuJTaqRd8jahe7texRVI2',
         name: 'Namn',
         email: 'E-post',
         phoneNumer: 'Telefonnummer',
         bio: 'Övrigt',
-        imageUrl:
-            'https://firebasestorage.googleapis.com/v0/b/stamp-db6ad.appspot.com/o/userProfilePicture%2Fprofile-user.png?alt=media&token=170630ba-bccf-4bd7-b50b-9d5e08f01a73',
         accountType: 'inactiv');
   }
 }

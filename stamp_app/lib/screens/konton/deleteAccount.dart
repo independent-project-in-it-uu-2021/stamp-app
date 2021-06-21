@@ -40,13 +40,49 @@ class DeleteAccountState extends State<DeleteAccount> {
                   padding: EdgeInsets.only(top: 30),
                 ),
                 Text(
-                  'Här ska man kunna radera ett konto',
+                  'Är du säker på att du vill radera ditt konto?',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 40,
+                    fontSize: 25,
                     color: Colors.black,
                   ),
                 ),
+                Container(
+                  height: 45,
+                  width: 230,
+                  child: FlatButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                    color: Colors.grey.shade900,
+                    child: Text(
+                      "Ångra",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 45,
+                  width: 230,
+                  child: FlatButton(
+                    onPressed: () => {"Radera"},
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                    color: Colors.red.shade900,
+                    child: Text(
+                      "Radera",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
           ),
