@@ -10,6 +10,28 @@ import 'package:stamp_app/studentScreens/FinalStudentChoice/finalStudentChoice.d
 
 class FinalChoice extends StatelessWidget {
   final AuthService _firebaseAuth = AuthService();
+  final title;
+  final description;
+  final date;
+  final time;
+  final endTime;
+  final location;
+  final count;
+  final maxCount;
+  final reserveCount;
+
+  FinalChoice({
+    Key key,
+    @required this.title,
+    @required this.description,
+    @required this.date,
+    @required this.time,
+    @required this.endTime,
+    @required this.location,
+    @required this.count,
+    @required this.maxCount,
+    @required this.reserveCount,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,34 +81,30 @@ class FinalChoice extends StatelessWidget {
                         Column(
                           children: [
                             Text(
-                              'Lego workshop',
+                              this.title,
                               style: TextStyle(
                                 fontSize: 30,
                                 color: Colors.black,
                               ),
                             ),
                             Text(
-                              '2021-07-11',
+                              this.date,
                               style: TextStyle(fontSize: 20),
                               textAlign: TextAlign.left,
                             ),
                             Text(
-                              '13:00 - 15:00',
+                              this.time + ' - ' + this.endTime,
                               style: TextStyle(fontSize: 20),
                             ),
                             Text(
-                              'Uppsala',
-                              style: TextStyle(fontSize: 20),
-                            ),
-                            Text(
-                              '3/4 st',
+                              this.location,
                               style: TextStyle(fontSize: 20),
                             ),
                           ],
                         ),
                       ],
                     ),
-                    Padding(padding: EdgeInsets.only(top: 40)),
+                    //Padding(padding: EdgeInsets.only(top: 40)),
                   ],
                 ),
                 Padding(
@@ -95,12 +113,23 @@ class FinalChoice extends StatelessWidget {
                 Text(
                   'Valda',
                   style: TextStyle(
-                    fontSize: 30,
+                    fontSize: 24,
                     color: Colors.black,
                   ),
                 ),
+                Text(
+                  'Studenter: ' +
+                      this.count.toString() +
+                      ' / ' +
+                      this.maxCount.toString(),
+                  style: TextStyle(fontSize: 20),
+                ),
+                Text(
+                  'Reserver: ' + this.reserveCount.toString(),
+                  style: TextStyle(fontSize: 20),
+                ),
 
-                Padding(padding: EdgeInsets.only(top: 20)),
+                //Padding(padding: EdgeInsets.only(top: 20)),
 
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -111,7 +140,7 @@ class FinalChoice extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 //---------------
                 FlatButton(
@@ -141,7 +170,7 @@ class FinalChoice extends StatelessWidget {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -152,7 +181,7 @@ class FinalChoice extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 FlatButton(
                   onPressed: () => {},
@@ -180,7 +209,7 @@ class FinalChoice extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -191,7 +220,7 @@ class FinalChoice extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 FlatButton(
                   onPressed: () => {},
@@ -219,7 +248,7 @@ class FinalChoice extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -233,7 +262,7 @@ class FinalChoice extends StatelessWidget {
                 Text(
                   'Reserver',
                   style: TextStyle(
-                    fontSize: 30,
+                    fontSize: 24,
                     color: Colors.black,
                   ),
                 ),
@@ -249,7 +278,7 @@ class FinalChoice extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 //---------------
                 FlatButton(
@@ -279,7 +308,7 @@ class FinalChoice extends StatelessWidget {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -290,7 +319,7 @@ class FinalChoice extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 FlatButton(
                   onPressed: () => {},
@@ -318,7 +347,7 @@ class FinalChoice extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -329,7 +358,7 @@ class FinalChoice extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 FlatButton(
                   onPressed: () => {},
@@ -357,7 +386,7 @@ class FinalChoice extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -368,7 +397,7 @@ class FinalChoice extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
               ],
             ),

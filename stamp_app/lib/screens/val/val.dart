@@ -138,7 +138,7 @@ class ChoiceState extends State<Choice> {
                 Text(
                   'Intresseanmälningar',
                   style: TextStyle(
-                    fontSize: 22,
+                    fontSize: 24,
                     color: Colors.black,
                   ),
                 ),
@@ -154,7 +154,7 @@ class ChoiceState extends State<Choice> {
                   style: TextStyle(fontSize: 20),
                 ),
 
-                TextButton(
+                /*TextButton(
                   style: TextButton.styleFrom(
                     textStyle: const TextStyle(fontSize: 26),
                     primary: Colors.blue,
@@ -165,7 +165,7 @@ class ChoiceState extends State<Choice> {
                       MaterialPageRoute(builder: (context) => OthersProfile()),
                     )
                   },
-                ),
+                ),*/
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
                   child: Container(
@@ -559,7 +559,17 @@ class ChoiceState extends State<Choice> {
               onPressed: () => {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => FinalChoice()),
+                  MaterialPageRoute(
+                      builder: (context) => FinalChoice(
+                          title: widget.title,
+                          description: widget.description,
+                          date: widget.date,
+                          time: widget.time,
+                          endTime: widget.endTime,
+                          location: widget.location,
+                          count: widget.count,
+                          maxCount: widget.maxCount,
+                          reserveCount: widget.reserveCount)),
                 ),
               },
             ),
