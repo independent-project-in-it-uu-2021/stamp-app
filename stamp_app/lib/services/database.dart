@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 import 'package:stamp_app/models/jobsModel.dart';
 import 'package:stamp_app/models/user.dart';
@@ -112,6 +114,48 @@ class DatabaseService {
   Stream<List<Jobs>> get allJobs {
     return jobsCollection.snapshots().map(_jobsFromDatabase);
   }
+
+  List<UserData> _usersFromDataBase(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return UserData(
+        uid: doc.id,
+        name: doc.data()['userName'],
+        email: doc.data()['userEmail'],
+        phoneNumer: doc.data()['userPhoneNumber'],
+        bio: doc.data()['userBio'],
+        imageUrl: doc.data()['userProfilePicUrl'],
+        accountType: doc.data()['accountType'],
+      );
+    }).toList();
+  }
+
+  //List<UserData> usesDatabase(QuerySnapshot snapshot)
+
+  Future getAllUsers() async {
+    //final users = await userCollection.get();
+    try {
+      final users = await userCollection.get();
+      users.docs.forEach((element) {
+        String name = element.data()['userName'];
+        print('Name: $name');
+      });
+      //return await userCollection.get();
+    } catch (e) {
+      print('Error inside getAllUsers');
+      print(e);
+    }
+
+    //return userCollection.snapshots().map(_userDataFromSnapshot);
+    /*List<UserData> usersList;
+    await userCollection.get().then((value) {
+      value.docs.forEach((doc) {
+        //print(element.data()['userName']);
+      });
+    });*/
+  }
+  //print(element.data());
+  //});
+  //return userCollection.snapshots().map(_usersFromDataBase);
 
   // User model for stream
   UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {

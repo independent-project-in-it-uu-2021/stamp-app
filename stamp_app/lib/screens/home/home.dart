@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stamp_app/services/auth.dart';
 import 'package:stamp_app/screens/profil/profil.dart';
-import 'package:stamp_app/screens/konton/hanteraKonton.dart';
+import 'package:stamp_app/screens/konton/manageAccount.dart';
 import 'package:stamp_app/screens/jobb/jobb.dart';
 import 'package:stamp_app/screens/historik/historik.dart';
 import 'package:stamp_app/screens/jobb/jobs.dart';
