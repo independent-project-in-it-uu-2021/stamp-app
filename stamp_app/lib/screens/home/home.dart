@@ -4,7 +4,7 @@ import 'package:stamp_app/screens/profil/profil.dart';
 import 'package:stamp_app/screens/konton/hanteraKonton.dart';
 import 'package:stamp_app/screens/jobb/jobb.dart';
 import 'package:stamp_app/screens/historik/historik.dart';
-import 'package:stamp_app/screens/jobb/jobs.dart';
+import 'package:stamp_app/screens/jobb/jobb.dart';
 
 class Home extends StatelessWidget {
   final AuthService _firebaseAuth = AuthService();
@@ -69,7 +69,7 @@ class Home extends StatelessWidget {
                   onPressed: () => {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Works()),
+                      MaterialPageRoute(builder: (context) => Work()),
                     ),
                   },
                   shape: RoundedRectangleBorder(

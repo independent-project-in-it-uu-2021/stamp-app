@@ -100,11 +100,16 @@ class DatabaseService {
   List<Jobs> _jobsFromDatabase(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return Jobs(
-          title: doc.data()['jobName'],
-          date: doc.data()['date'],
-          time: doc.data()['time'],
-          location: doc.data()['location'],
-          count: doc.data()['numberOfStudents']);
+        title: doc.data()['jobName'],
+        description: doc.data()['description'],
+        date: doc.data()['date'],
+        time: doc.data()['time'],
+        endTime: doc.data()['endTime'],
+        location: doc.data()['location'],
+        count: doc.data()['numberOfStudents'],
+        maxCount: doc.data()['maxStudents'],
+        reserveCount: doc.data()['currentReserve'],
+      );
     }).toList();
   }
 

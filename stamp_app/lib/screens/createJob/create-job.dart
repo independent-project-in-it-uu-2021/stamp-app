@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+
 import 'package:stamp_app/screens/jobb/jobb.dart';
 import 'package:icon_picker/icon_picker.dart';
 import 'package:stamp_app/services/database.dart';
@@ -21,9 +22,9 @@ class CreateJobState extends State<CreateJob> {
   String _location;
   String _desc;
   String _numbStudents;
-  String _selectedDate = 'Välj ett datum för jobbet';
-  String _selectedTime = 'Start tid';
-  String _selectedEndTime = 'Slut tid';
+  String _selectedDate = 'Välj datum';
+  String _selectedTime = 'Välj starttid';
+  String _selectedEndTime = 'Välj sluttid';
   String _icon;
   // Boolean value use to hide the write bio option field
   bool _writeBio = false;
