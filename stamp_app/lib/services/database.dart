@@ -8,9 +8,10 @@ import 'package:stamp_app/models/user.dart';
 class DatabaseService {
   // Parameter to user id created with firebase autentication
   final String userId;
+  int allUsersCount;
 
   //Class constracter
-  DatabaseService({this.userId});
+  DatabaseService({this.userId, this.allUsersCount});
 
   // reference to the user collection in firestore database
   final CollectionReference userCollection =
@@ -131,14 +132,13 @@ class DatabaseService {
 
   //List<UserData> usesDatabase(QuerySnapshot snapshot)
 
-  Future getAllUsers() async {
+  Future<List<UserData>> getAllUsers() async {
     //final users = await userCollection.get();
     List<Map<String, dynamic>> usersList = [];
+    List<UserData> userDataList = [];
     try {
       final users = await userCollection.get();
       users.docs.forEach((element) {
-        String name = element.data()['userName'];
-        //print('Name: $name');
         usersList.add({
           'uid': element.id,
           'name': element.data()['userName'],
@@ -148,24 +148,25 @@ class DatabaseService {
           'imageUrl': element.data()['userProfileUrl'],
           'accontType': element.data()['accountType']
         });
+        userDataList.add(UserData(
+            uid: element.id,
+            name: element.data()['userName'],
+            email: element.data()['userEmail'],
+            phoneNumer: element.data()['userPhoneNumber'],
+            bio: element.data()['userBio'],
+            imageUrl: element.data()['userProfilePicUrl'],
+            accountType: element.data()['accountType']));
       });
-      return usersList;
+      userDataList.sort((a, b) {
+        return a.name.compareTo(b.name);
+      });
+      allUsersCount = userDataList.length;
+      return userDataList;
     } catch (e) {
       print('Error inside getAllUsers');
       print(e);
     }
-
-    //return userCollection.snapshots().map(_userDataFromSnapshot);
-    /*List<UserData> usersList;
-    await userCollection.get().then((value) {
-      value.docs.forEach((doc) {
-        //print(element.data()['userName']);
-      });
-    });*/
   }
-  //print(element.data());
-  //});
-  //return userCollection.snapshots().map(_usersFromDataBase);
 
   // User model for stream
   UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {

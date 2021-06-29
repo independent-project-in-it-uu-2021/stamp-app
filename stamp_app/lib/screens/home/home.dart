@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stamp_app/screens/konton/manageAccounts.dart';
 import 'package:stamp_app/services/auth.dart';
 import 'package:stamp_app/screens/profil/profil.dart';
 import 'package:stamp_app/screens/konton/manageAccount.dart';
@@ -177,7 +178,7 @@ class Home extends StatelessWidget {
                   onPressed: () => {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ManageAccount()),
+                      MaterialPageRoute(builder: (context) => ManageAccounts()),
                     )
                   },
                   shape: RoundedRectangleBorder(
