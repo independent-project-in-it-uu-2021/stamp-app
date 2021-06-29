@@ -133,13 +133,23 @@ class DatabaseService {
 
   Future getAllUsers() async {
     //final users = await userCollection.get();
+    List<Map<String, dynamic>> usersList = [];
     try {
       final users = await userCollection.get();
       users.docs.forEach((element) {
         String name = element.data()['userName'];
-        print('Name: $name');
+        //print('Name: $name');
+        usersList.add({
+          'uid': element.id,
+          'name': element.data()['userName'],
+          'email': element.data()['userEmail'],
+          'phoneNumber': element.data()['userPhoneNumber'],
+          'bio': element.data()['userBio'],
+          'imageUrl': element.data()['userProfileUrl'],
+          'accontType': element.data()['accountType']
+        });
       });
-      //return await userCollection.get();
+      return usersList;
     } catch (e) {
       print('Error inside getAllUsers');
       print(e);
