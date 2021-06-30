@@ -139,7 +139,7 @@ class DatabaseService {
     try {
       final users = await userCollection.get();
       users.docs.forEach((element) {
-        usersList.add({
+        /*usersList.add({
           'uid': element.id,
           'name': element.data()['userName'],
           'email': element.data()['userEmail'],
@@ -147,7 +147,7 @@ class DatabaseService {
           'bio': element.data()['userBio'],
           'imageUrl': element.data()['userProfileUrl'],
           'accontType': element.data()['accountType']
-        });
+        });*/
         userDataList.add(UserData(
             uid: element.id,
             name: element.data()['userName'],
@@ -157,6 +157,8 @@ class DatabaseService {
             imageUrl: element.data()['userProfilePicUrl'],
             accountType: element.data()['accountType']));
       });
+
+      // Sort users according to their name
       userDataList.sort((a, b) {
         return a.name.compareTo(b.name);
       });
