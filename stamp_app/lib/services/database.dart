@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 
 import 'package:stamp_app/models/jobsModel.dart';
 import 'package:stamp_app/models/user.dart';
@@ -8,6 +7,7 @@ import 'package:stamp_app/models/user.dart';
 class DatabaseService {
   // Parameter to user id created with firebase autentication
   final String userId;
+  //Amount of users in the database
   int allUsersCount;
 
   //Class constracter
@@ -53,11 +53,16 @@ class DatabaseService {
   List<Jobs> _jobsFromDatabase(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return Jobs(
-          title: doc.data()['jobName'],
-          date: doc.data()['date'],
-          time: doc.data()['time'],
-          location: doc.data()['location'],
-          count: doc.data()['numberOfStudents']);
+        title: doc.data()['jobName'],
+        description: doc.data()['description'],
+        date: doc.data()['date'],
+        time: doc.data()['time'],
+        endTime: doc.data()['endTime'],
+        location: doc.data()['location'],
+        count: doc.data()['numberOfStudents'],
+        maxCount: doc.data()['maxStudents'],
+        reserveCount: doc.data()['currentReserve'],
+      );
     }).toList();
   }
 
@@ -134,20 +139,10 @@ class DatabaseService {
 
   Future<List<UserData>> getAllUsers() async {
     //final users = await userCollection.get();
-    List<Map<String, dynamic>> usersList = [];
     List<UserData> userDataList = [];
     try {
       final users = await userCollection.get();
       users.docs.forEach((element) {
-        /*usersList.add({
-          'uid': element.id,
-          'name': element.data()['userName'],
-          'email': element.data()['userEmail'],
-          'phoneNumber': element.data()['userPhoneNumber'],
-          'bio': element.data()['userBio'],
-          'imageUrl': element.data()['userProfileUrl'],
-          'accontType': element.data()['accountType']
-        });*/
         userDataList.add(UserData(
             uid: element.id,
             name: element.data()['userName'],
@@ -157,7 +152,6 @@ class DatabaseService {
             imageUrl: element.data()['userProfilePicUrl'],
             accountType: element.data()['accountType']));
       });
-
       // Sort users according to their name
       userDataList.sort((a, b) {
         return a.name.compareTo(b.name);

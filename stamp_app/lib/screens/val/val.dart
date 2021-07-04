@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:stamp_app/services/auth.dart';
+import 'package:provider/provider.dart';
 
 import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
 import 'package:stamp_app/screens/home/home.dart';
 import 'package:stamp_app/screens/jobb/jobb.dart';
 import 'package:stamp_app/screens/slutval/slutval.dart';
 import 'package:stamp_app/screens/annansProfil/annansProfil.dart';
+import 'package:stamp_app/models/jobsModel.dart';
 
 bool _pressedButton1 = false;
 bool _pressedButton2 = false;
@@ -15,6 +17,28 @@ bool _pressedButton5 = false;
 bool _pressedButton6 = false;
 
 class Choice extends StatefulWidget {
+  final title;
+  final description;
+  final date;
+  final time;
+  final endTime;
+  final location;
+  final count;
+  final maxCount;
+  final reserveCount;
+
+  Choice({
+    Key key,
+    @required this.title,
+    @required this.description,
+    @required this.date,
+    @required this.time,
+    @required this.endTime,
+    @required this.location,
+    @required this.count,
+    @required this.maxCount,
+    @required this.reserveCount,
+  }) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return ChoiceState();
@@ -25,6 +49,7 @@ class ChoiceState extends State<Choice> {
   final AuthService _firebaseAuth = AuthService();
   @override
   Widget build(BuildContext context) {
+    final allJobs = Provider.of<List<Jobs>>(context) ?? [];
     return Scaffold(
       appBar: AppBar(
         title: Text('Välj Studentambassadörer'),
@@ -62,64 +87,77 @@ class ChoiceState extends State<Choice> {
                         ),
                         Padding(padding: EdgeInsets.only(left: 20)),
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Lego workshop',
+                              widget.title.toString(),
                               style: TextStyle(
-                                fontSize: 30,
+                                fontSize: 24,
                                 color: Colors.black,
                               ),
-                            ),
-                            Text(
-                              '2021-07-11',
-                              style: TextStyle(fontSize: 20),
                               textAlign: TextAlign.left,
                             ),
                             Text(
-                              '13:00 - 15:00',
-                              style: TextStyle(fontSize: 20),
+                                'Tid: ' +
+                                    widget.time.toString() +
+                                    '-' +
+                                    widget.endTime.toString(),
+                                style: TextStyle(fontSize: 18),
+                                textAlign: TextAlign.left),
+                            Text('Datum: ' + widget.date.toString(),
+                                style: TextStyle(fontSize: 18),
+                                textAlign: TextAlign.left),
+                            Text(
+                              'Studenter: ' +
+                                  widget.count.toString() +
+                                  '/' +
+                                  widget.maxCount.toString() +
+                                  ' st',
+                              style: TextStyle(fontSize: 18),
+                              textAlign: TextAlign.left,
                             ),
                             Text(
-                              'Uppsala',
-                              style: TextStyle(fontSize: 20),
-                            ),
-                            Text(
-                              '3/4 st',
-                              style: TextStyle(fontSize: 20),
+                              'Reserver: ' +
+                                  widget.reserveCount.toString() +
+                                  ' st',
+                              style: TextStyle(fontSize: 18),
+                              textAlign: TextAlign.left,
                             ),
                           ],
                         ),
+                        Padding(padding: EdgeInsets.only(left: 20)),
                       ],
                     ),
-                    Padding(padding: EdgeInsets.only(top: 40)),
+                    Padding(padding: EdgeInsets.only(top: 20)),
                     Row(
                       children: [
                         Padding(padding: EdgeInsets.only(left: 30)),
                         Expanded(
                           child: Text(
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque porttitor tortor sed lacinia dictum. Mauris auctor massa magna, a consequat neque sodales eget. In ac hendrerit quam. Nullam sollicitudin orci at mauris rutrum scelerisque.',
-                            style: TextStyle(fontSize: 15),
+                            widget.description.toString(),
+                            style: TextStyle(fontSize: 14),
                             textAlign: TextAlign.left,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 10,
                           ),
                         ),
+                        Padding(padding: EdgeInsets.only(right: 10)),
                       ],
                     ),
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 40),
+                  padding: EdgeInsets.only(top: 20),
                 ),
+
                 Text(
                   'Intresseanmälningar',
                   style: TextStyle(
-                    fontSize: 30,
+                    fontSize: 24,
                     color: Colors.black,
                   ),
                 ),
-
-                TextButton(
+                /*TextButton(
                   style: TextButton.styleFrom(
                     textStyle: const TextStyle(fontSize: 26),
                     primary: Colors.blue,
@@ -130,8 +168,7 @@ class ChoiceState extends State<Choice> {
                       MaterialPageRoute(builder: (context) => OthersProfile()),
                     )
                   },
-                ),
-
+                ),*/
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
                   child: Container(
@@ -141,7 +178,7 @@ class ChoiceState extends State<Choice> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 //---------------
                 Row(
@@ -250,7 +287,7 @@ class ChoiceState extends State<Choice> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -261,7 +298,7 @@ class ChoiceState extends State<Choice> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 Row(
                   children: [
@@ -368,7 +405,7 @@ class ChoiceState extends State<Choice> {
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -379,7 +416,7 @@ class ChoiceState extends State<Choice> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 Row(
                   children: [
@@ -487,7 +524,7 @@ class ChoiceState extends State<Choice> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -498,7 +535,7 @@ class ChoiceState extends State<Choice> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
               ],
             ),
@@ -525,7 +562,17 @@ class ChoiceState extends State<Choice> {
               onPressed: () => {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => FinalChoice()),
+                  MaterialPageRoute(
+                      builder: (context) => FinalChoice(
+                          title: widget.title,
+                          description: widget.description,
+                          date: widget.date,
+                          time: widget.time,
+                          endTime: widget.endTime,
+                          location: widget.location,
+                          count: widget.count,
+                          maxCount: widget.maxCount,
+                          reserveCount: widget.reserveCount)),
                 ),
               },
             ),

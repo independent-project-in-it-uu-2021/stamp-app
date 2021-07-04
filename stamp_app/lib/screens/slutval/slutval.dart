@@ -10,6 +10,28 @@ import 'package:stamp_app/studentScreens/FinalStudentChoice/finalStudentChoice.d
 
 class FinalChoice extends StatelessWidget {
   final AuthService _firebaseAuth = AuthService();
+  final title;
+  final description;
+  final date;
+  final time;
+  final endTime;
+  final location;
+  final count;
+  final maxCount;
+  final reserveCount;
+
+  FinalChoice({
+    Key key,
+    @required this.title,
+    @required this.description,
+    @required this.date,
+    @required this.time,
+    @required this.endTime,
+    @required this.location,
+    @required this.count,
+    @required this.maxCount,
+    @required this.reserveCount,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,50 +79,79 @@ class FinalChoice extends StatelessWidget {
                         ),
                         Padding(padding: EdgeInsets.only(left: 20)),
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Lego workshop',
+                              this.title.toString(),
                               style: TextStyle(
-                                fontSize: 30,
+                                fontSize: 24,
                                 color: Colors.black,
                               ),
-                            ),
-                            Text(
-                              '2021-07-11',
-                              style: TextStyle(fontSize: 20),
                               textAlign: TextAlign.left,
                             ),
                             Text(
-                              '13:00 - 15:00',
-                              style: TextStyle(fontSize: 20),
+                                'Tid: ' +
+                                    this.time.toString() +
+                                    '-' +
+                                    this.endTime.toString(),
+                                style: TextStyle(fontSize: 18),
+                                textAlign: TextAlign.left),
+                            Text('Datum: ' + this.date.toString(),
+                                style: TextStyle(fontSize: 18),
+                                textAlign: TextAlign.left),
+                            Text(
+                              'Studenter: ' +
+                                  this.count.toString() +
+                                  '/' +
+                                  this.maxCount.toString() +
+                                  ' st',
+                              style: TextStyle(fontSize: 18),
+                              textAlign: TextAlign.left,
                             ),
                             Text(
-                              'Uppsala',
-                              style: TextStyle(fontSize: 20),
-                            ),
-                            Text(
-                              '3/4 st',
-                              style: TextStyle(fontSize: 20),
+                              'Reserver: ' +
+                                  this.reserveCount.toString() +
+                                  ' st',
+                              style: TextStyle(fontSize: 18),
+                              textAlign: TextAlign.left,
                             ),
                           ],
                         ),
                       ],
                     ),
-                    Padding(padding: EdgeInsets.only(top: 40)),
+                    //Padding(padding: EdgeInsets.only(top: 40)),
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
+                ),
+                Row(
+                  children: [
+                    Padding(padding: EdgeInsets.only(left: 30)),
+                    Expanded(
+                      child: Text(
+                        this.description.toString(),
+                        style: TextStyle(fontSize: 14),
+                        textAlign: TextAlign.left,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 10,
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.only(right: 10)),
+                  ],
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 Text(
                   'Valda',
                   style: TextStyle(
-                    fontSize: 30,
+                    fontSize: 24,
                     color: Colors.black,
                   ),
                 ),
 
-                Padding(padding: EdgeInsets.only(top: 20)),
+                //Padding(padding: EdgeInsets.only(top: 20)),
 
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -111,7 +162,7 @@ class FinalChoice extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 //---------------
                 FlatButton(
@@ -141,7 +192,7 @@ class FinalChoice extends StatelessWidget {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -152,7 +203,7 @@ class FinalChoice extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 FlatButton(
                   onPressed: () => {},
@@ -180,7 +231,7 @@ class FinalChoice extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -191,7 +242,7 @@ class FinalChoice extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 FlatButton(
                   onPressed: () => {},
@@ -219,7 +270,7 @@ class FinalChoice extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -233,7 +284,7 @@ class FinalChoice extends StatelessWidget {
                 Text(
                   'Reserver',
                   style: TextStyle(
-                    fontSize: 30,
+                    fontSize: 24,
                     color: Colors.black,
                   ),
                 ),
@@ -249,7 +300,7 @@ class FinalChoice extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 //---------------
                 FlatButton(
@@ -279,7 +330,7 @@ class FinalChoice extends StatelessWidget {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -290,7 +341,7 @@ class FinalChoice extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 FlatButton(
                   onPressed: () => {},
@@ -318,7 +369,7 @@ class FinalChoice extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -329,7 +380,7 @@ class FinalChoice extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 FlatButton(
                   onPressed: () => {},
@@ -357,7 +408,7 @@ class FinalChoice extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -368,7 +419,7 @@ class FinalChoice extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
               ],
             ),
@@ -392,7 +443,6 @@ class FinalChoice extends StatelessWidget {
                   fontSize: 21,
                 ),
               ),
-
               onPressed: () {
                 Navigator.of(context).pop();
                 Navigator.of(context).pop();

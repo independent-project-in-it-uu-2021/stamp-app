@@ -14,18 +14,17 @@ class StudentChoice extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-            title:
-                Image.asset('assets/images/uuLogaNew.png', fit: BoxFit.cover),
-            //centerTitle: true,
-            backgroundColor: Colors.red.shade900,
-            elevation: 0,
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios_rounded),
-              //TODO: This does nothing now
-              onPressed: () => Navigator.of(context).pop(),
-              tooltip: 'Tillbaka',
-            ),
-            /*actions: <Widget>[
+        title: Image.asset('assets/images/uuLogaNew.png', fit: BoxFit.cover),
+        //centerTitle: true,
+        backgroundColor: Colors.red.shade900,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_rounded),
+          //TODO: This does nothing now
+          onPressed: () => Navigator.of(context).pop(),
+          tooltip: 'Tillbaka',
+        ),
+        /*actions: <Widget>[
               IconButton(
                 padding: EdgeInsets.only(right: 10),
                 onPressed: null,
@@ -36,7 +35,7 @@ class StudentChoice extends StatelessWidget {
                 ),
               ),
             ],*/
-          ),
+      ),
       body: Container(
         width: double.infinity,
         child: SingleChildScrollView(

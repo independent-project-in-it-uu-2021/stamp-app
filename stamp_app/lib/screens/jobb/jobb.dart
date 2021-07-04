@@ -5,40 +5,13 @@ import 'package:stamp_app/screens/createJob/create-job.dart';
 import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
 import 'package:stamp_app/screens/val/val.dart';
 import 'package:stamp_app/services/auth.dart';
-import 'package:stamp_app/studentScreens/studentJobs/studentjobs.dart';
 import 'package:stamp_app/models/jobsModel.dart';
-
-var icon = ''; //TODO: oklart hur detta ska fungera
-var title = 'Lego Workshop';
-var date = '2017-07-11';
-var time = '13:00 - 15:00';
-var location = 'Uppsala';
-var count = '3/4 st';
-
-//Detta ska egentligen hämtas från databasen
-List<Map<String, dynamic>> _menuItem = [
-  {
-    'title': '$title',
-    'icon': Icon(Icons.home),
-    'subtitle': '$date \n$time \n$location \n$count',
-  },
-  {
-    'title': 'Teams',
-    'icon': Icon(Icons.people),
-    'subtitle': '$date \n$time \n$location \n$count',
-  },
-  {
-    'title': 'Test',
-    'icon': Icon(Icons.lightbulb),
-    'subtitle': '$date \n$time \n$location \n$count',
-  },
-];
 
 class Work extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print('Inside works build');
     final allJobs = Provider.of<List<Jobs>>(context) ?? [];
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Jobb'),
@@ -55,27 +28,55 @@ class Work extends StatelessWidget {
           ),
         ],*/
       ),
-      body: new ListView.builder(
-        itemCount: _menuItem.length,
+      body: ListView.builder(
+        itemCount: allJobs.length,
         itemBuilder: (BuildContext context, int index) {
-          return new Card(
+          var title = allJobs[index].title;
+          var description = allJobs[index].description;
+          var date = allJobs[index].date;
+          var time = allJobs[index].time;
+          var endTime = allJobs[index].endTime;
+          var location = allJobs[index].location;
+          var count = allJobs[index].count;
+          var maxCount = allJobs[index].maxCount;
+          var reserveCount = allJobs[index].reserveCount;
+
+          return Card(
             child: ListTile(
-              leading: _menuItem[index]['icon'],
-              title: Text(_menuItem[index]['title']),
-              subtitle: Text(_menuItem[index]['subtitle']),
-              /*child: Align(
-                alignment: Alignment.topRight,
-                child: Text('TESTING TESTING'),
-              ),*/
+              leading: Icon(Icons.arrow_forward_ios),
+              title: Text('$date $title'), //Aligna med hjälp av textspan
+              subtitle: Text(
+                  '$time - $endTime \n$location \nStudenter: $count/$maxCount \nReserver: $reserveCount'),
               onTap: () => {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Choice()),
+                  MaterialPageRoute(
+                      builder: (context) => Choice(
+                          title: title,
+                          description: description,
+                          date: date,
+                          time: time,
+                          endTime: endTime,
+                          location: location,
+                          count: count,
+                          maxCount: maxCount,
+                          reserveCount: reserveCount)),
                 )
               },
             ),
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.red.shade900,
+        foregroundColor: Colors.white,
+        onPressed: () => {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CreateJob()),
+          )
+        },
+        child: Icon(Icons.add),
       ),
     );
   }
