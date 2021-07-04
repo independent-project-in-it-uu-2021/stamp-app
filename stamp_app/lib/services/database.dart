@@ -172,7 +172,13 @@ class DatabaseService {
 
   // Change user account roll ex. from inactive to student
   Future changeAccountRoll(String userID, String newRoll) async {
-    return await userCollection.doc(userID).update({'accountType': newRoll});
+    try {
+      final result =
+          await userCollection.doc(userID).update({'accountType': newRoll});
+    } on FirebaseException catch (e) {
+      print('Change user roll');
+      print(e.code);
+    }
   }
 
   // User model for stream

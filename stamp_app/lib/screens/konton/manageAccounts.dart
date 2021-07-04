@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:stamp_app/models/user.dart';
@@ -53,12 +54,35 @@ class _ManageAccountsState extends State<ManageAccounts> {
   }
 
   // Elevated button widget that changes user roll
-  Widget changeUserRoll(String userID, String currentRoll, String newRoll) {
+  // Shows a snackbar with msg as well
+  Widget changeUserRoll(
+      String userID, String currentRoll, String newRoll, String userName) {
     return ElevatedButton(
       onPressed: () async {
+        String msgToShow = userName + ' byte roll';
+
         final changeRoll = await locator
             .get<DatabaseService>()
             .changeAccountRoll(userID, newRoll);
+
+        setState(() {});
+
+        // Snackbar design
+        final snackBar = SnackBar(
+          behavior: SnackBarBehavior.floating,
+          padding: EdgeInsets.symmetric(horizontal: 8.0),
+          content: Text(
+            changeRoll == null ? msgToShow : 'Nånting gick fel',
+            textAlign: TextAlign.center,
+          ),
+          backgroundColor: Colors.grey,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        );
+
+        //Show Snackbar
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       },
       child: Text(currentRoll),
       style: ElevatedButton.styleFrom(primary: Colors.red.shade900),
@@ -96,8 +120,8 @@ class _ManageAccountsState extends State<ManageAccounts> {
               ),
               children: <Widget>[
                 // Eleveted button that changes user roll
-                changeUserRoll(
-                    usersAccountList[index].uid, currentRoll, newRoll),
+                changeUserRoll(usersAccountList[index].uid, currentRoll,
+                    newRoll, usersAccountList[index].name),
               ],
             ),
           );
@@ -172,6 +196,7 @@ class _ManageAccountsState extends State<ManageAccounts> {
                         inActiveUsers, 'Aktivera konto', 'student'),
                     // Admin title
                     titleContainer('Admin'),
+
                     //List view for admin account
                     listViewForAccounts(
                         adminUsers, 'Gör till student', 'student'),
@@ -179,7 +204,7 @@ class _ManageAccountsState extends State<ManageAccounts> {
                     titleContainer('Student'),
                     //List view for student accounts
                     listViewForAccounts(
-                        studentUsers, 'Gör till student', 'admin'),
+                        studentUsers, 'Gör till admin', 'admin'),
                   ],
                 ),
               ),
