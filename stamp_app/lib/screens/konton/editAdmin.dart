@@ -99,7 +99,8 @@ class EditAdminState extends State<EditAdmin> {
                   child: FlatButton(
                     onPressed: () => {},
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                      borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                    ),
                     color: Colors.red.shade900,
                     child: Text(
                       "Gör till student",
