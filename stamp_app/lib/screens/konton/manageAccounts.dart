@@ -99,6 +99,7 @@ class _ManageAccountsState extends State<ManageAccounts> {
         // Cannot repeatedly scroll in more than one widget
         shrinkWrap: true,
         padding: EdgeInsets.only(bottom: 10),
+        physics: NeverScrollableScrollPhysics(),
         itemCount: usersAccountList.length,
         itemBuilder: (BuildContext context, int index) {
           return Card(
