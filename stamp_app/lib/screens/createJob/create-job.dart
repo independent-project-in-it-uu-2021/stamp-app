@@ -1,6 +1,4 @@
 import 'dart:ui';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -8,6 +6,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:stamp_app/screens/jobb/jobb.dart';
 import 'package:icon_picker/icon_picker.dart';
 import 'package:stamp_app/services/database.dart';
+import 'package:stamp_app/sharedWidget/inputDecoration.dart';
 
 class CreateJob extends StatefulWidget {
   @override
@@ -26,6 +25,7 @@ class CreateJobState extends State<CreateJob> {
   String _selectedTime = 'Välj starttid';
   String _selectedEndTime = 'Välj sluttid';
   String _icon;
+  String _category = 'Välj en kategori';
   // Boolean value use to hide the write bio option field
   bool _writeBio = false;
 
@@ -45,12 +45,6 @@ class CreateJobState extends State<CreateJob> {
         _selectedTime = result.format(context);
       });
     }
-  }
-
-  void showWriteBio() {
-    setState(() {
-      _writeBio = !_writeBio;
-    });
   }
 
   // key to hold the state of the form i.e referens to the form
@@ -85,7 +79,6 @@ class CreateJobState extends State<CreateJob> {
         },
         // The  form is saved and we tell what to do with the value
         onSaved: (String value) {
-          print(value);
           _name = value;
         },
       ),
@@ -120,7 +113,6 @@ class CreateJobState extends State<CreateJob> {
         },
         // The  form is saved and we tell what to do with the value
         onSaved: (String value) {
-          print(value);
           _location = value;
         },
       ),
@@ -157,6 +149,49 @@ class CreateJobState extends State<CreateJob> {
     );
   }
 
+  DropdownMenuItem<String> hej = DropdownMenuItem(child: Text('Kategori'));
+
+  Widget _chooseCategory() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      height: 40.0,
+      alignment: Alignment.center,
+      child: DropdownButtonFormField<String>(
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(30.0))),
+          filled: true,
+          fillColor: Colors.black12,
+          contentPadding: EdgeInsets.only(left: 8, right: 18),
+        ),
+        //value: 'Välj en kategori',
+        icon: Icon(Icons.arrow_downward),
+        iconSize: 20,
+        isExpanded: true,
+        hint: Align(
+          alignment: Alignment.center,
+          child: Text(
+            'Välj en kategori',
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+        items: <String>['Välj en kategori', 'Workshop', 'Studiebesök']
+            .map<DropdownMenuItem<String>>((String curValue) {
+          return DropdownMenuItem<String>(
+            value: curValue,
+            child: Text(curValue),
+          );
+        }).toList(),
+
+        onChanged: (String newValue) {
+          setState(() {
+            _category = newValue;
+          });
+        },
+      ),
+    );
+  }
+
   Widget _buildStudents() {
     return Container(
       width: 350,
@@ -176,15 +211,10 @@ class CreateJobState extends State<CreateJob> {
           if (value.isEmpty) {
             return 'Antal studenter är obligatorisk';
           }
-          if (value.length > 120) {
-            //TODO: Change the text below
-            return 'Antal studenter får inte vara längre än 120 tecken';
-          }
           return null;
         },
         // The  form is saved and we tell what to do with the value
         onSaved: (String value) {
-          print(value);
           _numbStudents = value; //TODO Save as int
         },
       ),
@@ -220,7 +250,6 @@ class CreateJobState extends State<CreateJob> {
         },
         // The  form is saved and we tell what to do with the value
         onSaved: (String value) {
-          print(value);
           _desc = value;
         },
       ),
@@ -240,15 +269,11 @@ class CreateJobState extends State<CreateJob> {
                 showTitleActions: true,
                 minTime: DateTime(DateTime.now().year - 5, 1, 1),
                 maxTime: DateTime(DateTime.now().year + 5, 12, 31),
-                onChanged: (date) {
-              print('change $date');
-            }, onConfirm: (date) {
-              print('confirm $date');
+                onChanged: (date) {}, onConfirm: (date) {
               if (date != null) {
                 setState(() {
                   var formattedDate = "${date.day}-${date.month}-${date.year}";
                   _selectedDate = formattedDate.toString();
-                  print(date.toString());
                 });
               }
             }, currentTime: DateTime.now(), locale: LocaleType.sv);
@@ -367,6 +392,7 @@ class CreateJobState extends State<CreateJob> {
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
+                _chooseCategory(),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
