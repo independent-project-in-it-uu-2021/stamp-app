@@ -7,11 +7,9 @@ class Jobs {
   String location;
   int count;
   // TODO: Change this to int
-  String maxCount;
+  int maxCount;
   int reserveCount;
   String category;
-
-  //TODO: Icon attribute
 
   Jobs(
       {this.title,

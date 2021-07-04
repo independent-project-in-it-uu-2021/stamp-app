@@ -18,7 +18,7 @@ class CreateJobState extends State<CreateJob> {
   String _name;
   String _location;
   String _desc;
-  String _numbStudents;
+  int _numbStudents;
   String _selectedDate = 'Välj datum';
   String _selectedTime = 'Välj starttid';
   String _selectedEndTime = 'Välj sluttid';
@@ -235,7 +235,7 @@ class CreateJobState extends State<CreateJob> {
         },
         // The  form is saved and we tell what to do with the value
         onSaved: (String value) {
-          _numbStudents = value; //TODO Save as int
+          _numbStudents = int.parse(value); //TODO Save as int
         },
       ),
     );

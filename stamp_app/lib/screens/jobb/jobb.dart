@@ -67,7 +67,7 @@ class Work extends StatelessWidget {
           String endTime = allJobs[index].endTime;
           String location = allJobs[index].location;
           int count = allJobs[index].count;
-          String maxCount = allJobs[index].maxCount;
+          int maxCount = allJobs[index].maxCount;
           int reserveCount = allJobs[index].reserveCount;
           String jobCategory = allJobs[index].category;
 

@@ -24,7 +24,7 @@ class DatabaseService {
     String name,
     String location,
     String desc,
-    String maxStudents,
+    int maxStudents,
     String date,
     String time,
     String endTime,
