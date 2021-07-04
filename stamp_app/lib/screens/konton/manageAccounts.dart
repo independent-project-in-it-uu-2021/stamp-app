@@ -39,13 +39,69 @@ class _ManageAccountsState extends State<ManageAccounts> {
     }
   }
 
+  // Returns a container that is used to show the title
+  Widget titleContainer(String title) {
+    return Container(
+      alignment: Alignment.topLeft,
+      padding: EdgeInsets.fromLTRB(10, 5, 0, 10),
+      child: Text(
+        title,
+        style: TextStyle(fontSize: 25),
+        textAlign: TextAlign.left,
+      ),
+    );
+  }
+
   // Elevated button widget that changes user roll
-  Widget changeUserRoll(String changeRollTO) {
+  Widget changeUserRoll(String userID, String currentRoll, String newRoll) {
     return ElevatedButton(
-      onPressed: () async {},
-      child: Text(changeRollTO),
+      onPressed: () async {
+        final changeRoll = await locator
+            .get<DatabaseService>()
+            .changeAccountRoll(userID, newRoll);
+      },
+      child: Text(currentRoll),
       style: ElevatedButton.styleFrom(primary: Colors.red.shade900),
     );
+  }
+
+  // Listview widget that is used to show user account
+  // Call the changeUserRoll method,
+  // Returs a ListViewbuilder widget
+  Widget listViewForAccounts(
+      List<UserData> usersAccountList, String currentRoll, String newRoll) {
+    return ListView.builder(
+        // User children total size
+        // Cannot repeatedly scroll in more than one widget
+        shrinkWrap: true,
+        padding: EdgeInsets.only(bottom: 10),
+        itemCount: usersAccountList.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Card(
+            child: ExpansionTile(
+              leading: _userProfilePic(usersAccountList[index].imageUrl),
+              title: Text(
+                usersAccountList[index].name,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              subtitle: Text(
+                usersAccountList[index].email,
+              ),
+              textColor: Colors.red.shade700,
+              trailing: Icon(
+                Icons.keyboard_arrow_down,
+                color: Colors.grey,
+              ),
+              children: <Widget>[
+                // Eleveted button that changes user roll
+                changeUserRoll(
+                    usersAccountList[index].uid, currentRoll, newRoll),
+              ],
+            ),
+          );
+        });
   }
 
   @override
@@ -100,7 +156,7 @@ class _ManageAccountsState extends State<ManageAccounts> {
                         style: TextStyle(fontSize: 35),
                       ),
                     ),
-                    Container(
+                    /*Container(
                       alignment: Alignment.topLeft,
                       padding: EdgeInsets.fromLTRB(10, 5, 0, 10),
                       child: Text(
@@ -108,138 +164,22 @@ class _ManageAccountsState extends State<ManageAccounts> {
                         style: TextStyle(fontSize: 25),
                         textAlign: TextAlign.left,
                       ),
-                    ),
-                    // List view for accounts that are inactive
-                    ListView.builder(
-                        // User children total size
-                        // Cannot repeatedly scroll in more than one widget
-                        shrinkWrap: true,
-                        padding: EdgeInsets.only(bottom: 10),
-                        itemCount: inActiveUsers.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Card(
-                            child: ExpansionTile(
-                              leading: _userProfilePic(
-                                  inActiveUsers[index].imageUrl),
-                              title: Text(
-                                inActiveUsers[index].name,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              subtitle: Text(
-                                inActiveUsers[index].email,
-                              ),
-                              textColor: Colors.red.shade700,
-                              trailing: Icon(
-                                Icons.keyboard_arrow_down,
-                                color: Colors.red,
-                              ),
-                              children: <Widget>[
-                                ElevatedButton(
-                                  onPressed: () {},
-                                  child: Text('Gör till Admin'),
-                                  //styleFrom static metho
-                                  style: ElevatedButton.styleFrom(
-                                      primary: Colors.red.shade900),
-                                ),
-                              ],
-                            ),
-                          );
-                        }),
-                    Container(
-                      alignment: Alignment.topLeft,
-                      padding: EdgeInsets.fromLTRB(10, 5, 0, 10),
-                      child: Text(
-                        'Admin',
-                        style: TextStyle(fontSize: 30),
-                        textAlign: TextAlign.left,
-                      ),
-                    ),
+                    ),*/
+                    // Inactive title
+                    titleContainer('Inaktivera konto'),
+                    // ListView for inactive accounts
+                    listViewForAccounts(
+                        inActiveUsers, 'Aktivera konto', 'student'),
+                    // Admin title
+                    titleContainer('Admin'),
                     //List view for admin account
-                    ListView.builder(
-                        // User children total size
-                        // Cannot repeatedly scroll in more than one widget
-                        shrinkWrap: true,
-                        padding: EdgeInsets.only(bottom: 10),
-                        itemCount: adminUsers.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Card(
-                            child: ExpansionTile(
-                              leading:
-                                  _userProfilePic(adminUsers[index].imageUrl),
-                              title: Text(
-                                adminUsers[index].name,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              subtitle: Text(
-                                adminUsers[index].email,
-                              ),
-                              textColor: Colors.red.shade700,
-                              trailing: Icon(
-                                Icons.keyboard_arrow_down,
-                                color: Colors.red,
-                              ),
-                              children: <Widget>[
-                                ElevatedButton(
-                                  onPressed: () {},
-                                  child: Text('Gör till Admin'),
-                                  //styleFrom static metho
-                                  style: ElevatedButton.styleFrom(
-                                      primary: Colors.red.shade900),
-                                ),
-                              ],
-                            ),
-                          );
-                        }),
-                    Container(
-                      alignment: Alignment.topLeft,
-                      padding: EdgeInsets.fromLTRB(10, 5, 0, 10),
-                      child: Text(
-                        'Student',
-                        style: TextStyle(fontSize: 30),
-                        textAlign: TextAlign.left,
-                      ),
-                    ),
+                    listViewForAccounts(
+                        adminUsers, 'Gör till student', 'student'),
+                    // Student title
+                    titleContainer('Student'),
                     //List view for student accounts
-                    ListView.builder(
-                        // User children total size
-                        // Cannot repeatedly scroll in more than one widget
-                        shrinkWrap: true,
-                        itemCount: studentUsers.length,
-                        padding: EdgeInsets.only(bottom: 10),
-                        itemBuilder: (BuildContext context, int index) {
-                          return Card(
-                            child: ExpansionTile(
-                              leading:
-                                  // Method _userProfilePic is called that takes care
-                                  // of cases when user has not profile image
-                                  _userProfilePic(studentUsers[index].imageUrl),
-                              title: Text(
-                                studentUsers[index].name,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              subtitle: Text(studentUsers[index].email),
-                              textColor: Colors.red.shade700,
-                              // TODO: Check red arrow och grey arrow??
-                              /*trailing: Icon(
-                                Icons.keyboard_arrow_down,
-                                color: Colors.red,
-                              ),*/
-                              children: <Widget>[
-                                ElevatedButton(
-                                  onPressed: () {},
-                                  child: Text('Gör till Admin'),
-                                  //styleFrom static metho
-                                  style: ElevatedButton.styleFrom(
-                                      primary: Colors.red.shade900),
-                                ),
-                              ],
-                            ),
-                          );
-                        }),
+                    listViewForAccounts(
+                        studentUsers, 'Gör till student', 'admin'),
                   ],
                 ),
               ),
