@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
-import 'package:stamp_app/screens/jobb/jobb.dart';
 import 'package:icon_picker/icon_picker.dart';
 import 'package:stamp_app/services/database.dart';
-import 'package:stamp_app/sharedWidget/inputDecoration.dart';
 
 class CreateJob extends StatefulWidget {
   @override
@@ -25,7 +23,7 @@ class CreateJobState extends State<CreateJob> {
   String _selectedTime = 'Välj starttid';
   String _selectedEndTime = 'Välj sluttid';
   String _icon;
-  String _category = 'Välj en kategori';
+  String _jobCategory = '';
   // Boolean value use to hide the write bio option field
   bool _writeBio = false;
 
@@ -43,6 +41,24 @@ class CreateJobState extends State<CreateJob> {
     if (result != null) {
       setState(() {
         _selectedTime = result.format(context);
+      });
+    }
+  }
+
+  Future<void> _showEndTime() async {
+    final TimeOfDay result = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      builder: (BuildContext context, Widget child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child,
+        );
+      },
+    );
+    if (result != null) {
+      setState(() {
+        _selectedEndTime = result.format(context);
       });
     }
   }
@@ -175,8 +191,12 @@ class CreateJobState extends State<CreateJob> {
             style: TextStyle(color: Colors.black),
           ),
         ),
-        items: <String>['Välj en kategori', 'Workshop', 'Studiebesök']
-            .map<DropdownMenuItem<String>>((String curValue) {
+        items: <String>[
+          'Välj en kategori',
+          'Workshop',
+          'Studiebesök',
+          'Lunch Föreläsning'
+        ].map<DropdownMenuItem<String>>((String curValue) {
           return DropdownMenuItem<String>(
             value: curValue,
             child: Text(curValue),
@@ -185,7 +205,7 @@ class CreateJobState extends State<CreateJob> {
 
         onChanged: (String newValue) {
           setState(() {
-            _category = newValue;
+            _jobCategory = newValue;
           });
         },
       ),
@@ -309,7 +329,7 @@ class CreateJobState extends State<CreateJob> {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(15.0))),
         color: Colors.black12,
-        onPressed: _show,
+        onPressed: _showEndTime,
         child: Text(
           "$_selectedEndTime",
           style: TextStyle(color: Colors.black),
@@ -388,7 +408,7 @@ class CreateJobState extends State<CreateJob> {
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
-                _chooseIcon(),
+                //_chooseIcon(),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
@@ -430,12 +450,10 @@ class CreateJobState extends State<CreateJob> {
                           _selectedDate,
                           _selectedTime,
                           _selectedEndTime,
-                          _icon);
+                          _icon,
+                          _jobCategory);
                     }
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Work()),
-                    );
+                    Navigator.pop(context);
                   },
                 )
               ],

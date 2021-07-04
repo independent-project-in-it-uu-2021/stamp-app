@@ -29,23 +29,29 @@ class DatabaseService {
     String time,
     String endTime,
     String icon,
+    String category,
   ) async {
-    Map reserveList = {};
-    Map acceptedList = {};
-    Map interestList = {};
+    //Map reserveList = {};
+    //Map acceptedList = {};
+    //Map interestList = {};
+
     return await jobsCollection.add({
-      'jobName': name,
-      'location': location,
+      'title': name,
       'description': desc,
-      'numberOfStudents': maxStudents,
       'data': date,
+      'location': location,
       'time': time,
       'endTime': endTime,
       'completed': false,
-      'currentReserve': reserveList,
-      'currentAccepted': acceptedList,
-      'currentInterest': interestList,
+      'currentReserve': 0,
+      'count': 0,
+      'maxCount': maxStudents,
+      'reserveCount': 0,
+      //'currentReserve': reserveList,
+      //'currentAccepted': acceptedList,
+      //'currentInterest': interestList,
       'icon': icon,
+      'category': category,
     }); //serializeIcon(_icon),})
   }
 
@@ -53,15 +59,16 @@ class DatabaseService {
   List<Jobs> _jobsFromDatabase(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return Jobs(
-        title: doc.data()['jobName'],
+        title: doc.data()['title'],
         description: doc.data()['description'],
         date: doc.data()['date'],
         time: doc.data()['time'],
         endTime: doc.data()['endTime'],
         location: doc.data()['location'],
-        count: doc.data()['numberOfStudents'],
-        maxCount: doc.data()['maxStudents'],
+        count: doc.data()['count'],
+        maxCount: doc.data()['maxCount'],
         reserveCount: doc.data()['currentReserve'],
+        category: doc.data()['category'],
       );
     }).toList();
   }

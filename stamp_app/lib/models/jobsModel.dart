@@ -6,8 +6,10 @@ class Jobs {
   String endTime;
   String location;
   int count;
-  int maxCount;
+  // TODO: Change this to int
+  String maxCount;
   int reserveCount;
+  String category;
 
   //TODO: Icon attribute
 
@@ -20,7 +22,8 @@ class Jobs {
       this.location,
       this.count,
       this.maxCount,
-      this.reserveCount});
+      this.reserveCount,
+      this.category});
 
   List<Jobs> newDummyJob() {
     return [
