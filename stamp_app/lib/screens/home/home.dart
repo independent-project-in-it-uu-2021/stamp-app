@@ -11,6 +11,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Streamproivder listen to stream and exposes its content to child
+
     return Scaffold(
       backgroundColor: Colors.red.shade900,
       appBar: AppBar(
