@@ -1,8 +1,13 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/src/rendering/box.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:stamp_app/models/jobsModel.dart';
+import 'package:stamp_app/models/user.dart';
+import 'package:stamp_app/screens/slutval/slutval.dart';
+import 'package:stamp_app/studentScreens/FinalStudentChoice/finalStudentChoice.dart';
 
 class StudentWork extends StatelessWidget {
   // Returns different typ of icon depending on category
@@ -40,47 +45,49 @@ class StudentWork extends StatelessWidget {
   }
 
   // Returns a listviewbuilder for all the jobs
-  Widget _buildAllJobs(List<Jobs> allJobs) {
+  Widget _buildAllJobs(List<Jobs> allJobs, String userID) {
     return ListView.builder(
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         itemCount: allJobs.length,
         itemBuilder: (BuildContext context, int index) {
-          String title = allJobs[index].title;
-          String description = allJobs[index].description;
-          String date = allJobs[index].date;
-          String time = allJobs[index].time;
-          String endTime = allJobs[index].endTime;
-          String location = allJobs[index].location;
-          int count = allJobs[index].count;
-          int maxCount = allJobs[index].maxCount;
-          int reserveCount = allJobs[index].reserveCount;
-          String jobCategory = allJobs[index].category;
+          String curTitle = allJobs[index].title;
+          //String curDescription = allJobs[index].description;
+          String curDate = allJobs[index].date;
+          String curTime = allJobs[index].time;
+          String curEndTime = allJobs[index].endTime;
+          String curLocation = allJobs[index].location;
+          int curCount = allJobs[index].count;
+          int curMaxCount = allJobs[index].maxCount;
+          int curReserveCount = allJobs[index].reserveCount;
+          String curJobCategory = allJobs[index].category;
           return Card(
             child: ListTile(
               //leading: Icon(Icons.arrow_forward_ios),
-              leading: _buildCategoryIcon(jobCategory),
-              title: Text('$date $title'), //Aligna med hjälp av textspan
+              leading: _buildCategoryIcon(curJobCategory),
+              title: Text('$curDate $curTitle'), //Aligna med hjälp av textspan
               subtitle: Text(
-                  '$time - $endTime \n$location \nStudenter: $count/$maxCount \nReserver: $reserveCount'),
+                  '$curTime - $curEndTime \n$curLocation \nStudenter: $curCount/$curMaxCount \nReserver: $curReserveCount'),
               onTap: () => {
-                /*Navigator.push(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Choice(
-                      title: title,
-                      description: description,
-                      date: date,
-                      time: time,
-                      endTime: endTime,
-                      location: location,
-                      count: count,
-                      maxCount: maxCount,
-                      reserveCount: reserveCount,
-                      category: jobCategory,
+                    builder: (context) => FinalStudentChoice(
+                      curJob: allJobs[index],
+                      userID: userID,
+                      /*title: curTitle,
+                      description: curDescription,
+                      date: curDate,
+                      time: curTime,
+                      endTime: curEndTime,
+                      location: curLocation,
+                      count: curCount,
+                      maxCount: curMaxCount,
+                      reserveCount: curReserveCount,
+                      category: curJobCategory,*/
                     ),
                   ),
-                )*/
+                )
               },
             ),
           );
@@ -91,6 +98,7 @@ class StudentWork extends StatelessWidget {
   Widget build(BuildContext context) {
     // Stream of all the jobs from database
     final allJobsFromDatabase = Provider.of<List<Jobs>>(context) ?? [];
+    final curUser = Provider.of<User>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Jobb'),
@@ -291,7 +299,7 @@ class StudentWork extends StatelessWidget {
                   color: Colors.black12,
                 ),
               ),
-              _buildAllJobs(allJobsFromDatabase),
+              _buildAllJobs(allJobsFromDatabase, curUser.uid),
             ],
           ),
         ),

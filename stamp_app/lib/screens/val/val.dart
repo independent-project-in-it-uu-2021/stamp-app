@@ -87,6 +87,8 @@ class ChoiceState extends State<Choice> {
   @override
   Widget build(BuildContext context) {
     final allJobs = Provider.of<List<Jobs>>(context) ?? [];
+
+    // Size of the screen used to the text size is responsive
     MediaQueryData screenSize = MediaQuery.of(context);
     return Scaffold(
       appBar: AppBar(
