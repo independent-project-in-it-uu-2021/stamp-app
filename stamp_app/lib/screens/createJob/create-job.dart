@@ -72,7 +72,7 @@ class CreateJobState extends State<CreateJob> {
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.name,
-        maxLength: 50,
+        maxLength: 20,
 
         // Decorate the input field here,
         decoration: InputDecoration(

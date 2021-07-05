@@ -10,6 +10,7 @@ import 'package:stamp_app/screens/val/val.dart';
 import 'package:stamp_app/models/jobsModel.dart';
 
 class Work extends StatelessWidget {
+  // Returns different typ of icon depending on category
   Widget _buildCategoryIcon(String jobCategory) {
     if (jobCategory != null && jobCategory.isNotEmpty) {
       return LayoutBuilder(builder: (context, constraints) {
@@ -21,11 +22,19 @@ class Work extends StatelessWidget {
               color: Colors.black,
             );
             break;
-          case 'Studie besök':
-            return Icon(Icons.ac_unit_sharp);
+          case 'Studiebesök':
+            return Icon(
+              Icons.ac_unit_sharp,
+              size: MediaQuery.of(context).size.height * 0.07,
+              color: Colors.black,
+            );
             break;
           default:
-            return Icon(Icons.smart_toy);
+            return Icon(
+              Icons.smart_toy,
+              size: MediaQuery.of(context).size.height * 0.07,
+              color: Colors.black,
+            );
         }
       });
     } else {
@@ -37,8 +46,6 @@ class Work extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('Inside works build');
-
     final allJobs = Provider.of<List<Jobs>>(context) ?? [];
 
     return Scaffold(
@@ -79,21 +86,23 @@ class Work extends StatelessWidget {
               subtitle: Text(
                   '$time - $endTime \n$location \nStudenter: $count/$maxCount \nReserver: $reserveCount'),
               onTap: () => {
-                /*Navigator.push(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => Choice(
-                        title: title,
-                        description: description,
-                        date: date,
-                        time: time,
-                        endTime: endTime,
-                        location: location,
-                        count: count,
-                        maxCount: maxCount,
-                        reserveCount: reserveCount),
+                      title: title,
+                      description: description,
+                      date: date,
+                      time: time,
+                      endTime: endTime,
+                      location: location,
+                      count: count,
+                      maxCount: maxCount,
+                      reserveCount: reserveCount,
+                      category: jobCategory,
+                    ),
                   ),
-                )*/
+                )
               },
             ),
           );

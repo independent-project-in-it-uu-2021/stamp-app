@@ -26,6 +26,7 @@ class Choice extends StatefulWidget {
   final count;
   final maxCount;
   final reserveCount;
+  final category;
 
   Choice({
     Key key,
@@ -38,6 +39,7 @@ class Choice extends StatefulWidget {
     @required this.count,
     @required this.maxCount,
     @required this.reserveCount,
+    @required this.category,
   }) : super(key: key);
   @override
   State<StatefulWidget> createState() {
@@ -47,9 +49,45 @@ class Choice extends StatefulWidget {
 
 class ChoiceState extends State<Choice> {
   final AuthService _firebaseAuth = AuthService();
+
+  // Returns different typ of icon depending on category
+  Widget _buildCategoryIcon(String jobCategory) {
+    if (jobCategory != null && jobCategory.isNotEmpty) {
+      return LayoutBuilder(builder: (context, constraints) {
+        switch (jobCategory) {
+          case 'Workshop':
+            return Icon(
+              Icons.smart_toy,
+              size: MediaQuery.of(context).size.height * 0.09,
+              color: Colors.black,
+            );
+            break;
+          case 'Studiebesök':
+            return Icon(
+              Icons.ac_unit_sharp,
+              size: MediaQuery.of(context).size.height * 0.09,
+              color: Colors.black,
+            );
+            break;
+          default:
+            return Icon(
+              Icons.smart_toy,
+              size: MediaQuery.of(context).size.height * 0.09,
+              color: Colors.black,
+            );
+        }
+      });
+    } else {
+      return LayoutBuilder(builder: (context, constraints) {
+        return Icon(Icons.smart_toy);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final allJobs = Provider.of<List<Jobs>>(context) ?? [];
+    MediaQueryData screenSize = MediaQuery.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Välj Studentambassadörer'),
@@ -81,10 +119,7 @@ class ChoiceState extends State<Choice> {
                     Row(
                       children: [
                         Padding(padding: EdgeInsets.only(left: 30)),
-                        Icon(
-                          Icons.smart_toy,
-                          size: 70,
-                        ),
+                        _buildCategoryIcon(widget.category),
                         Padding(padding: EdgeInsets.only(left: 20)),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,7 +127,7 @@ class ChoiceState extends State<Choice> {
                             Text(
                               widget.title.toString(),
                               style: TextStyle(
-                                fontSize: 24,
+                                fontSize: screenSize.size.width * 0.055,
                                 color: Colors.black,
                               ),
                               textAlign: TextAlign.left,

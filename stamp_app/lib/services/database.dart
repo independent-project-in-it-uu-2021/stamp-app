@@ -38,7 +38,7 @@ class DatabaseService {
     return await jobsCollection.add({
       'title': name,
       'description': desc,
-      'data': date,
+      'date': date,
       'location': location,
       'time': time,
       'endTime': endTime,
