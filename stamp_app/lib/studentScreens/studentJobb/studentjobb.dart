@@ -56,7 +56,7 @@ class StudentWork extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(top: 30),
                 ),
-                TextButton(
+                /*TextButton(
                   style: TextButton.styleFrom(
                     textStyle: const TextStyle(fontSize: 30),
                     primary: Colors.black,
@@ -109,22 +109,22 @@ class StudentWork extends StatelessWidget {
                       ),
                     ],
                   ),
-                ),
+                ),*/
                 Padding(
                   padding: EdgeInsets.only(top: 10),
                 ),
-                Padding(
+                /*Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
                   child: Container(
                     height: MediaQuery.of(context).size.height * 0.001,
                     width: MediaQuery.of(context).size.width * 0.83,
                     color: Colors.black12,
                   ),
-                ),
+                ),*/
                 Padding(
                   padding: EdgeInsets.only(top: 10),
                 ),
-                TextButton(
+                /*TextButton(
                   style: TextButton.styleFrom(
                     textStyle: const TextStyle(fontSize: 30),
                     primary: Colors.black,
@@ -177,7 +177,7 @@ class StudentWork extends StatelessWidget {
                       ),
                     ],
                   ),
-                ),
+                ),*/
                 Padding(
                   padding: EdgeInsets.only(top: 10),
                 ),
@@ -213,7 +213,7 @@ class StudentWork extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(top: 30),
                 ),
-                TextButton(
+                /*TextButton(
                   style: TextButton.styleFrom(
                     textStyle: const TextStyle(fontSize: 30),
                     primary: Colors.black,
@@ -265,22 +265,22 @@ class StudentWork extends StatelessWidget {
                       ),
                     ],
                   ),
-                ),
+                ),*/
                 Padding(
                   padding: EdgeInsets.only(top: 10),
                 ),
-                Padding(
+                /*Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
                   child: Container(
                     height: MediaQuery.of(context).size.height * 0.001,
                     width: MediaQuery.of(context).size.width * 0.83,
                     color: Colors.black12,
                   ),
-                ),
-                Padding(
+                ),*/
+                /*Padding(
                   padding: EdgeInsets.only(top: 10),
-                ),
-                TextButton(
+                ),*/
+                /*TextButton(
                   style: TextButton.styleFrom(
                     textStyle: const TextStyle(fontSize: 30),
                     primary: Colors.black,
@@ -332,8 +332,8 @@ class StudentWork extends StatelessWidget {
                       ),
                     ],
                   ),
-                ),
-                Padding(
+                ),*/
+                /*Padding(
                   padding: EdgeInsets.only(top: 10),
                 ),
                 Padding(
@@ -346,7 +346,7 @@ class StudentWork extends StatelessWidget {
                     width: MediaQuery.of(context).size.width * 0.83,
                     color: Colors.black12,
                   ),
-                ),
+                ),*/
               ],
             ),
           ),
