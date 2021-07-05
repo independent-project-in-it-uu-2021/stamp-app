@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:stamp_app/services/auth.dart';
 
@@ -221,6 +219,7 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
+                // Calls the method from above, shows job information
                 _buildJobInformation(),
 
                 Text(
@@ -237,20 +236,7 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
                       color: Colors.red.shade900,
                       fontWeight: FontWeight.bold,
                     )),
-
-                TextButton(
-                  style: TextButton.styleFrom(
-                    textStyle: const TextStyle(fontSize: 26),
-                    primary: Colors.blue,
-                  ),
-                  onPressed: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => OthersProfile()),
-                    )
-                  },
-                ),
-
+                Padding(padding: EdgeInsets.only(top: 10)),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
                   child: Container(
@@ -260,7 +246,7 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 //---------------
                 FlatButton(
@@ -381,6 +367,23 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
                 Padding(
                   padding: EdgeInsets.only(top: 30),
                 ),
+                FloatingActionButton.extended(
+                  backgroundColor: Colors.green,
+                  onPressed: () {},
+                  label: Text(
+                    'Anmäl intresse',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: Colors.black,
+                        fontFamily: 'Roboto'),
+                  ),
+                )
+
+                /*FloatingActionButton(
+                  onPressed: () {},
+                  backgroundColor: Colors.green,
+                ),*/
               ],
             ),
           ),

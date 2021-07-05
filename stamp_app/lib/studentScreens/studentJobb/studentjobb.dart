@@ -75,16 +75,6 @@ class StudentWork extends StatelessWidget {
                     builder: (context) => FinalStudentChoice(
                       curJob: allJobs[index],
                       userID: userID,
-                      /*title: curTitle,
-                      description: curDescription,
-                      date: curDate,
-                      time: curTime,
-                      endTime: curEndTime,
-                      location: curLocation,
-                      count: curCount,
-                      maxCount: curMaxCount,
-                      reserveCount: curReserveCount,
-                      category: curJobCategory,*/
                     ),
                   ),
                 )
