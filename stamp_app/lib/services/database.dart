@@ -31,9 +31,9 @@ class DatabaseService {
     String icon,
     String category,
   ) async {
-    //Map reserveList = {};
-    //Map acceptedList = {};
-    //Map interestList = {};
+    Map reserveList = {};
+    Map acceptedList = {};
+    Map interestList = {};
 
     return await jobsCollection.add({
       'title': name,
@@ -43,16 +43,15 @@ class DatabaseService {
       'time': time,
       'endTime': endTime,
       'completed': false,
-      'currentReserve': 0,
       'count': 0,
       'maxCount': maxStudents,
       'reserveCount': 0,
-      //'currentReserve': reserveList,
-      //'currentAccepted': acceptedList,
-      //'currentInterest': interestList,
+      'currentReserve': reserveList,
+      'currentAccepted': acceptedList,
+      'currentInterest': interestList,
       'icon': icon,
       'category': category,
-    }); //serializeIcon(_icon),})
+    });
   }
 
   //Job list
@@ -67,8 +66,11 @@ class DatabaseService {
         location: doc.data()['location'],
         count: doc.data()['count'],
         maxCount: doc.data()['maxCount'],
-        reserveCount: doc.data()['currentReserve'],
+        reserveCount: doc.data()['reserveCount'],
         category: doc.data()['category'],
+        currentReserv: doc.data()['currentReserve'],
+        currentAccepted: doc.data()['currentAccepted'],
+        currentInterest: doc.data()['currentInterest'],
       );
     }).toList();
   }

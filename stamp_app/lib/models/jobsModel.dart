@@ -10,6 +10,9 @@ class Jobs {
   int maxCount;
   int reserveCount;
   String category;
+  Map currentReserv;
+  Map currentAccepted;
+  Map currentInterest;
 
   Jobs(
       {this.title,
@@ -21,7 +24,10 @@ class Jobs {
       this.count,
       this.maxCount,
       this.reserveCount,
-      this.category});
+      this.category,
+      this.currentReserv,
+      this.currentAccepted,
+      this.currentInterest});
 
   List<Jobs> newDummyJob() {
     return [
