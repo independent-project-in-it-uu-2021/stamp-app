@@ -1,20 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:stamp_app/services/auth.dart';
 import 'package:provider/provider.dart';
 
-import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
-import 'package:stamp_app/screens/home/home.dart';
 import 'package:stamp_app/screens/jobb/jobb.dart';
 import 'package:stamp_app/screens/slutval/slutval.dart';
-import 'package:stamp_app/screens/annansProfil/annansProfil.dart';
 import 'package:stamp_app/models/jobsModel.dart';
-
-bool _pressedButton1 = false;
-bool _pressedButton2 = false;
-bool _pressedButton3 = false;
-bool _pressedButton4 = false;
-bool _pressedButton5 = false;
-bool _pressedButton6 = false;
 
 class Choice extends StatefulWidget {
   final Jobs curJob;
@@ -215,6 +204,7 @@ class ChoiceState extends State<Choice> {
   @override
   Widget build(BuildContext context) {
     final allJobs = Provider.of<List<Jobs>>(context) ?? [];
+    List<bool> isSelected = [false, false];
     print(' ');
     //print('Show interest map : ' +
     //  showInterestUser.values.toList()[0].toString());
@@ -263,6 +253,26 @@ class ChoiceState extends State<Choice> {
                 padding: EdgeInsets.only(top: 20),
               ),
               _buildUserShowIntereset(),
+              Padding(
+                padding: EdgeInsets.only(top: 20),
+              ),
+              ToggleButtons(
+                  children: <Widget>[
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text('Acceptera'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text('Reservera'),
+                    ),
+                  ],
+                  onPressed: (int index) {
+                    setState(() {
+                      isSelected[index] = !isSelected[index];
+                    });
+                  },
+                  isSelected: isSelected),
               Padding(
                 padding: EdgeInsets.only(top: 20),
               ),
