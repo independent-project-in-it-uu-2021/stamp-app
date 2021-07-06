@@ -94,16 +94,7 @@ class Work extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => Choice(
-                      title: title,
-                      description: description,
-                      date: date,
-                      time: time,
-                      endTime: endTime,
-                      location: location,
-                      count: count,
-                      maxCount: maxCount,
-                      reserveCount: reserveCount,
-                      category: jobCategory,
+                      curJob: allJobs[index],
                     ),
                   ),
                 )

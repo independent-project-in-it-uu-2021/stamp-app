@@ -11,31 +11,9 @@ import 'package:stamp_app/sharedWidget/loadingScreen.dart';
 class FinalStudentChoice extends StatefulWidget {
   final Jobs curJob;
 
-  /*final String title;
-  final String description;
-  final String date;
-  final String time;
-  final String endTime;
-  final String location;
-  final int count;
-  final int maxCount;
-  final int reserveCount;
-  final String category;*/
-
   FinalStudentChoice({
     Key key,
     @required this.curJob,
-
-    /*@required this.title,
-    @required this.description,
-    @required this.date,
-    @required this.time,
-    @required this.endTime,
-    @required this.location,
-    @required this.count,
-    @required this.maxCount,
-    @required this.reserveCount,
-    @required this.category,*/
   }) : super(key: key);
   @override
   State<StatefulWidget> createState() {
@@ -45,7 +23,6 @@ class FinalStudentChoice extends StatefulWidget {
 
 class FinalStudentChoiceState extends State<FinalStudentChoice> {
   String jobID;
-
   String title;
   String description;
   String date;

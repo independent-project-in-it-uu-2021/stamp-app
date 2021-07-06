@@ -36,9 +36,6 @@ class DatabaseService {
     Map reserveList = {};
     Map acceptedList = {};
     Map interestList = {};
-    //List<Map<String, dynamic>> reserveList = [];
-    //List<Map<String, dynamic>> acceptedList = [];
-    //List<Map<String, dynamic>> interestList = [];
 
     return await jobsCollection.add({
       'title': name,
