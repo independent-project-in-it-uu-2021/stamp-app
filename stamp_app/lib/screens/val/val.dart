@@ -32,6 +32,7 @@ class ChoiceState extends State<Choice> {
   int reserveCount;
   String category;
   Map showInterestUser;
+  List<bool> isSelected = [false, false];
 
   @override
   void initState() {
@@ -196,6 +197,23 @@ class ChoiceState extends State<Choice> {
             child: ListTile(
               leading: _userProfilePic(userProfilePicUrl),
               title: Text(userName),
+              subtitle: ToggleButtons(
+                  children: <Widget>[
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text('Acceptera'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text('Reservera'),
+                    ),
+                  ],
+                  onPressed: (int index) {
+                    setState(() {
+                      isSelected[index] = !isSelected[index];
+                    });
+                  },
+                  isSelected: isSelected),
             ),
           );
         });
@@ -204,7 +222,7 @@ class ChoiceState extends State<Choice> {
   @override
   Widget build(BuildContext context) {
     final allJobs = Provider.of<List<Jobs>>(context) ?? [];
-    List<bool> isSelected = [false, false];
+
     print(' ');
     //print('Show interest map : ' +
     //  showInterestUser.values.toList()[0].toString());
