@@ -19,6 +19,8 @@ class DatabaseService {
   final CollectionReference jobsCollection =
       FirebaseFirestore.instance.collection('jobs');
 
+  //------------------Job related methods----------------------//
+  //-----------------------------------------------------------//
   //Create job
   Future createJob(
     String name,
@@ -34,6 +36,9 @@ class DatabaseService {
     Map reserveList = {};
     Map acceptedList = {};
     Map interestList = {};
+    //List<Map<String, dynamic>> reserveList = [];
+    //List<Map<String, dynamic>> acceptedList = [];
+    //List<Map<String, dynamic>> interestList = [];
 
     return await jobsCollection.add({
       'title': name,
@@ -54,10 +59,11 @@ class DatabaseService {
     });
   }
 
-  //Job list
+  //Stores job object in list
   List<Jobs> _jobsFromDatabase(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return Jobs(
+        jobID: doc.id,
         title: doc.data()['title'],
         description: doc.data()['description'],
         date: doc.data()['date'],
@@ -68,11 +74,35 @@ class DatabaseService {
         maxCount: doc.data()['maxCount'],
         reserveCount: doc.data()['reserveCount'],
         category: doc.data()['category'],
-        currentReserv: doc.data()['currentReserve'],
+        currentReserve: doc.data()['currentReserve'],
         currentAccepted: doc.data()['currentAccepted'],
         currentInterest: doc.data()['currentInterest'],
       );
     }).toList();
+  }
+
+  Future showInterestJob(String jobID, String userID, String userName,
+      String userProfileLink) async {
+    Map userInformation = {
+      'userName': userName,
+      'userProfilePicUrl': userProfileLink,
+    };
+
+    try {
+      await jobsCollection.doc(jobID).update({
+        //'reserveCount': FieldValue.arrayUnion([userID]),
+        'currentInterest.' + userID: userInformation,
+
+        /*'reserveCount.' + userID: {
+          'name': 'Anders Student',
+          'profileLink': 'This is a profileLink',
+        }*/
+        //'reserveCount.' + userID: 'This is my profile link'
+      });
+    } on FirebaseException catch (e) {
+      print('Show instresset job');
+      print(e.code);
+    }
   }
 
   //Get jobs stream

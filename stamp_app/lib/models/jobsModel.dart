@@ -1,4 +1,5 @@
 class Jobs {
+  String jobID;
   String title;
   String description;
   String date;
@@ -10,12 +11,16 @@ class Jobs {
   int maxCount;
   int reserveCount;
   String category;
-  Map currentReserv;
+  Map currentReserve;
   Map currentAccepted;
   Map currentInterest;
+  //List<Map<String, dynamic>> currentReserv;
+  //List<Map<String, dynamic>> currentAccepted;
+  //List<Map<String, dynamic>> currentInterest;
 
   Jobs(
-      {this.title,
+      {this.jobID,
+      this.title,
       this.description,
       this.date,
       this.time,
@@ -25,7 +30,7 @@ class Jobs {
       this.maxCount,
       this.reserveCount,
       this.category,
-      this.currentReserv,
+      this.currentReserve,
       this.currentAccepted,
       this.currentInterest});
 

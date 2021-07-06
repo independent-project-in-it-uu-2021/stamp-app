@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:stamp_app/services/auth.dart';
+import 'package:provider/provider.dart';
+import 'package:stamp_app/models/user.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
-import 'package:stamp_app/screens/home/home.dart';
-import 'package:stamp_app/screens/jobb/jobb.dart';
-import 'package:stamp_app/screens/slutval/slutval.dart';
-import 'package:stamp_app/screens/annansProfil/annansProfil.dart';
 import 'package:stamp_app/models/jobsModel.dart';
+import 'package:stamp_app/services/database.dart';
+import 'package:stamp_app/services/locator.dart';
+import 'package:stamp_app/sharedWidget/loadingScreen.dart';
 
 class FinalStudentChoice extends StatefulWidget {
   final Jobs curJob;
-  final String userID;
+
   /*final String title;
   final String description;
   final String date;
@@ -25,7 +25,7 @@ class FinalStudentChoice extends StatefulWidget {
   FinalStudentChoice({
     Key key,
     @required this.curJob,
-    @required this.userID,
+
     /*@required this.title,
     @required this.description,
     @required this.date,
@@ -44,7 +44,8 @@ class FinalStudentChoice extends StatefulWidget {
 }
 
 class FinalStudentChoiceState extends State<FinalStudentChoice> {
-  String userID;
+  String jobID;
+
   String title;
   String description;
   String date;
@@ -59,7 +60,7 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
   @override
   void initState() {
     super.initState();
-    userID = widget.userID;
+    jobID = widget.curJob.jobID;
     title = widget.curJob.title;
     description = widget.curJob.description;
     date = widget.curJob.date;
@@ -187,20 +188,30 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Image.asset('assets/images/uuLogaNew.png', fit: BoxFit.cover),
-        //centerTitle: true,
-        backgroundColor: Colors.red.shade900,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_rounded),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          tooltip: 'Tillbaka',
-        ),
-        /*actions: <Widget>[
+    final _currentUser = Provider.of<User>(context);
+
+    return StreamBuilder<UserData>(
+      stream: DatabaseService(userId: _currentUser.uid).userData,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          String curUserID = _currentUser.uid;
+          String curUserName = snapshot.data.name;
+          String curUserProfileImage = snapshot.data.imageUrl;
+          return Scaffold(
+            appBar: AppBar(
+              title:
+                  Image.asset('assets/images/uuLogaNew.png', fit: BoxFit.cover),
+              //centerTitle: true,
+              backgroundColor: Colors.red.shade900,
+              elevation: 0,
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back_ios_rounded),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                tooltip: 'Tillbaka',
+              ),
+              /*actions: <Widget>[
               IconButton(
                 padding: EdgeInsets.only(right: 10),
                 onPressed: null,
@@ -211,184 +222,194 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
                 ),
               ),
             ],*/
-      ),
-      body: Container(
-        width: double.infinity,
-        child: SingleChildScrollView(
-          child: Form(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                // Calls the method from above, shows job information
-                _buildJobInformation(),
-
-                Text(
-                  'Intresseanmälningar',
-                  style: TextStyle(
-                    fontSize: 30,
-                    color: Colors.black,
-                  ),
-                ),
-                Padding(padding: EdgeInsets.only(top: 10)),
-                Text('Du har anmält intresse',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.red.shade900,
-                      fontWeight: FontWeight.bold,
-                    )),
-                Padding(padding: EdgeInsets.only(top: 10)),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 20),
-                ),
-                //---------------
-                FlatButton(
-                  onPressed: () => {},
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                  color: Colors.white,
-                  child: Row(
-                    // Replace with a Row for horizontal icon + text
-                    children: <Widget>[
-                      Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
-                      Image.asset(
-                        'assets/images/profilbild.png',
-                        fit: BoxFit.cover,
-                        scale: 3,
-                      ),
-                      Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
-                      Text(
-                        'Kalle Hansson',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                FlatButton(
-                  onPressed: () => {},
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                  color: Colors.white,
-                  child: Row(
-                    // Replace with a Row for horizontal icon + text
-                    children: <Widget>[
-                      Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
-                      Image.asset(
-                        'assets/images/profilbild.png',
-                        fit: BoxFit.cover,
-                        scale: 3,
-                      ),
-                      Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
-                      Text(
-                        'Agnes Brorson',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                FlatButton(
-                  onPressed: () => {},
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                  color: Colors.white,
-                  child: Row(
-                    // Replace with a Row for horizontal icon + text
-                    children: <Widget>[
-                      Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
-                      Image.asset(
-                        'assets/images/profilbild.png',
-                        fit: BoxFit.cover,
-                        scale: 3,
-                      ),
-                      Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
-                      Text(
-                        'Sixten Andersson',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                FloatingActionButton.extended(
-                  backgroundColor: Colors.green,
-                  onPressed: () {},
-                  label: Text(
-                    'Anmäl intresse',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: Colors.black,
-                        fontFamily: 'Roboto'),
-                  ),
-                )
-
-                /*FloatingActionButton(
-                  onPressed: () {},
-                  backgroundColor: Colors.green,
-                ),*/
-              ],
             ),
-          ),
-        ),
-      ),
+            body: Container(
+              width: double.infinity,
+              child: SingleChildScrollView(
+                child: Form(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      // Calls the method from above, shows job information
+                      _buildJobInformation(),
+
+                      Text(
+                        'Intresseanmälningar',
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Padding(padding: EdgeInsets.only(top: 10)),
+                      Text('Du har anmält intresse',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.red.shade900,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      Padding(padding: EdgeInsets.only(top: 10)),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.001,
+                          width: MediaQuery.of(context).size.width * 0.83,
+                          color: Colors.black12,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 20),
+                      ),
+                      //---------------
+                      FlatButton(
+                        onPressed: () => {},
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15.0))),
+                        color: Colors.white,
+                        child: Row(
+                          // Replace with a Row for horizontal icon + text
+                          children: <Widget>[
+                            Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
+                            Image.asset(
+                              'assets/images/profilbild.png',
+                              fit: BoxFit.cover,
+                              scale: 3,
+                            ),
+                            Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
+                            Text(
+                              'Kalle Hansson',
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Padding(
+                        padding: EdgeInsets.only(top: 30),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.001,
+                          width: MediaQuery.of(context).size.width * 0.83,
+                          color: Colors.black12,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 30),
+                      ),
+                      FlatButton(
+                        onPressed: () => {},
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15.0))),
+                        color: Colors.white,
+                        child: Row(
+                          // Replace with a Row for horizontal icon + text
+                          children: <Widget>[
+                            Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
+                            Image.asset(
+                              'assets/images/profilbild.png',
+                              fit: BoxFit.cover,
+                              scale: 3,
+                            ),
+                            Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
+                            Text(
+                              'Agnes Brorson',
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 30),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.001,
+                          width: MediaQuery.of(context).size.width * 0.83,
+                          color: Colors.black12,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 30),
+                      ),
+                      FlatButton(
+                        onPressed: () => {},
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15.0))),
+                        color: Colors.white,
+                        child: Row(
+                          // Replace with a Row for horizontal icon + text
+                          children: <Widget>[
+                            Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
+                            Image.asset(
+                              'assets/images/profilbild.png',
+                              fit: BoxFit.cover,
+                              scale: 3,
+                            ),
+                            Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
+                            Text(
+                              'Sixten Andersson',
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 30),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.001,
+                          width: MediaQuery.of(context).size.width * 0.83,
+                          color: Colors.black12,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 30),
+                      ),
+                      FloatingActionButton.extended(
+                        backgroundColor: Colors.green,
+                        onPressed: () async {
+                          final result = await locator
+                              .get<DatabaseService>()
+                              .showInterestJob(jobID, curUserID, curUserName,
+                                  curUserProfileImage);
+                          print('Show interest button');
+                          print(result);
+                        },
+                        label: Text(
+                          'Anmäl intresse',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              color: Colors.black,
+                              fontFamily: 'Roboto'),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        } else {
+          return LoadingScreen();
+        }
+      },
     );
   }
 }

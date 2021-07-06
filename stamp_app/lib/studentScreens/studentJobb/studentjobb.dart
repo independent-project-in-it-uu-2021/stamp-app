@@ -39,7 +39,11 @@ class StudentWork extends StatelessWidget {
       });
     } else {
       return LayoutBuilder(builder: (context, constraints) {
-        return Icon(Icons.smart_toy);
+        return Icon(
+          Icons.account_balance_sharp,
+          size: MediaQuery.of(context).size.height * 0.07,
+          color: Colors.black,
+        );
       });
     }
   }
@@ -74,7 +78,6 @@ class StudentWork extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) => FinalStudentChoice(
                       curJob: allJobs[index],
-                      userID: userID,
                     ),
                   ),
                 )
@@ -135,60 +138,6 @@ class StudentWork extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(top: 30),
               ),
-              /*TextButton(
-                  style: TextButton.styleFrom(
-                    textStyle: const TextStyle(fontSize: 30),
-                    primary: Colors.black,
-                  ),
-                  onPressed: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ShowWork()),
-                    )
-                  },
-                  child: Row(
-                    children: [
-                      Padding(padding: EdgeInsets.only(left: 30)),
-                      Icon(
-                        Icons.smart_toy,
-                        size: 70,
-                      ),
-                      Padding(padding: EdgeInsets.only(left: 20)),
-                      Column(
-                        children: [
-                          Text(
-                            'Lego workshop',
-                            style: TextStyle(
-                              fontSize: 30,
-                              color: Colors.black,
-                            ),
-                          ),
-                          Text(
-                            '2021-07-11',
-                            style: TextStyle(fontSize: 20),
-                            textAlign: TextAlign.left,
-                          ),
-                          Text(
-                            '13:00 - 15:00',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          Text(
-                            'Uppsala',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          Text(
-                            'Reserv',
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.red.shade900,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),*/
               Padding(
                 padding: EdgeInsets.only(top: 10),
               ),
@@ -203,60 +152,6 @@ class StudentWork extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(top: 10),
               ),
-              /*TextButton(
-                  style: TextButton.styleFrom(
-                    textStyle: const TextStyle(fontSize: 30),
-                    primary: Colors.black,
-                  ),
-                  onPressed: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ShowWork()),
-                    )
-                  },
-                  child: Row(
-                    children: [
-                      Padding(padding: EdgeInsets.only(left: 30)),
-                      Icon(
-                        Icons.smart_toy,
-                        size: 70,
-                      ),
-                      Padding(padding: EdgeInsets.only(left: 20)),
-                      Column(
-                        children: [
-                          Text(
-                            'Lego workshop',
-                            style: TextStyle(
-                              fontSize: 30,
-                              color: Colors.black,
-                            ),
-                          ),
-                          Text(
-                            '2021-07-11',
-                            style: TextStyle(fontSize: 20),
-                            textAlign: TextAlign.left,
-                          ),
-                          Text(
-                            '13:00 - 15:00',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          Text(
-                            'Uppsala',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          Text(
-                            'Anmäld',
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),*/
               Padding(
                 padding: EdgeInsets.only(top: 10),
               ),
