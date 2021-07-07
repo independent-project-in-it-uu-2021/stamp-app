@@ -181,15 +181,7 @@ class _ManageAccountsState extends State<ManageAccounts> {
                         style: TextStyle(fontSize: 35),
                       ),
                     ),
-                    /*Container(
-                      alignment: Alignment.topLeft,
-                      padding: EdgeInsets.fromLTRB(10, 5, 0, 10),
-                      child: Text(
-                        'Inaktiverad konto',
-                        style: TextStyle(fontSize: 25),
-                        textAlign: TextAlign.left,
-                      ),
-                    ),*/
+
                     // Inactive title
                     titleContainer('Inaktivera konto'),
                     // ListView for inactive accounts

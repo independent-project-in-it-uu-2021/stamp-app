@@ -35,3 +35,12 @@ class UserData {
         accountType: 'inactiv');
   }
 }
+
+class UserJob {
+  String userID;
+  String userName;
+  String profilePickLink;
+  bool isSelected = false;
+
+  UserJob({this.userID, this.userName, this.profilePickLink, this.isSelected});
+}
