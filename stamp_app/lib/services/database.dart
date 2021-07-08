@@ -78,6 +78,7 @@ class DatabaseService {
     }).toList();
   }
 
+  // Method is called when user show interest for a job
   Future showInterestJob(String jobID, String userID, String userName,
       String userProfileLink) async {
     Map userInformation = {
@@ -101,6 +102,37 @@ class DatabaseService {
       print(e.code);
     }
   }
+
+  // Method for user that are selected for a work
+  Future selectedAndUserJob(List<UserJob> userInfoList, String jobID,
+      String rollList, int count, int reservCount) async {
+    String selectedList = '';
+    rollList == 'selected'
+        ? selectedList = 'currentAccepted'
+        : selectedList = 'currentReserve';
+    Map userInfo = {};
+    userInfoList.forEach((curUser) async {
+      userInfo = {
+        'userName': curUser.userName,
+        'userProfilePicUrl': curUser.profilePickLink
+      };
+      try {
+        await jobsCollection.doc(jobID).update({
+          selectedList + '.' + curUser.userID: userInfo,
+          'currentInterest.' + curUser.userID: FieldValue.delete(),
+        });
+      } on FirebaseException catch (e) {
+        print('SelectedUers');
+        print(e.code);
+      }
+      jobsCollection.doc(jobID).update({
+        'count': count,
+        'reserveCount': reservCount,
+      });
+    });
+  }
+
+  // Method for user that are reserved for a work
 
   //Get jobs stream
   Stream<List<Jobs>> get allJobs {
@@ -194,7 +226,6 @@ class DatabaseService {
   }
 
   Future<List<UserData>> getAllUsers() async {
-    //final users = await userCollection.get();
     List<UserData> userDataList = [];
     try {
       final users = await userCollection.get();
