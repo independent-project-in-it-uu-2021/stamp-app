@@ -66,6 +66,7 @@ class ChoiceState extends State<Choice> {
             userName: value['userName'],
             profilePickLink: value['userProfilePicUrl'],
             isSelected: false,
+            isReserve: false,
           ),
         );
       },
@@ -282,7 +283,7 @@ class ChoiceState extends State<Choice> {
                       ),
                     ),
                     onPressed: () {
-                      changeState(index);
+                      changeState('selected', index);
                       //changeState(index);
                     },
                     child: Text(
@@ -294,9 +295,14 @@ class ChoiceState extends State<Choice> {
                     padding: EdgeInsets.only(left: 8.0),
                   ),
                   ElevatedButton(
+                    // Key added inorder to change button color
+                    // when pressed
+                    key: UniqueKey(),
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(
-                        (Colors.white),
+                        userThatShownInterest[index].isReserve
+                            ? Colors.green
+                            : Colors.white,
                       ),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
@@ -305,7 +311,9 @@ class ChoiceState extends State<Choice> {
                         ),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      changeState('reserve', index);
+                    },
                     child: Text(
                       'Reservera',
                       style: TextStyle(color: Colors.black),
@@ -318,10 +326,50 @@ class ChoiceState extends State<Choice> {
         });
   }
 
-  void changeState(int i) {
+  // Change the state if user is selected or is accepted as reserve
+  void changeState(String adminChoice, int i) {
+    UserJob curUserInfo = userThatShownInterest[i];
+    bool nonSelect =
+        curUserInfo.isReserve == false && curUserInfo.isSelected == false;
+    bool selectedSelected = curUserInfo.isSelected == true;
+    bool reserveSelected = curUserInfo.isReserve == true;
+    bool option1 =
+        adminChoice == 'selected' && userThatShownInterest[i].isReserve == true;
     setState(() {
-      userThatShownInterest[i].isSelected =
-          !userThatShownInterest[i].isSelected;
+      if (adminChoice == 'selected' && reserveSelected) {
+        curUserInfo.isSelected = !curUserInfo.isSelected;
+        curUserInfo.isReserve = !curUserInfo.isReserve;
+      } else if (adminChoice == 'reserve' && selectedSelected) {
+        curUserInfo.isReserve = !curUserInfo.isReserve;
+        curUserInfo.isSelected = !curUserInfo.isSelected;
+      } else if (adminChoice == 'selected' && nonSelect) {
+        curUserInfo.isSelected = !curUserInfo.isSelected;
+      } else if (adminChoice == 'reserve' && nonSelect) {
+        curUserInfo.isReserve = !curUserInfo.isReserve;
+      }
+
+      /*if (option1) {
+        userThatShownInterest[i].isSelected =
+            !userThatShownInterest[i].isSelected;
+        userThatShownInterest[i].isReserve =
+            !userThatShownInterest[i].isReserve;
+      } else if (adminChoice == 'reserve' &&
+          userThatShownInterest[i].isSelected == true) {
+        userThatShownInterest[i].isReserve =
+            !userThatShownInterest[i].isReserve;
+        userThatShownInterest[i].isSelected =
+            !userThatShownInterest[i].isSelected;
+      } else if (adminChoice == 'selected' &&
+          userThatShownInterest[i].isSelected == false &&
+          userThatShownInterest[i].isReserve == false) {
+        userThatShownInterest[i].isSelected =
+            !userThatShownInterest[i].isSelected;
+      } else if (adminChoice == 'reserve' &&
+          userThatShownInterest[i].isReserve == false &&
+          userThatShownInterest[i].isSelected == false) {
+        userThatShownInterest[i].isReserve =
+            !userThatShownInterest[i].isReserve;
+      }*/
     });
   }
 
