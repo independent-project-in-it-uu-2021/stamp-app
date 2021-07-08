@@ -1,30 +1,71 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:stamp_app/services/database.dart';
+
+import 'package:stamp_app/services/locator.dart';
+import 'package:stamp_app/models/user.dart';
+import 'package:stamp_app/sharedWidget/loadingScreen.dart';
 
 class OthersProfile extends StatelessWidget {
-  // State parameter
-  String _email;
-  String _userPassword;
+  final String userID;
+  OthersProfile({@required this.userID});
 
-  // key to hold the state of the form i.e referens to the form
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  //TODO: Check if an email is already used
+  Widget showProfileImage(String profileImagUrl) {
+    if (profileImagUrl == 'noImage') {
+      return CircleAvatar(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return Icon(
+                Icons.account_circle,
+                size: constraints.biggest.height,
+                color: Colors.black,
+              );
+            },
+          ),
+          minRadius: 60,
+          maxRadius: 80,
+          backgroundColor: Colors.white);
+    } else {
+      return CircleAvatar(
+          backgroundImage: NetworkImage(profileImagUrl),
+          minRadius: 60,
+          maxRadius: 80,
+          backgroundColor: Colors.white);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Image.asset('assets/images/uuLogaNew.png', fit: BoxFit.cover),
-        //centerTitle: true,
-        backgroundColor: Colors.red.shade900,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_rounded),
-          //TODO: This does nothing now
-          onPressed: () => Navigator.of(context).pop(),
-          tooltip: 'Tillbaka',
-        ),
-        /*actions: <Widget>[
+    return Container(
+      child: FutureBuilder(
+        future: locator.get<DatabaseService>().getUserFromDatabase(this.userID),
+        builder: (BuildContext, snapshot) {
+          if (snapshot.hasData) {
+            String userName = snapshot.data.name;
+            String userEmail = snapshot.data.email;
+            String profileImage = snapshot.data.imageUrl == null
+                ? 'noImage'
+                : snapshot.data.imageUrl;
+            String phoneNumber = snapshot.data.phoneNumer == null ||
+                    snapshot.data.phoneNumer.isEmpty
+                ? 'Telefonnumer saknas'
+                : snapshot.data.phoneNumer;
+            String userBio = snapshot.data.bio;
+
+            return Scaffold(
+              backgroundColor: Colors.white,
+              appBar: AppBar(
+                title: Image.asset('assets/images/uuLogaNew.png',
+                    fit: BoxFit.cover),
+                //centerTitle: true,
+                backgroundColor: Colors.red.shade900,
+                elevation: 0,
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back_ios_rounded),
+                  onPressed: () => Navigator.of(context).pop(),
+                  tooltip: 'Tillbaka',
+                ),
+                /*actions: <Widget>[
           IconButton(
             padding: EdgeInsets.only(right: 10),
             onPressed: null,
@@ -35,205 +76,155 @@ class OthersProfile extends StatelessWidget {
             ),
           ),
         ],*/
-      ),
-      body: Container(
-        width: double.infinity,
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                Text(
-                  'Förnamn Efternamn',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 25,
-                    color: Colors.black,
+              ),
+              body: Container(
+                width: double.infinity,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(top: 30),
+                      ),
+                      Text(
+                        userName,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 25,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      showProfileImage(profileImage),
+                      Padding(
+                        padding: EdgeInsets.only(top: 20),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.001,
+                          width: MediaQuery.of(context).size.width * 0.83,
+                          color: Colors.black12,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 12),
+                      ),
+                      Text(
+                        phoneNumber,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 12),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.001,
+                          width: MediaQuery.of(context).size.width * 0.83,
+                          color: Colors.black12,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 12),
+                      ),
+                      Text(
+                        userEmail,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 12),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.001,
+                          width: MediaQuery.of(context).size.width * 0.83,
+                          color: Colors.black12,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 12),
+                      ),
+                      Text(
+                        userBio,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 12),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.001,
+                          width: MediaQuery.of(context).size.width * 0.83,
+                          color: Colors.black12,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 30),
+                      ),
+                      Text(
+                        'Senaste Jobb',
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 30),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.001,
+                          width: MediaQuery.of(context).size.width * 0.83,
+                          color: Colors.black12,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 30),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 30),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.001,
+                          width: MediaQuery.of(context).size.width * 0.83,
+                          color: Colors.black12,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 30),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 50),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 60),
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
-                Image.asset(
-                  'assets/images/profilbild.png',
-                  fit: BoxFit.cover,
-                  scale: 1.5,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 20),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 12),
-                ),
-                Text(
-                  '+461234567',
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.black,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 12),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 12),
-                ),
-                Text(
-                  'jane@xample.com',
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.black,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 12),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 12),
-                ),
-                Text(
-                  'IT Ingenjör',
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.black,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 12),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                Text(
-                  'Senaste Jobb',
-                  style: TextStyle(
-                    fontSize: 30,
-                    color: Colors.black,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                Text(
-                  'Jobb 1',
-                  style: TextStyle(
-                    fontSize: 30,
-                    color: Colors.black,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                Text(
-                  'Jobb 2',
-                  style: TextStyle(
-                    fontSize: 30,
-                    color: Colors.black,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                Text(
-                  'Jobb 3',
-                  style: TextStyle(
-                    fontSize: 30,
-                    color: Colors.black,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 50),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 60),
-                ),
-              ],
-            ),
-          ),
-        ),
+              ),
+            );
+          } else {
+            return LoadingScreen();
+          }
+        },
       ),
     );
   }

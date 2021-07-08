@@ -80,8 +80,6 @@ class FinalChoice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('Inside final choice');
-    print(usersList);
     return Scaffold(
       appBar: AppBar(
         title: Image.asset('assets/images/uuLogaNew.png', fit: BoxFit.cover),
@@ -141,14 +139,6 @@ class FinalChoice extends StatelessWidget {
               ),
               //---------------
 
-              /*Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.0),
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.001,
-                  width: MediaQuery.of(context).size.width * 0.83,
-                  color: Colors.black12,
-                ),
-              ),*/
               Padding(padding: EdgeInsets.only(top: 20)),
               Text(
                 'Reserver',

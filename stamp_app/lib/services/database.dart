@@ -110,6 +110,26 @@ class DatabaseService {
   //------------Methods that are used for user-----------------//
   //-----------------------------------------------------------//
 
+  Future<UserData> getUserFromDatabase(String userID) async {
+    UserData userInfo;
+    try {
+      final element = await userCollection.doc(userID).get();
+      userInfo = UserData(
+          uid: userID,
+          name: element.data()['userName'],
+          email: element.data()['userEmail'],
+          phoneNumer: element.data()['userPhoneNumber'],
+          bio: element.data()['userBio'],
+          imageUrl: element.data()['userProfilePicUrl'],
+          accountType: element.data()['accountType']);
+      return userInfo;
+    } on FirebaseException catch (e) {
+      print('getUserFromDataBase');
+      print(e.code);
+    }
+    //return userInfo;
+  }
+
   List<UserData> _usersFromDataBase(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return UserData(

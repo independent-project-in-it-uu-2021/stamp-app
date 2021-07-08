@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:stamp_app/screens/annansProfil/annansProfil.dart';
 
 import 'package:stamp_app/screens/slutval/slutval.dart';
 import 'package:stamp_app/models/jobsModel.dart';
@@ -203,6 +204,16 @@ class ChoiceState extends State<Choice> {
 
           return Card(
             child: ListTile(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OthersProfile(
+                      userID: userID,
+                    ),
+                  ),
+                );
+              },
               leading: _userProfilePic(userProfilePicUrl),
               title: Text(userName),
               subtitle: Row(
@@ -223,7 +234,6 @@ class ChoiceState extends State<Choice> {
                     ),
                     onPressed: () {
                       changeState('selected', index);
-                      //changeState(index);
                     },
                     child: Text(
                       'Acceptera',
@@ -402,7 +412,6 @@ class ChoiceState extends State<Choice> {
                 ),
               ),
               onPressed: () => {
-                //TODO: Fixed this
                 Navigator.push(
                   context,
                   MaterialPageRoute(
