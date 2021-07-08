@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -36,6 +38,8 @@ class ChoiceState extends State<Choice> {
   String category;
   Map showInterestUser;
   List<UserJob> userThatShownInterest = [];
+  int amountSelected;
+  int amountReserved;
 
   @override
   void initState() {
@@ -52,10 +56,12 @@ class ChoiceState extends State<Choice> {
     reserveCount = widget.curJob.reserveCount;
     category = widget.curJob.category;
     showInterestUser = widget.curJob.currentInterest;
-
     userThatShownInterest = shownInterestList(showInterestUser);
+    amountSelected = widget.curJob.count;
+    amountReserved = widget.curJob.reserveCount;
   }
 
+  // Creates a list of Userjob object, which is easier to work with
   List<UserJob> shownInterestList(Map userMap) {
     List<UserJob> theList = [];
     userMap.forEach(
@@ -181,73 +187,7 @@ class ChoiceState extends State<Choice> {
     return ListViewImage(imageUrl: imageUrl);
   }
 
-  //Builds listview for the users that have shown instereset for the job
-  /*Widget _buildUserShowIntereset() {
-    List<UserJob> userThatShownInterest = shownInterestList(showInterestUser);
-    String userID;
-    String userName;
-    String userProfilePicUrl;
-    List userIDList = showInterestUser.keys.toList();
-    List userInterestList = showInterestUser.values.toList();
-    List booleanList = List<bool>.filled(userIDList.length, true);
-    return ListView.builder(
-        shrinkWrap: true,
-        itemCount: userIDList.length,
-        itemBuilder: (context, index) {
-          userID = userIDList[index];
-          userName = userInterestList[index]['userName'];
-          userProfilePicUrl = userInterestList[index]['userProfilePicUrl'];
-          //userInterestList[index]['isSelected'] = false;
-
-          return Card(
-            child: ListTile(
-              leading: _userProfilePic(userProfilePicUrl),
-              title: Text(userName),
-              subtitle: Row(
-                children: <Widget>[
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: boolList[index] ? Colors.green : Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                        side: BorderSide(color: Colors.black, width: 2.0),
-                      ),
-                    ),
-                    onPressed: () {
-                      changeState(index);
-                    },
-                    child: Text(
-                      'Acceptera',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 8.0),
-                  ),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                        (Colors.white),
-                      ),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(color: Colors.black, width: 2.0),
-                        ),
-                      ),
-                    ),
-                    onPressed: () {},
-                    child: Text(
-                      'Reservera',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
-  }*/
+  // Build the listview for users that have shown interest for the job
   Widget _buildUserShowIntereset() {
     String userID;
     String userName;
@@ -333,44 +273,43 @@ class ChoiceState extends State<Choice> {
         curUserInfo.isReserve == false && curUserInfo.isSelected == false;
     bool selectedSelected = curUserInfo.isSelected == true;
     bool reserveSelected = curUserInfo.isReserve == true;
-    bool option1 =
-        adminChoice == 'selected' && userThatShownInterest[i].isReserve == true;
     setState(() {
       if (adminChoice == 'selected' && reserveSelected) {
         curUserInfo.isSelected = !curUserInfo.isSelected;
         curUserInfo.isReserve = !curUserInfo.isReserve;
+
+        amountSelected++;
+        amountReserved--;
       } else if (adminChoice == 'reserve' && selectedSelected) {
         curUserInfo.isReserve = !curUserInfo.isReserve;
         curUserInfo.isSelected = !curUserInfo.isSelected;
+
+        amountReserved++;
+        amountSelected--;
       } else if (adminChoice == 'selected' && nonSelect) {
         curUserInfo.isSelected = !curUserInfo.isSelected;
+
+        amountSelected++;
       } else if (adminChoice == 'reserve' && nonSelect) {
         curUserInfo.isReserve = !curUserInfo.isReserve;
+
+        amountReserved++;
       }
 
-      /*if (option1) {
-        userThatShownInterest[i].isSelected =
-            !userThatShownInterest[i].isSelected;
-        userThatShownInterest[i].isReserve =
-            !userThatShownInterest[i].isReserve;
-      } else if (adminChoice == 'reserve' &&
-          userThatShownInterest[i].isSelected == true) {
-        userThatShownInterest[i].isReserve =
-            !userThatShownInterest[i].isReserve;
-        userThatShownInterest[i].isSelected =
-            !userThatShownInterest[i].isSelected;
-      } else if (adminChoice == 'selected' &&
-          userThatShownInterest[i].isSelected == false &&
-          userThatShownInterest[i].isReserve == false) {
-        userThatShownInterest[i].isSelected =
-            !userThatShownInterest[i].isSelected;
-      } else if (adminChoice == 'reserve' &&
-          userThatShownInterest[i].isReserve == false &&
-          userThatShownInterest[i].isSelected == false) {
-        userThatShownInterest[i].isReserve =
-            !userThatShownInterest[i].isReserve;
-      }*/
+      print(amountSelected);
     });
+  }
+
+  Widget buildInfoText() {
+    if (amountSelected == maxCount + 1) {
+      return Text(
+        'Kan inte acceptera mer än $maxCount',
+        style:
+            TextStyle(color: Colors.red.shade700, fontWeight: FontWeight.bold),
+      );
+    } else {
+      return Container();
+    }
   }
 
   @override
@@ -416,6 +355,7 @@ class ChoiceState extends State<Choice> {
               Padding(
                 padding: EdgeInsets.only(top: 20),
               ),
+              buildInfoText(),
               _buildUserShowIntereset(),
               Padding(
                 padding: EdgeInsets.only(top: 20),
