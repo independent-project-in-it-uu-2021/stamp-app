@@ -408,15 +408,7 @@ class ChoiceState extends State<Choice> {
                   MaterialPageRoute(
                     builder: (context) => FinalChoice(
                       curJob: widget.curJob,
-                      //title: widget.title,
-                      //description: widget.description,
-                      //date: widget.date,
-                      //time: widget.time,
-                      //endTime: widget.endTime,
-                      //location: widget.location,
-                      //count: widget.count,
-                      //maxCount: widget.maxCount,
-                      //reserveCount: widget.reserveCount),
+                      usersList: userThatShownInterest,
                     ),
                   ),
                 ),
