@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:stamp_app/screens/createJob/create-job.dart';
 import 'package:stamp_app/screens/val/val.dart';
 import 'package:stamp_app/models/jobsModel.dart';
+import 'package:stamp_app/models/user.dart';
 
 class Work extends StatelessWidget {
   // Returns different typ of icon depending on category
@@ -48,6 +49,24 @@ class Work extends StatelessWidget {
     }
   }
 
+  // Creates a list of userJob (i.e. userid, username and if selected) object
+  List<UserJob> shownInterestList(Map userMap) {
+    List<UserJob> theList = [];
+    userMap.forEach(
+      (key, value) {
+        theList.add(
+          UserJob(
+            userID: key,
+            userName: value['userName'],
+            profilePickLink: value['userProfilePicUrl'],
+            isSelected: false,
+          ),
+        );
+      },
+    );
+    return theList;
+  }
+
   @override
   Widget build(BuildContext context) {
     final allJobs = Provider.of<List<Jobs>>(context) ?? [];
@@ -81,6 +100,8 @@ class Work extends StatelessWidget {
           int maxCount = allJobs[index].maxCount;
           int reserveCount = allJobs[index].reserveCount;
           String jobCategory = allJobs[index].category;
+          List<UserJob> curUsersInterestList =
+              shownInterestList(allJobs[index].currentInterest);
 
           return Card(
             child: ListTile(
@@ -95,6 +116,7 @@ class Work extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) => Choice(
                       curJob: allJobs[index],
+                      //usersInterestList: curUsersInterestList,
                     ),
                   ),
                 )

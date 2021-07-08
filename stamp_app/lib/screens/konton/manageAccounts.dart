@@ -5,6 +5,7 @@ import 'package:stamp_app/models/user.dart';
 import 'package:stamp_app/services/database.dart';
 import 'package:stamp_app/services/locator.dart';
 import 'package:stamp_app/sharedWidget/loadingScreen.dart';
+import 'package:stamp_app/sharedWidget/imageForListView.dart';
 
 class ManageAccounts extends StatefulWidget {
   @override
@@ -17,27 +18,9 @@ class _ManageAccountsState extends State<ManageAccounts> {
   // Check if user has profileimage or not
   // returns userprofile image or icon
   Widget _userProfilePic(String imageUrl) {
-    if (imageUrl == null || imageUrl.isEmpty) {
-      return CircleAvatar(
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              return Icon(
-                Icons.account_circle,
-                size: constraints.biggest.height,
-                color: Colors.black,
-              );
-            },
-          ),
-          minRadius: 20,
-          maxRadius: 40,
-          backgroundColor: Colors.white);
-    } else {
-      return CircleAvatar(
-          backgroundImage: NetworkImage(imageUrl),
-          minRadius: 20,
-          maxRadius: 40,
-          backgroundColor: Colors.white);
-    }
+    return ListViewImage(
+      imageUrl: imageUrl,
+    );
   }
 
   // Returns a container that is used to show the title

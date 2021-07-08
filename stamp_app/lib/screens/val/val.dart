@@ -4,13 +4,16 @@ import 'package:provider/provider.dart';
 import 'package:stamp_app/screens/slutval/slutval.dart';
 import 'package:stamp_app/models/jobsModel.dart';
 import 'package:stamp_app/models/user.dart';
+import 'package:stamp_app/sharedWidget/imageForListView.dart';
 
 class Choice extends StatefulWidget {
   final Jobs curJob;
+  final List<UserJob> usersInterestList;
 
   Choice({
     Key key,
     @required this.curJob,
+    this.usersInterestList,
   }) : super(key: key);
   @override
   State<StatefulWidget> createState() {
@@ -35,6 +38,7 @@ class ChoiceState extends State<Choice> {
   List<bool> isSelected = [false, false];
   bool isChosen = false;
   List<bool> boolList = [];
+  List<UserJob> userThatShownInterest = [];
 
   @override
   void initState() {
@@ -52,6 +56,7 @@ class ChoiceState extends State<Choice> {
     category = widget.curJob.category;
     showInterestUser = widget.curJob.currentInterest;
     boolList = List.filled(2, false);
+    userThatShownInterest = shownInterestList(showInterestUser);
   }
 
   List<UserJob> shownInterestList(Map userMap) {
@@ -63,6 +68,7 @@ class ChoiceState extends State<Choice> {
             userID: key,
             userName: value['userName'],
             profilePickLink: value['userProfilePicUrl'],
+            isSelected: false,
           ),
         );
       },
@@ -174,54 +180,12 @@ class ChoiceState extends State<Choice> {
   // Check if user has profileimage or not
   // returns userprofile image or icon
   Widget _userProfilePic(String imageUrl) {
-    if (imageUrl == null || imageUrl.isEmpty) {
-      return CircleAvatar(
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              return Icon(
-                Icons.account_circle,
-                size: constraints.biggest.height,
-                color: Colors.black,
-              );
-            },
-          ),
-          minRadius: 20,
-          maxRadius: 40,
-          backgroundColor: Colors.white);
-    } else {
-      return CircleAvatar(
-          backgroundImage: NetworkImage(imageUrl),
-          minRadius: 20,
-          maxRadius: 40,
-          backgroundColor: Colors.white);
-    }
-  }
-
-  Widget _buildElevatedButton() {
-    bool changeColor = false;
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        primary: changeColor ? Colors.green : Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18.0),
-          side: BorderSide(color: Colors.black, width: 2.0),
-        ),
-      ),
-      onPressed: () {
-        setState(() {
-          changeColor = !changeColor;
-        });
-        print('Acceptera');
-      },
-      child: Text(
-        'Acceptera',
-        style: TextStyle(color: Colors.black),
-      ),
-    );
+    return ListViewImage(imageUrl: imageUrl);
   }
 
   //Builds listview for the users that have shown instereset for the job
-  Widget _buildUserShowIntereset() {
+  /*Widget _buildUserShowIntereset() {
+    List<UserJob> userThatShownInterest = shownInterestList(showInterestUser);
     String userID;
     String userName;
     String userProfilePicUrl;
@@ -285,12 +249,83 @@ class ChoiceState extends State<Choice> {
             ),
           );
         });
+  }*/
+  Widget _buildUserShowIntereset() {
+    //List<UserJob> userThatShownInterest = shownInterestList(showInterestUser);
+    String userID;
+    String userName;
+    String userProfilePicUrl;
+    List userIDList = showInterestUser.keys.toList();
+    List userInterestList = showInterestUser.values.toList();
+    List booleanList = List<bool>.filled(userIDList.length, true);
+    return ListView.builder(
+        shrinkWrap: true,
+        itemCount: userIDList.length,
+        itemBuilder: (context, index) {
+          userID = userThatShownInterest[index].userID;
+          userName = userThatShownInterest[index].userName;
+          userProfilePicUrl = userThatShownInterest[index].profilePickLink;
+          //userThatShownInterest[index].isSelected = false;
+
+          return Card(
+            child: ListTile(
+              leading: _userProfilePic(userProfilePicUrl),
+              title: Text(userName),
+              subtitle: Row(
+                key: UniqueKey(),
+                children: <Widget>[
+                  ElevatedButton(
+                    key: UniqueKey(),
+                    style: ElevatedButton.styleFrom(
+                      primary: userThatShownInterest[index].isSelected
+                          ? Colors.green
+                          : Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                        side: BorderSide(color: Colors.black, width: 2.0),
+                      ),
+                    ),
+                    onPressed: () {
+                      changeState(index);
+                      //changeState(index);
+                    },
+                    child: Text(
+                      'Acceptera',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 8.0),
+                  ),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                        (Colors.white),
+                      ),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                          side: BorderSide(color: Colors.black, width: 2.0),
+                        ),
+                      ),
+                    ),
+                    onPressed: () {},
+                    child: Text(
+                      'Reservera',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   void changeState(int i) {
     setState(() {
-      boolList[i] = !boolList[i];
-      print(boolList);
+      userThatShownInterest[i].isSelected =
+          !userThatShownInterest[i].isSelected;
     });
   }
 
