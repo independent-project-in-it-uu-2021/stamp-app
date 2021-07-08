@@ -41,6 +41,12 @@ class UserJob {
   String userName;
   String profilePickLink;
   bool isSelected;
+  bool isReserve;
 
-  UserJob({this.userID, this.userName, this.profilePickLink, this.isSelected});
+  UserJob(
+      {this.userID,
+      this.userName,
+      this.profilePickLink,
+      this.isSelected,
+      this.isReserve});
 }

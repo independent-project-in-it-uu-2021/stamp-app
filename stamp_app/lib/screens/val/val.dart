@@ -35,9 +35,6 @@ class ChoiceState extends State<Choice> {
   int reserveCount;
   String category;
   Map showInterestUser;
-  List<bool> isSelected = [false, false];
-  bool isChosen = false;
-  List<bool> boolList = [];
   List<UserJob> userThatShownInterest = [];
 
   @override
@@ -55,7 +52,7 @@ class ChoiceState extends State<Choice> {
     reserveCount = widget.curJob.reserveCount;
     category = widget.curJob.category;
     showInterestUser = widget.curJob.currentInterest;
-    boolList = List.filled(2, false);
+
     userThatShownInterest = shownInterestList(showInterestUser);
   }
 
@@ -251,13 +248,11 @@ class ChoiceState extends State<Choice> {
         });
   }*/
   Widget _buildUserShowIntereset() {
-    //List<UserJob> userThatShownInterest = shownInterestList(showInterestUser);
     String userID;
     String userName;
     String userProfilePicUrl;
     List userIDList = showInterestUser.keys.toList();
-    List userInterestList = showInterestUser.values.toList();
-    List booleanList = List<bool>.filled(userIDList.length, true);
+
     return ListView.builder(
         shrinkWrap: true,
         itemCount: userIDList.length,
@@ -265,7 +260,6 @@ class ChoiceState extends State<Choice> {
           userID = userThatShownInterest[index].userID;
           userName = userThatShownInterest[index].userName;
           userProfilePicUrl = userThatShownInterest[index].profilePickLink;
-          //userThatShownInterest[index].isSelected = false;
 
           return Card(
             child: ListTile(
@@ -275,6 +269,8 @@ class ChoiceState extends State<Choice> {
                 key: UniqueKey(),
                 children: <Widget>[
                   ElevatedButton(
+                    // Unique key is used in order to change color
+                    // when the button is pressed
                     key: UniqueKey(),
                     style: ElevatedButton.styleFrom(
                       primary: userThatShownInterest[index].isSelected
@@ -332,16 +328,7 @@ class ChoiceState extends State<Choice> {
   @override
   Widget build(BuildContext context) {
     final allJobs = Provider.of<List<Jobs>>(context) ?? [];
-    //boolList = List<bool>.filled(showInterestUser.keys.toList().length, false);
 
-    print(' ');
-    //print('Show interest map : ' +
-    //  showInterestUser.values.toList()[0].toString());
-    //print(
-    //    'Show interest map : ' + showInterestUser.keys.elementAt(0).toString());
-
-    // Size of the screen used to the text size is responsive
-    MediaQueryData screenSize = MediaQuery.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Välj Studentambassadörer'),
@@ -385,23 +372,6 @@ class ChoiceState extends State<Choice> {
               Padding(
                 padding: EdgeInsets.only(top: 20),
               ),
-              ToggleButtons(
-                  children: <Widget>[
-                    ElevatedButton(
-                      onPressed: () {},
-                      child: Text('Acceptera'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {},
-                      child: Text('Reservera'),
-                    ),
-                  ],
-                  onPressed: (int index) {
-                    setState(() {
-                      isSelected[index] = !isSelected[index];
-                    });
-                  },
-                  isSelected: isSelected),
               Padding(
                 padding: EdgeInsets.only(top: 20),
               ),
