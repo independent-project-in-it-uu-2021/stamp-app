@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:stamp_app/models/user.dart';
+import 'package:stamp_app/screens/annansProfil/annansProfil.dart';
 import 'package:stamp_app/services/database.dart';
 import 'package:stamp_app/services/locator.dart';
 import 'package:stamp_app/sharedWidget/loadingScreen.dart';
@@ -103,9 +104,31 @@ class _ManageAccountsState extends State<ManageAccounts> {
                 color: Colors.grey,
               ),
               children: <Widget>[
-                // Eleveted button that changes user roll
-                changeUserRoll(usersAccountList[index].uid, currentRoll,
-                    newRoll, usersAccountList[index].name),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    // Eleveted button that changes user roll
+                    changeUserRoll(usersAccountList[index].uid, currentRoll,
+                        newRoll, usersAccountList[index].name),
+                    SizedBox(
+                      width: 6,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => OthersProfile(
+                                userID: usersAccountList[index].uid),
+                          ),
+                        );
+                      },
+                      child: Text('Besök profile'),
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.red.shade900),
+                    )
+                  ],
+                ),
               ],
             ),
           );

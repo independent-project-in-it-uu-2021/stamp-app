@@ -34,6 +34,59 @@ class OthersProfile extends StatelessWidget {
     }
   }
 
+  Widget lowerHalfOfProfile(BuildContext context, String accountType) {
+    if (accountType == 'student') {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'Senaste Jobb',
+            style: TextStyle(
+              fontSize: 30,
+              color: Colors.black,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 30),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.001,
+              width: MediaQuery.of(context).size.width * 0.83,
+              color: Colors.black12,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 30),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 30),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.001,
+              width: MediaQuery.of(context).size.width * 0.83,
+              color: Colors.black12,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 30),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 50),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 60),
+          ),
+        ],
+      );
+    } else {
+      return Container();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -51,6 +104,7 @@ class OthersProfile extends StatelessWidget {
                 ? 'Telefonnumer saknas'
                 : snapshot.data.phoneNumer;
             String userBio = snapshot.data.bio;
+            String accountType = snapshot.data.accountType;
 
             return Scaffold(
               backgroundColor: Colors.white,
@@ -175,47 +229,7 @@ class OthersProfile extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.only(top: 30),
                       ),
-                      Text(
-                        'Senaste Jobb',
-                        style: TextStyle(
-                          fontSize: 30,
-                          color: Colors.black,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 30),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Container(
-                          height: MediaQuery.of(context).size.height * 0.001,
-                          width: MediaQuery.of(context).size.width * 0.83,
-                          color: Colors.black12,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 30),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 30),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Container(
-                          height: MediaQuery.of(context).size.height * 0.001,
-                          width: MediaQuery.of(context).size.width * 0.83,
-                          color: Colors.black12,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 30),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 50),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 60),
-                      ),
+                      lowerHalfOfProfile(context, accountType),
                     ],
                   ),
                 ),
