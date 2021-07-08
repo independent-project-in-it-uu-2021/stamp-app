@@ -7,15 +7,14 @@ import 'package:stamp_app/screens/slutval/slutval.dart';
 import 'package:stamp_app/models/jobsModel.dart';
 import 'package:stamp_app/models/user.dart';
 import 'package:stamp_app/sharedWidget/imageForListView.dart';
+import 'package:stamp_app/sharedWidget/buildJobInfor.dart';
 
 class Choice extends StatefulWidget {
   final Jobs curJob;
-  final List<UserJob> usersInterestList;
 
   Choice({
     Key key,
     @required this.curJob,
-    this.usersInterestList,
   }) : super(key: key);
   @override
   State<StatefulWidget> createState() {
@@ -81,7 +80,7 @@ class ChoiceState extends State<Choice> {
   }
 
   // Returns different typ of icon depending on category
-  Widget _buildCategoryIcon(String jobCategory) {
+  /*Widget _buildCategoryIcon(String jobCategory) {
     if (jobCategory != null && jobCategory.isNotEmpty) {
       return LayoutBuilder(builder: (context, constraints) {
         switch (jobCategory) {
@@ -116,9 +115,9 @@ class ChoiceState extends State<Choice> {
         );
       });
     }
-  }
+  }*/
 
-  Widget _buildJobInformation() {
+  /*Widget _buildJobInformation() {
     MediaQueryData screenSize = MediaQuery.of(context);
     return Column(
       children: [
@@ -179,7 +178,7 @@ class ChoiceState extends State<Choice> {
         ),
       ],
     );
-  }
+  }*/
 
   // Check if user has profileimage or not
   // returns userprofile image or icon
@@ -295,8 +294,6 @@ class ChoiceState extends State<Choice> {
 
         amountReserved++;
       }
-
-      print(amountSelected);
     });
   }
 
@@ -341,7 +338,7 @@ class ChoiceState extends State<Choice> {
               Padding(
                 padding: EdgeInsets.only(top: 20),
               ),
-              _buildJobInformation(),
+              BuildJobInformation(curJob: widget.curJob),
               Padding(
                 padding: EdgeInsets.only(top: 20),
               ),
@@ -406,20 +403,23 @@ class ChoiceState extends State<Choice> {
               ),
               onPressed: () => {
                 //TODO: Fixed this
-                /*Navigator.push(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => FinalChoice(
-                          title: widget.title,
-                          description: widget.description,
-                          date: widget.date,
-                          time: widget.time,
-                          endTime: widget.endTime,
-                          location: widget.location,
-                          count: widget.count,
-                          maxCount: widget.maxCount,
-                          reserveCount: widget.reserveCount)),
-                ),*/
+                    builder: (context) => FinalChoice(
+                      curJob: widget.curJob,
+                      //title: widget.title,
+                      //description: widget.description,
+                      //date: widget.date,
+                      //time: widget.time,
+                      //endTime: widget.endTime,
+                      //location: widget.location,
+                      //count: widget.count,
+                      //maxCount: widget.maxCount,
+                      //reserveCount: widget.reserveCount),
+                    ),
+                  ),
+                ),
               },
             ),
             Padding(padding: EdgeInsets.only(bottom: 100))
