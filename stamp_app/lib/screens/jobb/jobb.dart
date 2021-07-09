@@ -21,7 +21,7 @@ class Work extends StatelessWidget {
               color: Colors.black,
             );
             break;
-          case 'Lego Workshop':
+          case 'Lego workshop':
             return Icon(
               Icons.smart_toy,
               size: MediaQuery.of(context).size.height * 0.07,
@@ -77,6 +77,10 @@ class Work extends StatelessWidget {
       body: ListView.builder(
         itemCount: allJobs.length,
         itemBuilder: (BuildContext context, int index) {
+          // Sort the jobs according to date
+          allJobs.sort((a, b) {
+            return a.date.compareTo(b.date);
+          });
           String title = allJobs[index].title;
           String description = allJobs[index].description;
           String date = allJobs[index].date;
