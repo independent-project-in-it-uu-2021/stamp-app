@@ -1,14 +1,97 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
-import 'package:stamp_app/screens/val/val.dart';
-import 'package:stamp_app/studentScreens/visaJobb/visaJobb.dart';
-import 'package:stamp_app/studentScreens/studentIntresse/studentIntresse.dart';
-import 'package:stamp_app/services/auth.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:stamp_app/models/jobsModel.dart';
+import 'package:stamp_app/models/user.dart';
+import 'package:stamp_app/screens/slutval/slutval.dart';
+import 'package:stamp_app/studentScreens/FinalStudentChoice/finalStudentChoice.dart';
 
 class StudentWork extends StatelessWidget {
-  final AuthService _firebaseAuth = AuthService();
+  // Returns different typ of icon depending on category
+  Widget _buildCategoryIcon(String jobCategory) {
+    if (jobCategory != null && jobCategory.isNotEmpty) {
+      return LayoutBuilder(builder: (context, constraints) {
+        switch (jobCategory) {
+          case 'Workshop':
+            return Icon(
+              Icons.smart_toy,
+              size: MediaQuery.of(context).size.height * 0.07,
+              color: Colors.black,
+            );
+            break;
+          case 'Studiebesök':
+            return Icon(
+              Icons.ac_unit_sharp,
+              size: MediaQuery.of(context).size.height * 0.07,
+              color: Colors.black,
+            );
+            break;
+          default:
+            return Icon(
+              Icons.smart_toy,
+              size: MediaQuery.of(context).size.height * 0.07,
+              color: Colors.black,
+            );
+        }
+      });
+    } else {
+      return LayoutBuilder(builder: (context, constraints) {
+        return Icon(
+          Icons.account_balance_sharp,
+          size: MediaQuery.of(context).size.height * 0.07,
+          color: Colors.black,
+        );
+      });
+    }
+  }
+
+  // Returns a listviewbuilder for all the jobs
+  Widget _buildAllJobs(List<Jobs> allJobs, String userID) {
+    return ListView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: allJobs.length,
+        itemBuilder: (BuildContext context, int index) {
+          String curTitle = allJobs[index].title;
+          //String curDescription = allJobs[index].description;
+          String curDate = allJobs[index].date;
+          String curTime = allJobs[index].time;
+          String curEndTime = allJobs[index].endTime;
+          String curLocation = allJobs[index].location;
+          int curCount = allJobs[index].count;
+          int curMaxCount = allJobs[index].maxCount;
+          int curReserveCount = allJobs[index].reserveCount;
+          String curJobCategory = allJobs[index].category;
+          return Card(
+            child: ListTile(
+              //leading: Icon(Icons.arrow_forward_ios),
+              leading: _buildCategoryIcon(curJobCategory),
+              title: Text('$curDate $curTitle'), //Aligna med hjälp av textspan
+              subtitle: Text(
+                  '$curTime - $curEndTime \n$curLocation \nStudenter: $curCount/$curMaxCount \nReserver: $curReserveCount'),
+              onTap: () => {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FinalStudentChoice(
+                      curJob: allJobs[index],
+                    ),
+                  ),
+                )
+              },
+            ),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Stream of all the jobs from database
+    final allJobsFromDatabase = Provider.of<List<Jobs>>(context) ?? [];
+    final curUser = Provider.of<User>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Jobb'),
@@ -28,327 +111,81 @@ class StudentWork extends StatelessWidget {
       body: Container(
         width: double.infinity,
         child: SingleChildScrollView(
-          child: Form(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(top: 10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(top: 10),
+              ),
+              Text(
+                'Dina Jobb',
+                style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.black,
                 ),
-                Text(
-                  'Dina Jobb',
-                  style: TextStyle(
-                    fontSize: 30,
-                    color: Colors.black,
-                  ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 10),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.001,
+                  width: MediaQuery.of(context).size.width * 0.83,
+                  color: Colors.black12,
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: 10),
-                ),
-                Padding(
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 30),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 10),
+              ),
+              /*Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
                   child: Container(
                     height: MediaQuery.of(context).size.height * 0.001,
                     width: MediaQuery.of(context).size.width * 0.83,
                     color: Colors.black12,
                   ),
+                ),*/
+              Padding(
+                padding: EdgeInsets.only(top: 10),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 10),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.001,
+                  width: MediaQuery.of(context).size.width * 0.83,
+                  color: Colors.black12,
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 30),
+              ),
+              Text(
+                'Lediga Jobb',
+                style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.black,
                 ),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    textStyle: const TextStyle(fontSize: 30),
-                    primary: Colors.black,
-                  ),
-                  onPressed: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ShowWork()),
-                    )
-                  },
-                  child: Row(
-                    children: [
-                      Padding(padding: EdgeInsets.only(left: 30)),
-                      Icon(
-                        Icons.smart_toy,
-                        size: 70,
-                      ),
-                      Padding(padding: EdgeInsets.only(left: 20)),
-                      Column(
-                        children: [
-                          Text(
-                            'Lego workshop',
-                            style: TextStyle(
-                              fontSize: 30,
-                              color: Colors.black,
-                            ),
-                          ),
-                          Text(
-                            '2021-07-11',
-                            style: TextStyle(fontSize: 20),
-                            textAlign: TextAlign.left,
-                          ),
-                          Text(
-                            '13:00 - 15:00',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          Text(
-                            'Uppsala',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          Text(
-                            'Reserv',
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.red.shade900,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 30),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.001,
+                  width: MediaQuery.of(context).size.width * 0.83,
+                  color: Colors.black12,
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: 10),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 10),
-                ),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    textStyle: const TextStyle(fontSize: 30),
-                    primary: Colors.black,
-                  ),
-                  onPressed: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ShowWork()),
-                    )
-                  },
-                  child: Row(
-                    children: [
-                      Padding(padding: EdgeInsets.only(left: 30)),
-                      Icon(
-                        Icons.smart_toy,
-                        size: 70,
-                      ),
-                      Padding(padding: EdgeInsets.only(left: 20)),
-                      Column(
-                        children: [
-                          Text(
-                            'Lego workshop',
-                            style: TextStyle(
-                              fontSize: 30,
-                              color: Colors.black,
-                            ),
-                          ),
-                          Text(
-                            '2021-07-11',
-                            style: TextStyle(fontSize: 20),
-                            textAlign: TextAlign.left,
-                          ),
-                          Text(
-                            '13:00 - 15:00',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          Text(
-                            'Uppsala',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          Text(
-                            'Anmäld',
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 10),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                Text(
-                  'Lediga Jobb',
-                  style: TextStyle(
-                    fontSize: 30,
-                    color: Colors.black,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    textStyle: const TextStyle(fontSize: 30),
-                    primary: Colors.black,
-                  ),
-                  onPressed: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => StudentChoice()),
-                    )
-                  },
-                  child: Row(
-                    children: [
-                      Padding(padding: EdgeInsets.only(left: 30)),
-                      Icon(
-                        Icons.smart_toy,
-                        size: 70,
-                      ),
-                      Padding(padding: EdgeInsets.only(left: 20)),
-                      Column(
-                        children: [
-                          Text(
-                            'Lego workshop',
-                            style: TextStyle(
-                              fontSize: 30,
-                              color: Colors.black,
-                            ),
-                          ),
-                          Text(
-                            '2021-07-11',
-                            style: TextStyle(fontSize: 20),
-                            textAlign: TextAlign.left,
-                          ),
-                          Text(
-                            '13:00 - 15:00',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          Text(
-                            'Uppsala',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          Text(
-                            '3/4',
-                            style: TextStyle(
-                              fontSize: 20,
-                              
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 10),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 10),
-                ),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    textStyle: const TextStyle(fontSize: 30),
-                    primary: Colors.black,
-                  ),
-                  onPressed: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => StudentChoice()),
-                    )
-                  },
-                  child: Row(
-                    children: [
-                      Padding(padding: EdgeInsets.only(left: 30)),
-                      Icon(
-                        Icons.smart_toy,
-                        size: 70,
-                      ),
-                      Padding(padding: EdgeInsets.only(left: 20)),
-                      Column(
-                        children: [
-                          Text(
-                            'Lego workshop',
-                            style: TextStyle(
-                              fontSize: 30,
-                              color: Colors.black,
-                            ),
-                          ),
-                          Text(
-                            '2021-07-11',
-                            style: TextStyle(fontSize: 20),
-                            textAlign: TextAlign.left,
-                          ),
-                          Text(
-                            '13:00 - 15:00',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          Text(
-                            'Uppsala',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          Text(
-                            '3/4',
-                            style: TextStyle(
-                              fontSize: 20,
-                              
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 10),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-              ],
-            ),
+              ),
+              _buildAllJobs(allJobsFromDatabase, curUser.uid),
+            ],
           ),
         ),
       ),

@@ -49,6 +49,7 @@ class ProfileImageState extends State<ProfileImage> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData _mediQuearyData = MediaQuery.of(context);
     final currentUser = Provider.of<User>(context);
     return SizedBox(
       child: Stack(
@@ -58,14 +59,14 @@ class ProfileImageState extends State<ProfileImage> {
           _imageWidget(),
           Positioned(
             bottom: 0,
-            right: -25,
+            right: _mediQuearyData.size.width * -0.06,
             child: RawMaterialButton(
               elevation: 2.0,
               fillColor: Colors.redAccent.shade700,
               child: Icon(
                 Icons.camera_alt_outlined,
                 color: Colors.white,
-                //ize: 10,
+                //size: 10,
               ),
               padding: EdgeInsets.all(7.0),
               shape: CircleBorder(),

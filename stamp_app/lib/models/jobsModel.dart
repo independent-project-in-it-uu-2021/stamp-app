@@ -1,4 +1,5 @@
 class Jobs {
+  String jobID;
   String title;
   String description;
   String date;
@@ -6,13 +7,20 @@ class Jobs {
   String endTime;
   String location;
   int count;
+  // TODO: Change this to int
   int maxCount;
   int reserveCount;
-
-  //TODO: Icon attribute
+  String category;
+  Map currentReserve;
+  Map currentAccepted;
+  Map currentInterest;
+  //List<Map<String, dynamic>> currentReserv;
+  //List<Map<String, dynamic>> currentAccepted;
+  //List<Map<String, dynamic>> currentInterest;
 
   Jobs(
-      {this.title,
+      {this.jobID,
+      this.title,
       this.description,
       this.date,
       this.time,
@@ -20,7 +28,11 @@ class Jobs {
       this.location,
       this.count,
       this.maxCount,
-      this.reserveCount});
+      this.reserveCount,
+      this.category,
+      this.currentReserve,
+      this.currentAccepted,
+      this.currentInterest});
 
   List<Jobs> newDummyJob() {
     return [

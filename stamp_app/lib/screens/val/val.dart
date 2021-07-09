@@ -1,43 +1,21 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:stamp_app/services/auth.dart';
 import 'package:provider/provider.dart';
-
-import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
-import 'package:stamp_app/screens/home/home.dart';
-import 'package:stamp_app/screens/jobb/jobb.dart';
-import 'package:stamp_app/screens/slutval/slutval.dart';
 import 'package:stamp_app/screens/annansProfil/annansProfil.dart';
-import 'package:stamp_app/models/jobsModel.dart';
 
-bool _pressedButton1 = false;
-bool _pressedButton2 = false;
-bool _pressedButton3 = false;
-bool _pressedButton4 = false;
-bool _pressedButton5 = false;
-bool _pressedButton6 = false;
+import 'package:stamp_app/screens/slutval/slutval.dart';
+import 'package:stamp_app/models/jobsModel.dart';
+import 'package:stamp_app/models/user.dart';
+import 'package:stamp_app/sharedWidget/imageForListView.dart';
+import 'package:stamp_app/sharedWidget/buildJobInfor.dart';
 
 class Choice extends StatefulWidget {
-  final title;
-  final description;
-  final date;
-  final time;
-  final endTime;
-  final location;
-  final count;
-  final maxCount;
-  final reserveCount;
+  final Jobs curJob;
 
   Choice({
     Key key,
-    @required this.title,
-    @required this.description,
-    @required this.date,
-    @required this.time,
-    @required this.endTime,
-    @required this.location,
-    @required this.count,
-    @required this.maxCount,
-    @required this.reserveCount,
+    @required this.curJob,
   }) : super(key: key);
   @override
   State<StatefulWidget> createState() {
@@ -46,10 +24,264 @@ class Choice extends StatefulWidget {
 }
 
 class ChoiceState extends State<Choice> {
-  final AuthService _firebaseAuth = AuthService();
+  // Job information attribute
+  String jobID;
+  String title;
+  String description;
+  String date;
+  String time;
+  String endTime;
+  String location;
+  int count;
+  int maxCount;
+  int reserveCount;
+  String category;
+  Map showInterestUser;
+  Map showSelectedUser;
+  Map showReservedUser;
+  List<UserJob> userThatShownInterest = [];
+  List<UserJob> userThatSelected = [];
+  List<UserJob> userThatReserved = [];
+  int amountSelected;
+  int amountReserved;
+
+  @override
+  void initState() {
+    super.initState();
+    jobID = widget.curJob.jobID;
+    title = widget.curJob.title;
+    description = widget.curJob.description;
+    date = widget.curJob.date;
+    time = widget.curJob.time;
+    endTime = widget.curJob.endTime;
+    location = widget.curJob.location;
+    count = widget.curJob.count;
+    maxCount = widget.curJob.maxCount;
+    reserveCount = widget.curJob.reserveCount;
+    category = widget.curJob.category;
+    showInterestUser = widget.curJob.currentInterest;
+    showSelectedUser = widget.curJob.currentAccepted;
+    showReservedUser = widget.curJob.currentReserve;
+
+    // Create a list of users that have shown interest
+    userThatShownInterest = createUsersList(showInterestUser, false, false);
+    // List of users that are accepted
+    userThatSelected = createUsersList(showSelectedUser, true, false);
+    // List of users that are reserved
+    userThatReserved = createUsersList(showReservedUser, false, true);
+    amountSelected = widget.curJob.count;
+    amountReserved = widget.curJob.reserveCount;
+  }
+
+  // Creates a list of Userjob object, which is easier to work with
+  List<UserJob> createUsersList(Map userMap, bool select, bool reserve) {
+    List<UserJob> theList = [];
+    userMap.forEach(
+      (key, value) {
+        theList.add(
+          UserJob(
+            userID: key,
+            userName: value['userName'],
+            profilePickLink: value['userProfilePicUrl'],
+            isSelected: select,
+            isReserve: reserve,
+          ),
+        );
+      },
+    );
+    return theList;
+  }
+
+  // Check if user has profileimage or not
+  // returns userprofile image or icon
+  Widget _userProfilePic(String imageUrl) {
+    return ListViewImage(imageUrl: imageUrl);
+  }
+
+  Widget showSelectedUsers(List<UserJob> usersList, String msgText) {
+    String userID;
+    String userName;
+    String userProfilePicUrl;
+
+    if (usersList.isEmpty) {
+      msgText == 'selected'
+          ? msgText = 'Ingen accepterade'
+          : msgText = 'Ingen reserver';
+      return Text(
+        msgText,
+        style: TextStyle(fontSize: 15),
+      );
+    }
+
+    return ListView.builder(
+        shrinkWrap: true,
+        itemCount: usersList.length,
+        itemBuilder: (context, index) {
+          userID = usersList[index].userID;
+          userName = usersList[index].userName;
+          userProfilePicUrl = usersList[index].profilePickLink;
+          return Card(
+            child: ListTile(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OthersProfile(
+                      userID: userID,
+                    ),
+                  ),
+                );
+              },
+              leading: _userProfilePic(userProfilePicUrl),
+              title: Text(userName),
+              //subtitle:
+            ),
+          );
+        });
+  }
+
+  // Build the listview for users that have shown interest for the job
+  Widget _buildUserShowIntereset() {
+    String userID;
+    String userName;
+    String userProfilePicUrl;
+    List userIDList = showInterestUser.keys.toList();
+
+    if (userIDList.isEmpty) {
+      return Text(
+        'Ingen intresseanmälningar',
+        style: TextStyle(fontSize: 15),
+      );
+    }
+    return ListView.builder(
+        shrinkWrap: true,
+        itemCount: userIDList.length,
+        itemBuilder: (context, index) {
+          userID = userThatShownInterest[index].userID;
+          userName = userThatShownInterest[index].userName;
+          userProfilePicUrl = userThatShownInterest[index].profilePickLink;
+
+          return Card(
+            child: ListTile(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OthersProfile(
+                      userID: userID,
+                    ),
+                  ),
+                );
+              },
+              leading: _userProfilePic(userProfilePicUrl),
+              title: Text(userName),
+              subtitle: Row(
+                key: UniqueKey(),
+                children: <Widget>[
+                  ElevatedButton(
+                    // Unique key is used in order to change color
+                    // when the button is pressed
+                    key: UniqueKey(),
+                    style: ElevatedButton.styleFrom(
+                      primary: userThatShownInterest[index].isSelected
+                          ? Colors.green
+                          : Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                        side: BorderSide(color: Colors.black, width: 2.0),
+                      ),
+                    ),
+                    onPressed: () {
+                      changeState('selected', index);
+                    },
+                    child: Text(
+                      'Acceptera',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 8.0),
+                  ),
+                  ElevatedButton(
+                    // Key added inorder to change button color
+                    // when pressed
+                    key: UniqueKey(),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                        userThatShownInterest[index].isReserve
+                            ? Colors.green
+                            : Colors.white,
+                      ),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                          side: BorderSide(color: Colors.black, width: 2.0),
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      changeState('reserve', index);
+                    },
+                    child: Text(
+                      'Reservera',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  // Change the state if user is selected or is accepted as reserve
+  void changeState(String adminChoice, int i) {
+    UserJob curUserInfo = userThatShownInterest[i];
+    bool nonSelect =
+        curUserInfo.isReserve == false && curUserInfo.isSelected == false;
+    bool selectedSelected = curUserInfo.isSelected == true;
+    bool reserveSelected = curUserInfo.isReserve == true;
+    setState(() {
+      if (adminChoice == 'selected' && reserveSelected) {
+        curUserInfo.isSelected = !curUserInfo.isSelected;
+        curUserInfo.isReserve = !curUserInfo.isReserve;
+
+        amountSelected++;
+        amountReserved--;
+      } else if (adminChoice == 'reserve' && selectedSelected) {
+        curUserInfo.isReserve = !curUserInfo.isReserve;
+        curUserInfo.isSelected = !curUserInfo.isSelected;
+
+        amountReserved++;
+        amountSelected--;
+      } else if (adminChoice == 'selected' && nonSelect) {
+        curUserInfo.isSelected = !curUserInfo.isSelected;
+
+        amountSelected++;
+      } else if (adminChoice == 'reserve' && nonSelect) {
+        curUserInfo.isReserve = !curUserInfo.isReserve;
+
+        amountReserved++;
+      }
+    });
+  }
+
+  Widget buildInfoText() {
+    if (amountSelected == maxCount + 1) {
+      return Text(
+        'Kan inte acceptera mer än $maxCount',
+        style:
+            TextStyle(color: Colors.red.shade700, fontWeight: FontWeight.bold),
+      );
+    } else {
+      return Container();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final allJobs = Provider.of<List<Jobs>>(context) ?? [];
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Välj Studentambassadörer'),
@@ -69,476 +301,63 @@ class ChoiceState extends State<Choice> {
       body: Container(
         width: double.infinity,
         child: SingleChildScrollView(
-          child: Form(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(top: 20),
+              ),
+              BuildJobInformation(curJob: widget.curJob),
+              Padding(
+                padding: EdgeInsets.only(top: 20),
+              ),
+              Text(
+                'Intresseanmälningar',
+                style: TextStyle(
+                  fontSize: 24,
+                  color: Colors.black,
                 ),
-                Column(
-                  children: [
-                    Row(
-                      children: [
-                        Padding(padding: EdgeInsets.only(left: 30)),
-                        Icon(
-                          Icons.smart_toy,
-                          size: 70,
-                        ),
-                        Padding(padding: EdgeInsets.only(left: 20)),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.title.toString(),
-                              style: TextStyle(
-                                fontSize: 24,
-                                color: Colors.black,
-                              ),
-                              textAlign: TextAlign.left,
-                            ),
-                            Text(
-                                'Tid: ' +
-                                    widget.time.toString() +
-                                    '-' +
-                                    widget.endTime.toString(),
-                                style: TextStyle(fontSize: 18),
-                                textAlign: TextAlign.left),
-                            Text('Datum: ' + widget.date.toString(),
-                                style: TextStyle(fontSize: 18),
-                                textAlign: TextAlign.left),
-                            Text(
-                              'Studenter: ' +
-                                  widget.count.toString() +
-                                  '/' +
-                                  widget.maxCount.toString() +
-                                  ' st',
-                              style: TextStyle(fontSize: 18),
-                              textAlign: TextAlign.left,
-                            ),
-                            Text(
-                              'Reserver: ' +
-                                  widget.reserveCount.toString() +
-                                  ' st',
-                              style: TextStyle(fontSize: 18),
-                              textAlign: TextAlign.left,
-                            ),
-                          ],
-                        ),
-                        Padding(padding: EdgeInsets.only(left: 20)),
-                      ],
-                    ),
-                    Padding(padding: EdgeInsets.only(top: 20)),
-                    Row(
-                      children: [
-                        Padding(padding: EdgeInsets.only(left: 30)),
-                        Expanded(
-                          child: Text(
-                            widget.description.toString(),
-                            style: TextStyle(fontSize: 14),
-                            textAlign: TextAlign.left,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 10,
-                          ),
-                        ),
-                        Padding(padding: EdgeInsets.only(right: 10)),
-                      ],
-                    ),
-                  ],
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 20),
+              ),
+              buildInfoText(),
+              _buildUserShowIntereset(),
+              Padding(
+                padding: EdgeInsets.only(top: 20),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 20),
+              ),
+              Text(
+                'Accepterade',
+                style: TextStyle(
+                  fontSize: 24,
+                  color: Colors.black,
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: 20),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 20),
+              ),
+              showSelectedUsers(userThatSelected, 'selected'),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Reserver',
+                style: TextStyle(
+                  fontSize: 24,
+                  color: Colors.black,
                 ),
-
-                Text(
-                  'Intresseanmälningar',
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.black,
-                  ),
-                ),
-                /*TextButton(
-                  style: TextButton.styleFrom(
-                    textStyle: const TextStyle(fontSize: 26),
-                    primary: Colors.blue,
-                  ),
-                  onPressed: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => OthersProfile()),
-                    )
-                  },
-                ),*/
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 20),
-                ),
-                //---------------
-                Row(
-                  children: [
-                    Container(
-                      height: 50,
-                      width: 209,
-                      child: FlatButton(
-                        onPressed: () => {},
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(15.0))),
-                        color: Colors.white,
-                        child: Row(
-                          // Replace with a Row for horizontal icon + text
-                          children: <Widget>[
-                            Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
-                            Image.asset(
-                              'assets/images/profilbild.png',
-                              fit: BoxFit.cover,
-                              height: 45,
-                              width: 45,
-                            ),
-                            Padding(padding: EdgeInsets.fromLTRB(5, 0, 0, 0)),
-                            Text(
-                              'Sixten Andersson',
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          width: 85,
-                          height: 35,
-                          child: RaisedButton(
-                            child: new Text(
-                              'Acceptera',
-                              style: TextStyle(
-                                  color: _pressedButton1
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            shape: RoundedRectangleBorder(
-                                side: BorderSide(color: Colors.black, width: 2),
-                                borderRadius: new BorderRadius.circular(30.0)),
-                            textColor: Colors.white,
-
-                            // 2
-                            color: _pressedButton1
-                                ? Colors.red.shade900
-                                : Colors.white,
-
-                            // 3
-                            onPressed: () => {
-                              setState(() {
-                                _pressedButton1 = !_pressedButton1;
-                              })
-                            },
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 5),
-                        ),
-                        Container(
-                          width: 85,
-                          height: 35,
-                          child: RaisedButton(
-                            child: new Text(
-                              'Reservera',
-                              style: TextStyle(
-                                  color: _pressedButton2
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            shape: RoundedRectangleBorder(
-                                side: BorderSide(color: Colors.black, width: 2),
-                                borderRadius: new BorderRadius.circular(30.0)),
-                            textColor: Colors.white,
-
-                            // 2
-                            color: _pressedButton2
-                                ? Colors.red.shade900
-                                : Colors.white,
-
-                            // 3
-                            onPressed: () => {
-                              setState(() {
-                                _pressedButton2 = !_pressedButton2;
-                              })
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-
-                Padding(
-                  padding: EdgeInsets.only(top: 20),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 20),
-                ),
-                Row(
-                  children: [
-                    Container(
-                      height: 50,
-                      width: 209,
-                      child: FlatButton(
-                        onPressed: () => {},
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(15.0))),
-                        color: Colors.white,
-                        child: Row(
-                          // Replace with a Row for horizontal icon + text
-                          children: <Widget>[
-                            Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
-                            Image.asset(
-                              'assets/images/profilbild.png',
-                              fit: BoxFit.cover,
-                              height: 45,
-                              width: 45,
-                            ),
-                            Padding(padding: EdgeInsets.fromLTRB(5, 0, 0, 0)),
-                            Text(
-                              'Kalle Hansson',
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          width: 85,
-                          height: 35,
-                          child: RaisedButton(
-                            child: new Text(
-                              'Acceptera',
-                              style: TextStyle(
-                                  color: _pressedButton3
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            shape: RoundedRectangleBorder(
-                                side: BorderSide(color: Colors.black, width: 2),
-                                borderRadius: new BorderRadius.circular(30.0)),
-                            textColor: Colors.white,
-
-                            // 2
-                            color: _pressedButton3
-                                ? Colors.red.shade900
-                                : Colors.white,
-
-                            // 3
-                            onPressed: () => {
-                              setState(() {
-                                _pressedButton3 = !_pressedButton3;
-                              })
-                            },
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 5),
-                        ),
-                        Container(
-                          width: 85,
-                          height: 35,
-                          child: RaisedButton(
-                            child: new Text(
-                              'Reservera',
-                              style: TextStyle(
-                                  color: _pressedButton4
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            shape: RoundedRectangleBorder(
-                                side: BorderSide(color: Colors.black, width: 2),
-                                borderRadius: new BorderRadius.circular(30.0)),
-                            textColor: Colors.white,
-
-                            // 2
-                            color: _pressedButton4
-                                ? Colors.red.shade900
-                                : Colors.white,
-
-                            // 3
-                            onPressed: () => {
-                              setState(() {
-                                _pressedButton4 = !_pressedButton4;
-                              })
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 20),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 20),
-                ),
-                Row(
-                  children: [
-                    Container(
-                      height: 50,
-                      width: 209,
-                      child: FlatButton(
-                        onPressed: () => {},
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(15.0))),
-                        color: Colors.white,
-                        child: Row(
-                          // Replace with a Row for horizontal icon + text
-                          children: <Widget>[
-                            Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
-                            Image.asset(
-                              'assets/images/profilbild.png',
-                              fit: BoxFit.cover,
-                              height: 45,
-                              width: 45,
-                            ),
-                            Padding(padding: EdgeInsets.fromLTRB(5, 0, 0, 0)),
-                            Text(
-                              'Agnes Brorson',
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          width: 85,
-                          height: 35,
-                          child: RaisedButton(
-                            child: new Text(
-                              'Acceptera',
-                              style: TextStyle(
-                                  color: _pressedButton5
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            shape: RoundedRectangleBorder(
-                                side: BorderSide(color: Colors.black, width: 2),
-                                borderRadius: new BorderRadius.circular(30.0)),
-                            textColor: Colors.white,
-
-                            // 2
-                            color: _pressedButton5
-                                ? Colors.red.shade900
-                                : Colors.white,
-
-                            // 3
-                            onPressed: () => {
-                              setState(() {
-                                _pressedButton5 = !_pressedButton5;
-                              })
-                            },
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 5),
-                        ),
-                        Container(
-                          width: 85,
-                          height: 35,
-                          child: RaisedButton(
-                            child: new Text(
-                              'Reservera',
-                              style: TextStyle(
-                                  color: _pressedButton6
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            shape: RoundedRectangleBorder(
-                                side: BorderSide(color: Colors.black, width: 2),
-                                borderRadius: new BorderRadius.circular(30.0)),
-                            textColor: Colors.white,
-
-                            // 2
-                            color: _pressedButton6
-                                ? Colors.red.shade900
-                                : Colors.white,
-
-                            // 3
-                            onPressed: () => {
-                              setState(() {
-                                _pressedButton6 = !_pressedButton6;
-                              })
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-
-                Padding(
-                  padding: EdgeInsets.only(top: 20),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 20),
-                ),
-              ],
-            ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 20),
+              ),
+              showSelectedUsers(userThatReserved, 'reserve'),
+              SizedBox(
+                height: 20,
+              ),
+            ],
           ),
         ),
       ),
@@ -563,16 +382,11 @@ class ChoiceState extends State<Choice> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => FinalChoice(
-                          title: widget.title,
-                          description: widget.description,
-                          date: widget.date,
-                          time: widget.time,
-                          endTime: widget.endTime,
-                          location: widget.location,
-                          count: widget.count,
-                          maxCount: widget.maxCount,
-                          reserveCount: widget.reserveCount)),
+                    builder: (context) => FinalChoice(
+                      curJob: widget.curJob,
+                      usersList: userThatShownInterest,
+                    ),
+                  ),
                 ),
               },
             ),

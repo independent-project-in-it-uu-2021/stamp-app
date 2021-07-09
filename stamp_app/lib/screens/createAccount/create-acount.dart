@@ -327,6 +327,7 @@ class CreateAccountState extends State<CreateAccount> {
                                   .getImage(source: ImageSource.gallery);
                               _userImage = File(_pickedImage.path);
                             } else if (userOption == DialogAction.option2) {
+                              //TODO: Check this
                               print('Från mobil');
                               try {
                                 _pickedImage = await ImagePicker()

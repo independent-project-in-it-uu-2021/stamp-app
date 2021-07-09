@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:stamp_app/screens/konton/manageAccounts.dart';
 import 'package:stamp_app/services/auth.dart';
 import 'package:stamp_app/screens/profil/profil.dart';
-import 'package:stamp_app/screens/konton/hanteraKonton.dart';
 import 'package:stamp_app/screens/jobb/jobb.dart';
 import 'package:stamp_app/screens/historik/historik.dart';
 import 'package:stamp_app/screens/jobb/jobb.dart';
@@ -11,6 +11,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Streamproivder listen to stream and exposes its content to child
+
     return Scaffold(
       backgroundColor: Colors.red.shade900,
       appBar: AppBar(
@@ -177,7 +178,7 @@ class Home extends StatelessWidget {
                   onPressed: () => {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ManageAccount()),
+                      MaterialPageRoute(builder: (context) => ManageAccounts()),
                     )
                   },
                   shape: RoundedRectangleBorder(

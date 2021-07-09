@@ -1,11 +1,8 @@
 import 'dart:ui';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
-import 'package:stamp_app/screens/jobb/jobb.dart';
 import 'package:icon_picker/icon_picker.dart';
 import 'package:stamp_app/services/database.dart';
 
@@ -21,11 +18,12 @@ class CreateJobState extends State<CreateJob> {
   String _name;
   String _location;
   String _desc;
-  String _numbStudents;
+  int _numbStudents;
   String _selectedDate = 'Välj datum';
   String _selectedTime = 'Välj starttid';
   String _selectedEndTime = 'Välj sluttid';
   String _icon;
+  String _jobCategory = '';
   // Boolean value use to hide the write bio option field
   bool _writeBio = false;
 
@@ -47,10 +45,22 @@ class CreateJobState extends State<CreateJob> {
     }
   }
 
-  void showWriteBio() {
-    setState(() {
-      _writeBio = !_writeBio;
-    });
+  Future<void> _showEndTime() async {
+    final TimeOfDay result = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      builder: (BuildContext context, Widget child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child,
+        );
+      },
+    );
+    if (result != null) {
+      setState(() {
+        _selectedEndTime = result.format(context);
+      });
+    }
   }
 
   // key to hold the state of the form i.e referens to the form
@@ -62,7 +72,7 @@ class CreateJobState extends State<CreateJob> {
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.name,
-        maxLength: 50,
+        maxLength: 20,
 
         // Decorate the input field here,
         decoration: InputDecoration(
@@ -85,7 +95,6 @@ class CreateJobState extends State<CreateJob> {
         },
         // The  form is saved and we tell what to do with the value
         onSaved: (String value) {
-          print(value);
           _name = value;
         },
       ),
@@ -120,7 +129,6 @@ class CreateJobState extends State<CreateJob> {
         },
         // The  form is saved and we tell what to do with the value
         onSaved: (String value) {
-          print(value);
           _location = value;
         },
       ),
@@ -157,6 +165,53 @@ class CreateJobState extends State<CreateJob> {
     );
   }
 
+  DropdownMenuItem<String> hej = DropdownMenuItem(child: Text('Kategori'));
+
+  Widget _chooseCategory() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      height: 40.0,
+      alignment: Alignment.center,
+      child: DropdownButtonFormField<String>(
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(30.0))),
+          filled: true,
+          fillColor: Colors.black12,
+          contentPadding: EdgeInsets.only(left: 8, right: 18),
+        ),
+        //value: 'Välj en kategori',
+        icon: Icon(Icons.arrow_downward),
+        iconSize: 20,
+        isExpanded: true,
+        hint: Align(
+          alignment: Alignment.center,
+          child: Text(
+            'Välj en kategori',
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+        items: <String>[
+          'Välj en kategori',
+          'Workshop',
+          'Studiebesök',
+          'Lunch Föreläsning'
+        ].map<DropdownMenuItem<String>>((String curValue) {
+          return DropdownMenuItem<String>(
+            value: curValue,
+            child: Text(curValue),
+          );
+        }).toList(),
+
+        onChanged: (String newValue) {
+          setState(() {
+            _jobCategory = newValue;
+          });
+        },
+      ),
+    );
+  }
+
   Widget _buildStudents() {
     return Container(
       width: 350,
@@ -176,16 +231,11 @@ class CreateJobState extends State<CreateJob> {
           if (value.isEmpty) {
             return 'Antal studenter är obligatorisk';
           }
-          if (value.length > 120) {
-            //TODO: Change the text below
-            return 'Antal studenter får inte vara längre än 120 tecken';
-          }
           return null;
         },
         // The  form is saved and we tell what to do with the value
         onSaved: (String value) {
-          print(value);
-          _numbStudents = value; //TODO Save as int
+          _numbStudents = int.parse(value); //TODO Save as int
         },
       ),
     );
@@ -220,7 +270,6 @@ class CreateJobState extends State<CreateJob> {
         },
         // The  form is saved and we tell what to do with the value
         onSaved: (String value) {
-          print(value);
           _desc = value;
         },
       ),
@@ -240,15 +289,11 @@ class CreateJobState extends State<CreateJob> {
                 showTitleActions: true,
                 minTime: DateTime(DateTime.now().year - 5, 1, 1),
                 maxTime: DateTime(DateTime.now().year + 5, 12, 31),
-                onChanged: (date) {
-              print('change $date');
-            }, onConfirm: (date) {
-              print('confirm $date');
+                onChanged: (date) {}, onConfirm: (date) {
               if (date != null) {
                 setState(() {
                   var formattedDate = "${date.day}-${date.month}-${date.year}";
                   _selectedDate = formattedDate.toString();
-                  print(date.toString());
                 });
               }
             }, currentTime: DateTime.now(), locale: LocaleType.sv);
@@ -284,7 +329,7 @@ class CreateJobState extends State<CreateJob> {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(15.0))),
         color: Colors.black12,
-        onPressed: _show,
+        onPressed: _showEndTime,
         child: Text(
           "$_selectedEndTime",
           style: TextStyle(color: Colors.black),
@@ -363,10 +408,11 @@ class CreateJobState extends State<CreateJob> {
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
-                _chooseIcon(),
+                //_chooseIcon(),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
+                _chooseCategory(),
                 Padding(
                   padding: EdgeInsets.only(top: 12),
                 ),
@@ -404,12 +450,10 @@ class CreateJobState extends State<CreateJob> {
                           _selectedDate,
                           _selectedTime,
                           _selectedEndTime,
-                          _icon);
+                          _icon,
+                          _jobCategory);
                     }
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Work()),
-                    );
+                    Navigator.pop(context);
                   },
                 )
               ],
