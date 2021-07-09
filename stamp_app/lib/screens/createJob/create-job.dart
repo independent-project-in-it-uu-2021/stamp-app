@@ -19,9 +19,9 @@ class CreateJobState extends State<CreateJob> {
   String _location;
   String _desc;
   int _numbStudents;
-  String _selectedDate = 'Välj datum';
-  String _selectedTime = 'Välj starttid';
-  String _selectedEndTime = 'Välj sluttid';
+  String _selectedDate = 'Datum';
+  String _selectedTime = 'Starttid';
+  String _selectedEndTime = 'Sluttid';
   String _icon;
   String _jobCategory = '';
   // Boolean value use to hide the write bio option field
@@ -31,6 +31,9 @@ class CreateJobState extends State<CreateJob> {
     final TimeOfDay result = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
+      initialEntryMode: TimePickerEntryMode.input,
+      helpText: 'Välj tid',
+      cancelText: 'Avbryt',
       builder: (BuildContext context, Widget child) {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
@@ -49,6 +52,9 @@ class CreateJobState extends State<CreateJob> {
     final TimeOfDay result = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
+      initialEntryMode: TimePickerEntryMode.input,
+      helpText: 'Välj tid',
+      cancelText: 'Avbryt',
       builder: (BuildContext context, Widget child) {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
@@ -72,7 +78,7 @@ class CreateJobState extends State<CreateJob> {
       width: 350,
       child: TextFormField(
         keyboardType: TextInputType.name,
-        maxLength: 20,
+        maxLength: 40,
 
         // Decorate the input field here,
         decoration: InputDecoration(
@@ -202,7 +208,6 @@ class CreateJobState extends State<CreateJob> {
             child: Text(curValue),
           );
         }).toList(),
-
         onChanged: (String newValue) {
           setState(() {
             _jobCategory = newValue;
@@ -279,7 +284,7 @@ class CreateJobState extends State<CreateJob> {
   //Widget för att välja datum
   Widget _buildDate() {
     return Container(
-        width: 300,
+        width: 200,
         child: FlatButton(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(15.0))),
@@ -308,7 +313,7 @@ class CreateJobState extends State<CreateJob> {
   //Widget för klockan med hjälp av _show
   Widget _buildTime() {
     return Container(
-      width: 300,
+      width: 200,
       child: FlatButton(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(15.0))),
@@ -324,7 +329,7 @@ class CreateJobState extends State<CreateJob> {
 
   Widget _buildEndTime() {
     return Container(
-      width: 300,
+      width: 200,
       child: FlatButton(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(15.0))),
@@ -353,7 +358,6 @@ class CreateJobState extends State<CreateJob> {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_rounded),
-          // TODO: Change this (Does nothing right now)
           onPressed: () {
             Navigator.pop(context);
           },

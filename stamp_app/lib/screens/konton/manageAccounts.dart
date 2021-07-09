@@ -56,7 +56,7 @@ class _ManageAccountsState extends State<ManageAccounts> {
           behavior: SnackBarBehavior.floating,
           padding: EdgeInsets.symmetric(horizontal: 8.0),
           content: Text(
-            changeRoll == null ? msgToShow : 'Nånting gick fel',
+            changeRoll == null ? msgToShow : 'Något gick fel',
             textAlign: TextAlign.center,
           ),
           backgroundColor: Colors.grey,
@@ -189,7 +189,7 @@ class _ManageAccountsState extends State<ManageAccounts> {
                     ),
 
                     // Inactive title
-                    titleContainer('Inaktivera konto'),
+                    titleContainer('Inaktiverade'),
                     // ListView for inactive accounts
                     listViewForAccounts(
                         inActiveUsers, 'Aktivera konto', 'student'),
