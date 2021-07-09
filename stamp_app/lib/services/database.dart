@@ -107,20 +107,30 @@ class DatabaseService {
   Future selectedAndUserJob(List<UserJob> userInfoList, String jobID,
       String rollList, int count, int reservCount) async {
     String selectedList = '';
+    // Checks if the users show go in selected list or reserve list
     rollList == 'selected'
         ? selectedList = 'currentAccepted'
         : selectedList = 'currentReserve';
     Map userInfo = {};
+    Map jobInfo = {};
+
+    // Loops through the list and adds the users info to the job
     userInfoList.forEach((curUser) async {
       userInfo = {
         'userName': curUser.userName,
         'userProfilePicUrl': curUser.profilePickLink
       };
+      /* jobInfo = {
+        'roll': 'seleced'
+      };*/
       try {
         await jobsCollection.doc(jobID).update({
           selectedList + '.' + curUser.userID: userInfo,
           'currentInterest.' + curUser.userID: FieldValue.delete(),
         });
+        /*await userCollection.doc(curUser.userID).update({
+          'jobs.' + jobID: 
+        });*/
       } on FirebaseException catch (e) {
         print('SelectedUers');
         print(e.code);
