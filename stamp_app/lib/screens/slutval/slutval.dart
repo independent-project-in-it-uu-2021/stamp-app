@@ -52,12 +52,14 @@ class FinalChoice extends StatelessWidget {
     reservedUsers =
         usersList.where((element) => element.isReserve == true).toList();
 
+    print(reservedUsers.length);
+
     String userID;
     String userName;
     String userProfilePicUrl;
     return ListView.builder(
       shrinkWrap: true,
-      itemCount: selectedUsers.length,
+      itemCount: reservedUsers.length,
       itemBuilder: (context, index) {
         userID = reservedUsers[index].userID;
         userName = reservedUsers[index].userName;
