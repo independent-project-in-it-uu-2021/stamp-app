@@ -16,6 +16,13 @@ class Work extends StatelessWidget {
         switch (jobCategory) {
           case 'Workshop':
             return Icon(
+              Icons.construction_sharp,
+              size: MediaQuery.of(context).size.height * 0.07,
+              color: Colors.black,
+            );
+            break;
+          case 'Lego Workshop':
+            return Icon(
               Icons.smart_toy,
               size: MediaQuery.of(context).size.height * 0.07,
               color: Colors.black,
@@ -23,14 +30,14 @@ class Work extends StatelessWidget {
             break;
           case 'Studiebesök':
             return Icon(
-              Icons.ac_unit_sharp,
+              Icons.school,
               size: MediaQuery.of(context).size.height * 0.07,
               color: Colors.black,
             );
             break;
           default:
             return Icon(
-              Icons.smart_toy,
+              Icons.campaign_sharp,
               size: MediaQuery.of(context).size.height * 0.07,
               color: Colors.black,
             );

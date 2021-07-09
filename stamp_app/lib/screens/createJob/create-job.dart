@@ -194,8 +194,8 @@ class CreateJobState extends State<CreateJob> {
         items: <String>[
           'Välj en kategori',
           'Workshop',
+          'Lego workshop',
           'Studiebesök',
-          'Lunch Föreläsning'
         ].map<DropdownMenuItem<String>>((String curValue) {
           return DropdownMenuItem<String>(
             value: curValue,

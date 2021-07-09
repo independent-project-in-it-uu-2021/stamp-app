@@ -54,21 +54,29 @@ class _BuildJobInformationState extends State<BuildJobInformation> {
         switch (jobCategory) {
           case 'Workshop':
             return Icon(
+              Icons.construction_sharp,
+              size: MediaQuery.of(context).size.height * 0.09,
+              color: Colors.black,
+            );
+            break;
+          case 'Lego workshop':
+            return Icon(
               Icons.smart_toy,
               size: MediaQuery.of(context).size.height * 0.09,
               color: Colors.black,
             );
             break;
+
           case 'Studiebesök':
             return Icon(
-              Icons.ac_unit_sharp,
+              Icons.school,
               size: MediaQuery.of(context).size.height * 0.09,
               color: Colors.black,
             );
             break;
           default:
             return Icon(
-              Icons.smart_toy,
+              Icons.campaign_sharp,
               size: MediaQuery.of(context).size.height * 0.09,
               color: Colors.black,
             );
