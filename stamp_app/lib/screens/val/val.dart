@@ -37,7 +37,11 @@ class ChoiceState extends State<Choice> {
   int reserveCount;
   String category;
   Map showInterestUser;
+  Map showSelectedUser;
+  Map showReservedUser;
   List<UserJob> userThatShownInterest = [];
+  List<UserJob> userThatSelected = [];
+  List<UserJob> userThatReserved = [];
   int amountSelected;
   int amountReserved;
 
@@ -56,13 +60,21 @@ class ChoiceState extends State<Choice> {
     reserveCount = widget.curJob.reserveCount;
     category = widget.curJob.category;
     showInterestUser = widget.curJob.currentInterest;
-    userThatShownInterest = shownInterestList(showInterestUser);
+    showSelectedUser = widget.curJob.currentAccepted;
+    showReservedUser = widget.curJob.currentReserve;
+
+    // Create a list of users that have shown interest
+    userThatShownInterest = createUsersList(showInterestUser, false, false);
+    // List of users that are accepted
+    userThatSelected = createUsersList(showSelectedUser, true, false);
+    // List of users that are reserved
+    userThatReserved = createUsersList(showReservedUser, false, true);
     amountSelected = widget.curJob.count;
     amountReserved = widget.curJob.reserveCount;
   }
 
   // Creates a list of Userjob object, which is easier to work with
-  List<UserJob> shownInterestList(Map userMap) {
+  List<UserJob> createUsersList(Map userMap, bool select, bool reserve) {
     List<UserJob> theList = [];
     userMap.forEach(
       (key, value) {
@@ -71,8 +83,8 @@ class ChoiceState extends State<Choice> {
             userID: key,
             userName: value['userName'],
             profilePickLink: value['userProfilePicUrl'],
-            isSelected: false,
-            isReserve: false,
+            isSelected: select,
+            isReserve: reserve,
           ),
         );
       },
@@ -80,111 +92,52 @@ class ChoiceState extends State<Choice> {
     return theList;
   }
 
-  // Returns different typ of icon depending on category
-  /*Widget _buildCategoryIcon(String jobCategory) {
-    if (jobCategory != null && jobCategory.isNotEmpty) {
-      return LayoutBuilder(builder: (context, constraints) {
-        switch (jobCategory) {
-          case 'Workshop':
-            return Icon(
-              Icons.smart_toy,
-              size: MediaQuery.of(context).size.height * 0.09,
-              color: Colors.black,
-            );
-            break;
-          case 'Studiebesök':
-            return Icon(
-              Icons.ac_unit_sharp,
-              size: MediaQuery.of(context).size.height * 0.09,
-              color: Colors.black,
-            );
-            break;
-          default:
-            return Icon(
-              Icons.smart_toy,
-              size: MediaQuery.of(context).size.height * 0.09,
-              color: Colors.black,
-            );
-        }
-      });
-    } else {
-      return LayoutBuilder(builder: (context, constraints) {
-        return Icon(
-          Icons.smart_toy,
-          size: MediaQuery.of(context).size.height * 0.07,
-          color: Colors.black,
-        );
-      });
-    }
-  }*/
-
-  /*Widget _buildJobInformation() {
-    MediaQueryData screenSize = MediaQuery.of(context);
-    return Column(
-      children: [
-        Row(
-          children: [
-            Padding(padding: EdgeInsets.only(left: 30)),
-            _buildCategoryIcon(category),
-            Padding(padding: EdgeInsets.only(left: 20)),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: screenSize.size.width * 0.055,
-                    color: Colors.black,
-                  ),
-                  textAlign: TextAlign.left,
-                ),
-                Text('Tid: ' + time + '-' + endTime,
-                    style: TextStyle(fontSize: 18), textAlign: TextAlign.left),
-                Text('Datum: ' + date,
-                    style: TextStyle(fontSize: 18), textAlign: TextAlign.left),
-                Text(
-                  'Studenter: ' +
-                      count.toString() +
-                      '/' +
-                      maxCount.toString() +
-                      ' st',
-                  style: TextStyle(fontSize: 18),
-                  textAlign: TextAlign.left,
-                ),
-                Text(
-                  'Reserver: ' + reserveCount.toString() + ' st',
-                  style: TextStyle(fontSize: 18),
-                  textAlign: TextAlign.left,
-                ),
-              ],
-            ),
-            Padding(padding: EdgeInsets.only(left: 20)),
-          ],
-        ),
-        Padding(padding: EdgeInsets.only(top: 20)),
-        Row(
-          children: [
-            Padding(padding: EdgeInsets.only(left: 30)),
-            Expanded(
-              child: Text(
-                description,
-                style: TextStyle(fontSize: 14),
-                textAlign: TextAlign.left,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 10,
-              ),
-            ),
-            Padding(padding: EdgeInsets.only(right: 10)),
-          ],
-        ),
-      ],
-    );
-  }*/
-
   // Check if user has profileimage or not
   // returns userprofile image or icon
   Widget _userProfilePic(String imageUrl) {
     return ListViewImage(imageUrl: imageUrl);
+  }
+
+  Widget showSelectedUsers(List<UserJob> usersList, String msgText) {
+    String userID;
+    String userName;
+    String userProfilePicUrl;
+
+    if (usersList.isEmpty) {
+      msgText == 'selected'
+          ? msgText = 'Ingen accepterade'
+          : msgText = 'Ingen reserver';
+      return Text(
+        msgText,
+        style: TextStyle(fontSize: 15),
+      );
+    }
+
+    return ListView.builder(
+        shrinkWrap: true,
+        itemCount: usersList.length,
+        itemBuilder: (context, index) {
+          userID = usersList[index].userID;
+          userName = usersList[index].userName;
+          userProfilePicUrl = usersList[index].profilePickLink;
+          return Card(
+            child: ListTile(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OthersProfile(
+                      userID: userID,
+                    ),
+                  ),
+                );
+              },
+              leading: _userProfilePic(userProfilePicUrl),
+              title: Text(userName),
+              //subtitle:
+            ),
+          );
+        });
   }
 
   // Build the listview for users that have shown interest for the job
@@ -194,6 +147,12 @@ class ChoiceState extends State<Choice> {
     String userProfilePicUrl;
     List userIDList = showInterestUser.keys.toList();
 
+    if (userIDList.isEmpty) {
+      return Text(
+        'Ingen intresseanmälningar',
+        style: TextStyle(fontSize: 15),
+      );
+    }
     return ListView.builder(
         shrinkWrap: true,
         itemCount: userIDList.length,
@@ -380,6 +339,10 @@ class ChoiceState extends State<Choice> {
               Padding(
                 padding: EdgeInsets.only(top: 20),
               ),
+              showSelectedUsers(userThatSelected, 'selected'),
+              SizedBox(
+                height: 20,
+              ),
               Text(
                 'Reserver',
                 style: TextStyle(
@@ -389,6 +352,10 @@ class ChoiceState extends State<Choice> {
               ),
               Padding(
                 padding: EdgeInsets.only(top: 20),
+              ),
+              showSelectedUsers(userThatReserved, 'reserve'),
+              SizedBox(
+                height: 20,
               ),
             ],
           ),
