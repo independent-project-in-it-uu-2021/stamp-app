@@ -49,6 +49,8 @@ class _BuildJobInformationState extends State<BuildJobInformation> {
 
   // Returns different typ of icon depending on category
   Widget _buildCategoryIcon(String jobCategory) {
+    print('Build Category icon');
+    print(jobCategory);
     if (jobCategory != null && jobCategory.isNotEmpty) {
       return LayoutBuilder(builder: (context, constraints) {
         switch (jobCategory) {
@@ -85,7 +87,7 @@ class _BuildJobInformationState extends State<BuildJobInformation> {
     } else {
       return LayoutBuilder(builder: (context, constraints) {
         return Icon(
-          Icons.smart_toy,
+          Icons.campaign_sharp,
           size: MediaQuery.of(context).size.height * 0.07,
           color: Colors.black,
         );
@@ -105,13 +107,18 @@ class _BuildJobInformationState extends State<BuildJobInformation> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: screenSize.size.width * 0.055,
-                    color: Colors.black,
+                Container(
+                  width: screenSize.size.width * 0.6,
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: screenSize.size.width * 0.055,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.left,
+                    overflow: TextOverflow.clip,
                   ),
-                  textAlign: TextAlign.left,
                 ),
                 Text('Tid: ' + time + '-' + endTime,
                     style: TextStyle(fontSize: 18), textAlign: TextAlign.left),

@@ -46,7 +46,7 @@ class Work extends StatelessWidget {
     } else {
       return LayoutBuilder(builder: (context, constraints) {
         return Icon(
-          Icons.account_balance_sharp,
+          Icons.campaign_sharp,
           size: MediaQuery.of(context).size.height * 0.07,
           color: Colors.black,
         );
