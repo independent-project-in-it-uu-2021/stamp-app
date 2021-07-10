@@ -8,46 +8,9 @@ import 'package:stamp_app/models/jobsModel.dart';
 import 'package:stamp_app/models/user.dart';
 import 'package:stamp_app/screens/slutval/slutval.dart';
 import 'package:stamp_app/studentScreens/FinalStudentChoice/finalStudentChoice.dart';
+import 'package:stamp_app/sharedWidget/iconForWorkFeed.dart';
 
 class StudentWork extends StatelessWidget {
-  // Returns different typ of icon depending on category
-  Widget _buildCategoryIcon(String jobCategory) {
-    if (jobCategory != null && jobCategory.isNotEmpty) {
-      return LayoutBuilder(builder: (context, constraints) {
-        switch (jobCategory) {
-          case 'Workshop':
-            return Icon(
-              Icons.smart_toy,
-              size: MediaQuery.of(context).size.height * 0.07,
-              color: Colors.black,
-            );
-            break;
-          case 'Studiebesök':
-            return Icon(
-              Icons.ac_unit_sharp,
-              size: MediaQuery.of(context).size.height * 0.07,
-              color: Colors.black,
-            );
-            break;
-          default:
-            return Icon(
-              Icons.smart_toy,
-              size: MediaQuery.of(context).size.height * 0.07,
-              color: Colors.black,
-            );
-        }
-      });
-    } else {
-      return LayoutBuilder(builder: (context, constraints) {
-        return Icon(
-          Icons.account_balance_sharp,
-          size: MediaQuery.of(context).size.height * 0.07,
-          color: Colors.black,
-        );
-      });
-    }
-  }
-
   // Returns a listviewbuilder for all the jobs
   Widget _buildAllJobs(List<Jobs> allJobs, String userID) {
     return ListView.builder(
@@ -68,7 +31,9 @@ class StudentWork extends StatelessWidget {
           return Card(
             child: ListTile(
               //leading: Icon(Icons.arrow_forward_ios),
-              leading: _buildCategoryIcon(curJobCategory),
+              leading: IconForWorkFeed(
+                jobCategory: curJobCategory,
+              ),
               title: Text('$curDate $curTitle'), //Aligna med hjälp av textspan
               subtitle: Text(
                   '$curTime - $curEndTime \n$curLocation \nStudenter: $curCount/$curMaxCount \nReserver: $curReserveCount'),

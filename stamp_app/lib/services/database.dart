@@ -128,9 +128,9 @@ class DatabaseService {
           selectedList + '.' + curUser.userID: userInfo,
           'currentInterest.' + curUser.userID: FieldValue.delete(),
         });
-        /*await userCollection.doc(curUser.userID).update({
-          'jobs.' + jobID: 
-        });*/
+        await userCollection.doc(curUser.userID).update({
+          'jobs.' + jobID: rollList,
+        });
       } on FirebaseException catch (e) {
         print('SelectedUers');
         print(e.code);

@@ -7,6 +7,7 @@ import 'package:stamp_app/models/jobsModel.dart';
 import 'package:stamp_app/services/database.dart';
 import 'package:stamp_app/services/locator.dart';
 import 'package:stamp_app/sharedWidget/loadingScreen.dart';
+import 'package:stamp_app/sharedWidget/buildJobInfor.dart';
 
 class FinalStudentChoice extends StatefulWidget {
   final Jobs curJob;
@@ -22,6 +23,7 @@ class FinalStudentChoice extends StatefulWidget {
 }
 
 class FinalStudentChoiceState extends State<FinalStudentChoice> {
+  Jobs currentJob;
   String jobID;
   String title;
   String description;
@@ -37,6 +39,7 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
   @override
   void initState() {
     super.initState();
+    currentJob = widget.curJob;
     jobID = widget.curJob.jobID;
     title = widget.curJob.title;
     description = widget.curJob.description;
@@ -48,119 +51,6 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
     maxCount = widget.curJob.maxCount;
     reserveCount = widget.curJob.reserveCount;
     category = widget.curJob.category;
-  }
-
-  // Returns different typ of icon depending on category
-  Widget _buildCategoryIcon(String jobCategory) {
-    if (jobCategory != null && jobCategory.isNotEmpty) {
-      return LayoutBuilder(builder: (context, constraints) {
-        switch (jobCategory) {
-          case 'Workshop':
-            return Icon(
-              Icons.smart_toy,
-              size: MediaQuery.of(context).size.height * 0.09,
-              color: Colors.black,
-            );
-            break;
-          case 'Studiebesök':
-            return Icon(
-              Icons.ac_unit_sharp,
-              size: MediaQuery.of(context).size.height * 0.09,
-              color: Colors.black,
-            );
-            break;
-          default:
-            return Icon(
-              Icons.smart_toy,
-              size: MediaQuery.of(context).size.height * 0.09,
-              color: Colors.black,
-            );
-        }
-      });
-    } else {
-      return LayoutBuilder(builder: (context, constraints) {
-        return Icon(Icons.smart_toy);
-      });
-    }
-  }
-
-  // Build method for show job information
-  Widget _buildJobInformation() {
-    // Size of the screen used to the text size is responsive
-    MediaQueryData screenSize = MediaQuery.of(context);
-    double fontSizeJobInfo = screenSize.size.width * 0.046;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(top: 30),
-        ),
-        Column(
-          children: [
-            Row(
-              children: [
-                Padding(padding: EdgeInsets.only(left: 30)),
-                _buildCategoryIcon(category),
-                Padding(padding: EdgeInsets.only(left: 20)),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: screenSize.size.width * 0.055,
-                        color: Colors.black,
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
-                    Text('Tid: ' + time + '-' + endTime,
-                        style: TextStyle(fontSize: fontSizeJobInfo),
-                        textAlign: TextAlign.left),
-                    Text('Datum: ' + date,
-                        style: TextStyle(fontSize: fontSizeJobInfo),
-                        textAlign: TextAlign.left),
-                    Text(
-                      'Studenter: ' +
-                          count.toString() +
-                          '/' +
-                          maxCount.toString() +
-                          ' st',
-                      style: TextStyle(fontSize: fontSizeJobInfo),
-                      textAlign: TextAlign.left,
-                    ),
-                    Text(
-                      'Reserver: ' + reserveCount.toString() + ' st',
-                      style: TextStyle(fontSize: fontSizeJobInfo),
-                      textAlign: TextAlign.left,
-                    ),
-                  ],
-                ),
-                Padding(padding: EdgeInsets.only(left: 20)),
-              ],
-            ),
-            Padding(padding: EdgeInsets.only(top: 20)),
-            Row(
-              children: [
-                Padding(padding: EdgeInsets.only(left: 30)),
-                Expanded(
-                  child: Text(
-                    description.toString(),
-                    style: TextStyle(fontSize: 14),
-                    textAlign: TextAlign.left,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 10,
-                  ),
-                ),
-                Padding(padding: EdgeInsets.only(right: 10)),
-              ],
-            ),
-          ],
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 20),
-        ),
-      ],
-    );
   }
 
   @override
@@ -207,8 +97,8 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      // Calls the method from above, shows job information
-                      _buildJobInformation(),
+                      // Builds job information
+                      BuildJobInformation(curJob: currentJob),
 
                       Text(
                         'Intresseanmälningar',

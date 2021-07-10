@@ -15,8 +15,8 @@ class FinalChoice extends StatelessWidget {
 
   FinalChoice({
     Key key,
-    this.curJob,
-    this.usersList,
+    @required this.curJob,
+    @required this.usersList,
   }) : super(key: key);
 
   Widget _userProfilePic(String imageUrl) {
