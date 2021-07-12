@@ -44,6 +44,7 @@ class ChoiceState extends State<Choice> {
   List<UserJob> userThatReserved = [];
   int amountSelected;
   int amountReserved;
+  bool showErrorMsg = false;
 
   @override
   void initState() {
@@ -223,7 +224,7 @@ class ChoiceState extends State<Choice> {
                       changeState('reserve', index);
                     },
                     child: Text(
-                      'Reservera',
+                      'Reserver',
                       style: TextStyle(color: Colors.black),
                     ),
                   ),
@@ -242,6 +243,7 @@ class ChoiceState extends State<Choice> {
     bool selectedSelected = curUserInfo.isSelected == true;
     bool reserveSelected = curUserInfo.isReserve == true;
     setState(() {
+      showErrorMsg = false;
       if (adminChoice == 'selected' && reserveSelected) {
         curUserInfo.isSelected = !curUserInfo.isSelected;
         curUserInfo.isReserve = !curUserInfo.isReserve;
@@ -276,6 +278,60 @@ class ChoiceState extends State<Choice> {
     } else {
       return Container();
     }
+  }
+
+  Widget buildMsgText() {
+    if (showErrorMsg == true) {
+      return Text(
+        'TODO: Ingen nya..... ',
+        style:
+            TextStyle(color: Colors.red.shade700, fontWeight: FontWeight.bold),
+      );
+    } else {
+      return Container();
+    }
+  }
+
+  Widget buildBottomBar() {
+    return BottomAppBar(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Colors.green[400],
+              padding: EdgeInsets.symmetric(horizontal: 90, vertical: 15),
+            ),
+            child: Text(
+              'Nästa Steg',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 21,
+              ),
+            ),
+            onPressed: () => {
+              if (amountReserved ==
+                  (userThatReserved
+                      .where((element) => element.isReserve == true)).length)
+                {setState(() {})}
+              else
+                {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FinalChoice(
+                        curJob: widget.curJob,
+                        usersList: userThatShownInterest,
+                      ),
+                    ),
+                  ),
+                }
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -321,6 +377,7 @@ class ChoiceState extends State<Choice> {
               Padding(
                 padding: EdgeInsets.only(top: 20),
               ),
+              buildMsgText(),
               buildInfoText(),
               _buildUserShowIntereset(),
               Padding(
@@ -379,15 +436,28 @@ class ChoiceState extends State<Choice> {
                 ),
               ),
               onPressed: () => {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => FinalChoice(
-                      curJob: widget.curJob,
-                      usersList: userThatShownInterest,
+                if (amountReserved ==
+                    (userThatReserved
+                        .where((element) => element.isReserve == true)).length)
+                  {
+                    setState(() {
+                      showErrorMsg = true;
+                    })
+                  }
+                else if (amountReserved !=
+                    (userThatReserved
+                        .where((element) => element.isReserve == true)).length)
+                  {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FinalChoice(
+                          curJob: widget.curJob,
+                          usersList: userThatShownInterest,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                  }
               },
             ),
             Padding(padding: EdgeInsets.only(bottom: 100))

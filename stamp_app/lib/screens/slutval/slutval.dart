@@ -52,8 +52,6 @@ class FinalChoice extends StatelessWidget {
     reservedUsers =
         usersList.where((element) => element.isReserve == true).toList();
 
-    print(reservedUsers.length);
-
     String userID;
     String userName;
     String userProfilePicUrl;
