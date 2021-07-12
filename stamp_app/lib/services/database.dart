@@ -78,6 +78,11 @@ class DatabaseService {
     }).toList();
   }
 
+  // Gets the job that user is either reserved or accepted
+  Future getUserJob(String userID) async {
+    List<Jobs> userJobs = [];
+  }
+
   // Method is called when user show interest for a job
   Future showInterestJob(String jobID, String userID, String userName,
       String userProfileLink) async {
@@ -120,7 +125,7 @@ class DatabaseService {
         'userName': curUser.userName,
         'userProfilePicUrl': curUser.profilePickLink
       };
-      jobInfo = {'roll': 'seleced'};
+      jobInfo = {'roll': 'selected'};
       try {
         await jobsCollection.doc(jobID).update({
           selectedList + '.' + curUser.userID: userInfo,
@@ -192,6 +197,7 @@ class DatabaseService {
       String userBio,
       String userProfilePicUrl,
       String accountType) async {
+    Map jobs = {};
     return await userCollection.doc(userId).set(
       {
         'userName': userName,
@@ -200,6 +206,7 @@ class DatabaseService {
         'userBio': userBio,
         'userProfilePicUrl': userProfilePicUrl,
         'accountType': accountType,
+        'jobs': jobs,
       },
     );
   }
