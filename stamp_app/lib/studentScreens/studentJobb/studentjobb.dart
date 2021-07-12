@@ -5,12 +5,26 @@ import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:stamp_app/models/jobsModel.dart';
-import 'package:stamp_app/models/user.dart';
-import 'package:stamp_app/screens/slutval/slutval.dart';
 import 'package:stamp_app/studentScreens/FinalStudentChoice/finalStudentChoice.dart';
 import 'package:stamp_app/sharedWidget/iconForWorkFeed.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class StudentWork extends StatelessWidget {
+  // Not in used
+  // When use, MaterialApp has change to GetMaterialApp in main
+  /*void topSnackBar() {
+    Get.snackbar(
+      'Test Test',
+      '',
+      duration: Duration(seconds: 4),
+      animationDuration: Duration(milliseconds: 800),
+      snackPosition: SnackPosition.TOP,
+      backgroundColor: Colors.grey,
+      
+    );
+  }*/
+
   // Returns a listviewbuilder for all the jobs
   Widget _buildAllJobs(List<Jobs> allJobs, String userID) {
     allJobs.sort((a, b) {
@@ -40,15 +54,31 @@ class StudentWork extends StatelessWidget {
               title: Text('$curDate $curTitle'), //Aligna med hjälp av textspan
               subtitle: Text(
                   '$curTime - $curEndTime \n$curLocation \nStudenter: $curCount/$curMaxCount \nReserver: $curReserveCount'),
-              onTap: () => {
-                Navigator.push(
+              onTap: () async {
+                final result = await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => FinalStudentChoice(
                       curJob: allJobs[index],
                     ),
                   ),
-                )
+                );
+                if (result == 'Du har anmält intresse') {
+                  showTopSnackBar(
+                    context,
+                    CustomSnackBar.info(
+                        message: '$result',
+                        backgroundColor: Colors.grey,
+                        textStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontFamily: 'Roboto'),
+                        icon: Icon(
+                          Icons.ac_unit,
+                          size: 0,
+                        )),
+                  );
+                }
               },
             ),
           );

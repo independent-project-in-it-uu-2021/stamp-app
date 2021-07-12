@@ -4,6 +4,7 @@ import 'package:stamp_app/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:stamp_app/models/jobsModel.dart';
+import 'package:stamp_app/screens/profil/profil.dart';
 import 'package:stamp_app/services/database.dart';
 import 'package:stamp_app/services/locator.dart';
 import 'package:stamp_app/sharedWidget/loadingScreen.dart';
@@ -40,6 +41,7 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
   Map showInterestUser;
   List<UserJob> userThatShownInterest = [];
   bool showMsgToUser = false;
+  String currentUserID;
 
   @override
   void initState() {
@@ -109,14 +111,17 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
           return Card(
             child: ListTile(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => OthersProfile(
-                      userID: userID,
-                    ),
-                  ),
-                );
+                userID == currentUserID
+                    ? Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Profil()))
+                    : Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OthersProfile(
+                            userID: userID,
+                          ),
+                        ),
+                      );
               },
               leading: _userProfilePic(userProfilePicUrl),
               title: Text(userName),
@@ -147,6 +152,7 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
   @override
   Widget build(BuildContext context) {
     final _currentUser = Provider.of<User>(context);
+    currentUserID = _currentUser.uid;
 
     return StreamBuilder<UserData>(
       stream: DatabaseService(userId: _currentUser.uid).userData,
@@ -220,6 +226,7 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
                         padding: EdgeInsets.only(top: 20),
                       ),
                       //---------------
+
                       _buildUserShowIntereset(),
 
                       Padding(
@@ -240,7 +247,8 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
                               .get<DatabaseService>()
                               .showInterestJob(jobID, curUserID, curUserName,
                                   curUserProfileImage);
-                          print(result);
+
+                          //print(result);
                           if (userThatShownInterest
                               .where((element) => element.userID == curUserID)
                               .isNotEmpty) {
@@ -253,6 +261,7 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
                               showMsgToUser = true;
                             });
                           }
+                          Navigator.pop(context, 'Du har anmält intresse');
                         },
                         label: Text(
                           'Anmäl intresse',
