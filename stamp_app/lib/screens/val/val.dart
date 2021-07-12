@@ -45,8 +45,6 @@ class ChoiceState extends State<Choice> {
   int amountSelected;
   int amountReserved;
   bool showErrorMsg = false;
-  int checkReservLength;
-  int checkSelectedLength;
 
   @override
   void initState() {
@@ -67,17 +65,17 @@ class ChoiceState extends State<Choice> {
     showReservedUser = widget.curJob.currentReserve;
 
     // Create a list of users that have shown interest
-    userThatShownInterest = createUsersList(showInterestUser, false, false);
+    userThatShownInterest = _createUsersList(showInterestUser, false, false);
     // List of users that are accepted
-    userThatSelected = createUsersList(showSelectedUser, true, false);
+    userThatSelected = _createUsersList(showSelectedUser, true, false);
     // List of users that are reserved
-    userThatReserved = createUsersList(showReservedUser, false, true);
+    userThatReserved = _createUsersList(showReservedUser, false, true);
     amountSelected = widget.curJob.count;
     amountReserved = widget.curJob.reserveCount;
   }
 
   // Creates a list of Userjob object, which is easier to work with
-  List<UserJob> createUsersList(Map userMap, bool select, bool reserve) {
+  List<UserJob> _createUsersList(Map userMap, bool select, bool reserve) {
     List<UserJob> theList = [];
     userMap.forEach(
       (key, value) {
@@ -271,6 +269,7 @@ class ChoiceState extends State<Choice> {
     });
   }
 
+  // Show text message if user choose more than allowed amount of student
   Widget buildInfoText() {
     if (amountSelected == maxCount + 1) {
       return Text(
@@ -283,6 +282,7 @@ class ChoiceState extends State<Choice> {
     }
   }
 
+  // Shows text message if user has not selected anyone
   Widget buildMsgText() {
     if (showErrorMsg == true) {
       return Text(
@@ -295,6 +295,7 @@ class ChoiceState extends State<Choice> {
     }
   }
 
+  // Logic and build widget for the bottombar button
   Widget buildBottomBar() {
     return BottomAppBar(
       child: Row(
@@ -314,10 +315,12 @@ class ChoiceState extends State<Choice> {
               ),
             ),
             onPressed: () => {
-              if (amountReserved ==
-                  (userThatReserved
-                      .where((element) => element.isReserve == true)).length)
-                {setState(() {})}
+              if (reserveCount == amountReserved && count == amountSelected)
+                {
+                  setState(() {
+                    showErrorMsg = true;
+                  })
+                }
               else
                 {
                   Navigator.push(
@@ -332,6 +335,7 @@ class ChoiceState extends State<Choice> {
                 }
             },
           ),
+          Padding(padding: EdgeInsets.only(bottom: 60))
         ],
       ),
     );
@@ -421,56 +425,7 @@ class ChoiceState extends State<Choice> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Colors.green[400],
-                padding: EdgeInsets.symmetric(horizontal: 90, vertical: 15),
-              ),
-              child: Text(
-                'Nästa Steg',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 21,
-                ),
-              ),
-              onPressed: () => {
-                // Check weather admin has selected/reserved new students
-                checkReservLength = (userThatReserved
-                    .where((element) => element.isReserve == true)
-                    .length),
-                checkSelectedLength = (userThatSelected
-                    .where((element) => element.isSelected == true)
-                    .length),
-
-                if (reserveCount == amountReserved && count == amountSelected)
-                  {
-                    setState(() {
-                      showErrorMsg = true;
-                    })
-                  }
-                else
-                  {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FinalChoice(
-                          curJob: widget.curJob,
-                          usersList: userThatShownInterest,
-                        ),
-                      ),
-                    ),
-                  }
-              },
-            ),
-            Padding(padding: EdgeInsets.only(bottom: 100))
-          ],
-        ),
-      ),
+      bottomNavigationBar: buildBottomBar(),
     );
   }
 }

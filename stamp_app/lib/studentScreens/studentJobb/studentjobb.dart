@@ -13,6 +13,9 @@ import 'package:stamp_app/sharedWidget/iconForWorkFeed.dart';
 class StudentWork extends StatelessWidget {
   // Returns a listviewbuilder for all the jobs
   Widget _buildAllJobs(List<Jobs> allJobs, String userID) {
+    allJobs.sort((a, b) {
+      return a.date.compareTo(b.date);
+    });
     return ListView.builder(
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),

@@ -8,6 +8,8 @@ import 'package:stamp_app/services/database.dart';
 import 'package:stamp_app/services/locator.dart';
 import 'package:stamp_app/sharedWidget/loadingScreen.dart';
 import 'package:stamp_app/sharedWidget/buildJobInfor.dart';
+import 'package:stamp_app/sharedWidget/imageForListView.dart';
+import 'package:stamp_app/screens/annansProfil/annansProfil.dart';
 
 class FinalStudentChoice extends StatefulWidget {
   final Jobs curJob;
@@ -35,6 +37,9 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
   int maxCount;
   int reserveCount;
   String category;
+  Map showInterestUser;
+  List<UserJob> userThatShownInterest = [];
+  bool showMsgToUser = false;
 
   @override
   void initState() {
@@ -51,6 +56,92 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
     maxCount = widget.curJob.maxCount;
     reserveCount = widget.curJob.reserveCount;
     category = widget.curJob.category;
+    showInterestUser = widget.curJob.currentInterest;
+    // Create a list of users that have shown interest
+    userThatShownInterest = _createUsersList(showInterestUser, false, false);
+  }
+
+  // Creates a list of Userjob object, which is easier to work with
+  List<UserJob> _createUsersList(Map userMap, bool select, bool reserve) {
+    List<UserJob> theList = [];
+    userMap.forEach(
+      (key, value) {
+        theList.add(
+          UserJob(
+            userID: key,
+            userName: value['userName'],
+            profilePickLink: value['userProfilePicUrl'],
+            isSelected: select,
+            isReserve: reserve,
+          ),
+        );
+      },
+    );
+    return theList;
+  }
+
+  // Check if user has profileimage or not
+  // returns userprofile image or icon
+  Widget _userProfilePic(String imageUrl) {
+    return ListViewImage(imageUrl: imageUrl);
+  }
+
+  // Build the listview for users that have shown interest for the job
+  Widget _buildUserShowIntereset() {
+    String userID;
+    String userName;
+    String userProfilePicUrl;
+    List userIDList = showInterestUser.keys.toList();
+
+    if (userIDList.isEmpty) {
+      return Text(
+        'Ingen intresseanmälningar',
+        style: TextStyle(fontSize: 15),
+      );
+    }
+    return ListView.builder(
+        shrinkWrap: true,
+        itemCount: userIDList.length,
+        itemBuilder: (context, index) {
+          userID = userThatShownInterest[index].userID;
+          userName = userThatShownInterest[index].userName;
+          userProfilePicUrl = userThatShownInterest[index].profilePickLink;
+          return Card(
+            child: ListTile(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OthersProfile(
+                      userID: userID,
+                    ),
+                  ),
+                );
+              },
+              leading: _userProfilePic(userProfilePicUrl),
+              title: Text(userName),
+            ),
+          );
+        });
+  }
+
+  // Shows text message if user has show interest for the job
+  Widget _buildMsgWidget(String currentUserID) {
+    bool checkIfUserHarShownInterest = userThatShownInterest
+        .where((element) => element.userID == currentUserID)
+        .isNotEmpty;
+    if (showMsgToUser || checkIfUserHarShownInterest) {
+      return Text(
+        'Du har anmält intresse',
+        style: TextStyle(
+          fontSize: 20,
+          color: Colors.red.shade900,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    } else {
+      return Container();
+    }
   }
 
   @override
@@ -108,12 +199,14 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
                         ),
                       ),
                       Padding(padding: EdgeInsets.only(top: 10)),
-                      Text('Du har anmält intresse',
+                      /*Text('Du har anmält intresse',
                           style: TextStyle(
                             fontSize: 20,
                             color: Colors.red.shade900,
                             fontWeight: FontWeight.bold,
-                          )),
+                          )),*/
+                      _buildMsgWidget(curUserID),
+
                       Padding(padding: EdgeInsets.only(top: 10)),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -127,116 +220,8 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
                         padding: EdgeInsets.only(top: 20),
                       ),
                       //---------------
-                      FlatButton(
-                        onPressed: () => {},
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(15.0))),
-                        color: Colors.white,
-                        child: Row(
-                          // Replace with a Row for horizontal icon + text
-                          children: <Widget>[
-                            Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
-                            Image.asset(
-                              'assets/images/profilbild.png',
-                              fit: BoxFit.cover,
-                              scale: 3,
-                            ),
-                            Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
-                            Text(
-                              'Kalle Hansson',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      _buildUserShowIntereset(),
 
-                      Padding(
-                        padding: EdgeInsets.only(top: 30),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Container(
-                          height: MediaQuery.of(context).size.height * 0.001,
-                          width: MediaQuery.of(context).size.width * 0.83,
-                          color: Colors.black12,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 30),
-                      ),
-                      FlatButton(
-                        onPressed: () => {},
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(15.0))),
-                        color: Colors.white,
-                        child: Row(
-                          // Replace with a Row for horizontal icon + text
-                          children: <Widget>[
-                            Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
-                            Image.asset(
-                              'assets/images/profilbild.png',
-                              fit: BoxFit.cover,
-                              scale: 3,
-                            ),
-                            Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
-                            Text(
-                              'Agnes Brorson',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 30),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Container(
-                          height: MediaQuery.of(context).size.height * 0.001,
-                          width: MediaQuery.of(context).size.width * 0.83,
-                          color: Colors.black12,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 30),
-                      ),
-                      FlatButton(
-                        onPressed: () => {},
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(15.0))),
-                        color: Colors.white,
-                        child: Row(
-                          // Replace with a Row for horizontal icon + text
-                          children: <Widget>[
-                            Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
-                            Image.asset(
-                              'assets/images/profilbild.png',
-                              fit: BoxFit.cover,
-                              scale: 3,
-                            ),
-                            Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
-                            Text(
-                              'Sixten Andersson',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 30),
-                      ),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0),
                         child: Container(
@@ -255,8 +240,19 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
                               .get<DatabaseService>()
                               .showInterestJob(jobID, curUserID, curUserName,
                                   curUserProfileImage);
-                          print('Show interest button');
                           print(result);
+                          if (userThatShownInterest
+                              .where((element) => element.userID == curUserID)
+                              .isNotEmpty) {
+                            setState(() {
+                              showMsgToUser = true;
+                            });
+                          }
+                          if (result == null) {
+                            setState(() {
+                              showMsgToUser = true;
+                            });
+                          }
                         },
                         label: Text(
                           'Anmäl intresse',
