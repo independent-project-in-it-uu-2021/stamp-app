@@ -120,9 +120,7 @@ class DatabaseService {
         'userName': curUser.userName,
         'userProfilePicUrl': curUser.profilePickLink
       };
-      /* jobInfo = {
-        'roll': 'seleced'
-      };*/
+      jobInfo = {'roll': 'seleced'};
       try {
         await jobsCollection.doc(jobID).update({
           selectedList + '.' + curUser.userID: userInfo,
