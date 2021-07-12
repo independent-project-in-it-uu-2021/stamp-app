@@ -45,6 +45,8 @@ class ChoiceState extends State<Choice> {
   int amountSelected;
   int amountReserved;
   bool showErrorMsg = false;
+  int checkReservLength;
+  int checkSelectedLength;
 
   @override
   void initState() {
@@ -243,6 +245,7 @@ class ChoiceState extends State<Choice> {
     bool selectedSelected = curUserInfo.isSelected == true;
     bool reserveSelected = curUserInfo.isReserve == true;
     setState(() {
+      // Checks if user has choosen any reserv or accepted anyone
       showErrorMsg = false;
       if (adminChoice == 'selected' && reserveSelected) {
         curUserInfo.isSelected = !curUserInfo.isSelected;
@@ -283,7 +286,7 @@ class ChoiceState extends State<Choice> {
   Widget buildMsgText() {
     if (showErrorMsg == true) {
       return Text(
-        'TODO: Ingen nya..... ',
+        'TODO: Ingen har ... ',
         style:
             TextStyle(color: Colors.red.shade700, fontWeight: FontWeight.bold),
       );
@@ -436,17 +439,21 @@ class ChoiceState extends State<Choice> {
                 ),
               ),
               onPressed: () => {
-                if (amountReserved ==
-                    (userThatReserved
-                        .where((element) => element.isReserve == true)).length)
+                // Check weather admin has selected/reserved new students
+                checkReservLength = (userThatReserved
+                    .where((element) => element.isReserve == true)
+                    .length),
+                checkSelectedLength = (userThatSelected
+                    .where((element) => element.isSelected == true)
+                    .length),
+
+                if (reserveCount == amountReserved && count == amountSelected)
                   {
                     setState(() {
                       showErrorMsg = true;
                     })
                   }
-                else if (amountReserved !=
-                    (userThatReserved
-                        .where((element) => element.isReserve == true)).length)
+                else
                   {
                     Navigator.push(
                       context,
