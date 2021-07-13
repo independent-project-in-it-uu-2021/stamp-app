@@ -15,6 +15,7 @@ class UserData {
   final String bio;
   final String imageUrl;
   final String accountType;
+  final Map jobs;
 
   UserData(
       {this.uid,
@@ -23,7 +24,8 @@ class UserData {
       this.phoneNumer,
       this.bio,
       this.imageUrl,
-      this.accountType});
+      this.accountType,
+      this.jobs});
 
   UserData newDummyUser() {
     return UserData(

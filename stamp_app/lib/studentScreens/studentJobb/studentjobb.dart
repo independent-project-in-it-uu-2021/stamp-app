@@ -1,16 +1,17 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/root/parse_route.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:stamp_app/models/jobsModel.dart';
+import 'package:stamp_app/models/user.dart';
 import 'package:stamp_app/sharedWidget/loadingScreen.dart';
 import 'package:stamp_app/studentScreens/FinalStudentChoice/finalStudentChoice.dart';
 import 'package:stamp_app/sharedWidget/iconForWorkFeed.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
-import 'package:stamp_app/services/locator.dart';
 import 'package:stamp_app/services/database.dart';
 
 class StudentWork extends StatefulWidget {
@@ -19,6 +20,7 @@ class StudentWork extends StatefulWidget {
 }
 
 class _StudentWorkState extends State<StudentWork> {
+  Map studentsCurrentJob = {};
   // Not in used
   // When use, MaterialApp has change to GetMaterialApp in main
   /*void topSnackBar() {
@@ -33,12 +35,20 @@ class _StudentWorkState extends State<StudentWork> {
     );
   }*/
 
-  Widget showTheStudentJobs() {
+  Widget showTheStudentJobs(List<Jobs> allTheJobs, Map studentJobs) {
+    print('Inside showTheStudent jobs');
+    List studentJobsKey = studentJobs.keys.toList();
     List<Jobs> theStudentJobs = [];
+    studentJobsKey.forEach((studentJobID) {
+      List<Jobs> curJob =
+          allTheJobs.where((element) => element.jobID == studentJobID).toList();
+      theStudentJobs.addAll(curJob);
+    });
 
     return ListView.builder(
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
+        itemCount: studentJobsKey.length,
         itemBuilder: (context, index) {
           String curTitle = theStudentJobs[index].title;
           //String curDescription = allJobs[index].description;
@@ -53,9 +63,19 @@ class _StudentWorkState extends State<StudentWork> {
           return Card(
             child: ListTile(
               leading: IconForWorkFeed(jobCategory: curJobCategory),
+              title: Text('$curDate $curTitle'),
               subtitle: Text(
                   '$curTime - $curEndTime \n$curLocation \nStudenter: $curCount/$curMaxCount \nReserver: $curReserveCount'),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FinalStudentChoice(
+                      curJob: theStudentJobs[index],
+                    ),
+                  ),
+                );
+              },
             ),
           );
         });
@@ -126,26 +146,28 @@ class _StudentWorkState extends State<StudentWork> {
     // Stream of all the jobs from database
     final allJobsFromDatabase = Provider.of<List<Jobs>>(context) ?? [];
     final curUser = Provider.of<User>(context);
-    return Container(
-      child: FutureBuilder(
-          future: locator.get<DatabaseService>().getAllUsers(),
-          builder: (BuildContext context, snapshot) {
+    if (curUser != null) {
+      return StreamBuilder<UserData>(
+          stream: DatabaseService(userId: curUser.uid).userData,
+          builder: (context, snapshot) {
             if (snapshot.hasData) {
+              studentsCurrentJob = snapshot.data.jobs;
+
               return Scaffold(
                 appBar: AppBar(
                   title: Text('Jobb'),
                   backgroundColor: Colors.red.shade900,
                   /*actions: <Widget>[
-          IconButton(
-            padding: EdgeInsets.only(right: 10),
-            onPressed: null,
-            icon: Icon(
-              Icons.chat_bubble_rounded,
-              color: Colors.white,
-              size: 35,
-            ),
-          ),
-        ],*/
+                IconButton(
+                padding: EdgeInsets.only(right: 10),
+                onPressed: null,
+                icon: Icon(
+                  Icons.chat_bubble_rounded,
+                  color: Colors.white,
+                  size: 35,
+                    ),
+                  ),
+                ],*/
                 ),
                 body: Container(
                   width: double.infinity,
@@ -174,36 +196,10 @@ class _StudentWorkState extends State<StudentWork> {
                             color: Colors.black12,
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 30),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 10),
-                        ),
-                        /*Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),*/
+                        showTheStudentJobs(
+                            allJobsFromDatabase, studentsCurrentJob),
                         Padding(
                           padding: EdgeInsets.only(top: 10),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 10),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Container(
-                            height: MediaQuery.of(context).size.height * 0.001,
-                            width: MediaQuery.of(context).size.width * 0.83,
-                            color: Colors.black12,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 30),
                         ),
                         Text(
                           'Lediga Jobb',
@@ -232,7 +228,9 @@ class _StudentWorkState extends State<StudentWork> {
             } else {
               return LoadingScreen();
             }
-          }),
-    );
+          });
+    } else {
+      return LoadingScreen();
+    }
   }
 }

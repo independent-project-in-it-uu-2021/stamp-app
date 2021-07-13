@@ -79,8 +79,28 @@ class DatabaseService {
   }
 
   // Gets the job that user is either reserved or accepted
-  Future getUserJob(String userID) async {
+  Future getUserJob(String userID, Map jobMap) async {
+    List jobKey = jobMap.keys.toList();
     List<Jobs> userJobs = [];
+    jobKey.forEach((element) async {
+      final doc = await jobsCollection.doc(element).get();
+      userJobs.add(Jobs(
+        jobID: doc.id,
+        title: doc.data()['title'],
+        description: doc.data()['description'],
+        date: doc.data()['date'],
+        time: doc.data()['time'],
+        endTime: doc.data()['endTime'],
+        location: doc.data()['location'],
+        count: doc.data()['count'],
+        maxCount: doc.data()['maxCount'],
+        reserveCount: doc.data()['reserveCount'],
+        category: doc.data()['category'],
+        currentReserve: doc.data()['currentReserve'],
+        currentAccepted: doc.data()['currentAccepted'],
+        currentInterest: doc.data()['currentInterest'],
+      ));
+    });
   }
 
   // Method is called when user show interest for a job
@@ -287,6 +307,7 @@ class DatabaseService {
       bio: snapshot.data()['userBio'],
       imageUrl: snapshot.data()['userProfilePicUrl'],
       accountType: snapshot.data()['accountType'],
+      jobs: snapshot.data()['jobs'],
     );
   }
 
