@@ -38,8 +38,14 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
   int maxCount;
   int reserveCount;
   String category;
+
   Map showInterestUser;
+  Map showSelectedUser;
+  Map showReservedUser;
+
   List<UserJob> userThatShownInterest = [];
+  List<UserJob> userThatSelected = [];
+  List<UserJob> userThatReserved = [];
   bool showMsgToUser = false;
   String currentUserID;
 
@@ -59,8 +65,16 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
     reserveCount = widget.curJob.reserveCount;
     category = widget.curJob.category;
     showInterestUser = widget.curJob.currentInterest;
+    showSelectedUser = widget.curJob.currentAccepted;
+    showReservedUser = widget.curJob.currentReserve;
+
     // Create a list of users that have shown interest
     userThatShownInterest = _createUsersList(showInterestUser, false, false);
+
+    // List of users that are accepted
+    userThatSelected = _createUsersList(showSelectedUser, true, false);
+    // List of users that are reserved
+    userThatReserved = _createUsersList(showReservedUser, false, true);
   }
 
   // Creates a list of Userjob object, which is easier to work with
@@ -131,23 +145,64 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
         });
   }
 
+  Widget showSelectedUsers(List<UserJob> usersList, String msgText) {
+    String userID;
+    String userName;
+    String userProfilePicUrl;
+
+    if (usersList.isEmpty) {
+      msgText == 'selected'
+          ? msgText = 'Ingen accepterade'
+          : msgText = 'Ingen reserver';
+      return Text(
+        msgText,
+        style: TextStyle(fontSize: 15),
+      );
+    }
+
+    return ListView.builder(
+        shrinkWrap: true,
+        itemCount: usersList.length,
+        itemBuilder: (context, index) {
+          userID = usersList[index].userID;
+          userName = usersList[index].userName;
+          userProfilePicUrl = usersList[index].profilePickLink;
+          return Card(
+            child: ListTile(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OthersProfile(
+                      userID: userID,
+                    ),
+                  ),
+                );
+              },
+              leading: _userProfilePic(userProfilePicUrl),
+              title: Text(userName),
+              //subtitle:
+            ),
+          );
+        });
+  }
+
   // Shows text message if user has show interest for the job
   Widget _buildMsgWidget(String currentUserID) {
-    bool checkIfUserHarShownInterest = userThatShownInterest
+    bool userAccepted = userThatSelected
         .where((element) => element.userID == currentUserID)
         .isNotEmpty;
-    if (showMsgToUser || checkIfUserHarShownInterest) {
-      return Text(
-        'Du har anmält intresse',
-        style: TextStyle(
-          fontSize: 20,
-          color: Colors.red.shade900,
-          fontWeight: FontWeight.bold,
-        ),
-      );
-    } else {
-      return Container();
-    }
+
+    String msg;
+    userAccepted ? msg = 'Du är antagen' : msg = 'Du står som reserv';
+    return Text(
+      msg,
+      style: TextStyle(
+        fontSize: 20,
+        color: Colors.red.shade900,
+        fontWeight: FontWeight.bold,
+      ),
+    );
   }
 
   @override
@@ -197,9 +252,9 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
                     children: <Widget>[
                       // Builds job information
                       BuildJobInformation(curJob: currentJob),
-
+                      _buildMsgWidget(curUserID),
                       Text(
-                        'Intresseanmälningar',
+                        'Accepterad',
                         style: TextStyle(
                           fontSize: 30,
                           color: Colors.black,
@@ -212,7 +267,7 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
                             color: Colors.red.shade900,
                             fontWeight: FontWeight.bold,
                           )),*/
-                      _buildMsgWidget(curUserID),
+                      showSelectedUsers(userThatSelected, 'selected'),
 
                       Padding(padding: EdgeInsets.only(top: 10)),
                       Padding(
@@ -228,7 +283,20 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
                       ),
                       //---------------
 
-                      _buildUserShowIntereset(),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        'Reserv',
+                        style: TextStyle(
+                          fontSize: 24,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 20),
+                      ),
+                      showSelectedUsers(userThatReserved, 'reserve'),
 
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -241,38 +309,6 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
                       Padding(
                         padding: EdgeInsets.only(top: 30),
                       ),
-                      FloatingActionButton.extended(
-                        backgroundColor: Colors.green,
-                        onPressed: () async {
-                          final result = await locator
-                              .get<DatabaseService>()
-                              .showInterestJob(jobID, curUserID, curUserName,
-                                  curUserProfileImage);
-
-                          //print(result);
-                          if (userThatShownInterest
-                              .where((element) => element.userID == curUserID)
-                              .isNotEmpty) {
-                            setState(() {
-                              showMsgToUser = true;
-                            });
-                          }
-                          if (result == null) {
-                            setState(() {
-                              showMsgToUser = true;
-                            });
-                          }
-                          Navigator.pop(context, 'Du har anmält intresse');
-                        },
-                        label: Text(
-                          'Anmäl intresse',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                              color: Colors.black,
-                              fontFamily: 'Roboto'),
-                        ),
-                      )
                     ],
                   ),
                 ),
