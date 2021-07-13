@@ -22,6 +22,7 @@ class StudentWork extends StatefulWidget {
 
 class _StudentWorkState extends State<StudentWork> {
   Map studentsCurrentJob = {};
+  String currentUserID;
   // Not in used
   // When use, MaterialApp has change to GetMaterialApp in main
   /*void topSnackBar() {
@@ -51,21 +52,32 @@ class _StudentWorkState extends State<StudentWork> {
         itemCount: studentJobsKey.length,
         itemBuilder: (context, index) {
           String curTitle = theStudentJobs[index].title;
-          //String curDescription = allJobs[index].description;
           String curDate = theStudentJobs[index].date;
           String curTime = theStudentJobs[index].time;
           String curEndTime = theStudentJobs[index].endTime;
           String curLocation = theStudentJobs[index].location;
-          int curCount = theStudentJobs[index].count;
-          int curMaxCount = theStudentJobs[index].maxCount;
-          int curReserveCount = theStudentJobs[index].reserveCount;
           String curJobCategory = theStudentJobs[index].category;
+          String msg;
+
+          (theStudentJobs[index].currentAccepted.containsKey(currentUserID))
+              ? msg = 'Antagen'
+              : msg = 'Reserv';
+
           return Card(
             child: ListTile(
               leading: IconForWorkFeed(jobCategory: curJobCategory),
               title: Text('$curDate $curTitle'),
-              subtitle: Text(
-                  '$curTime - $curEndTime \n$curLocation \nStudenter: $curCount/$curMaxCount \nReserver: $curReserveCount'),
+              subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text('$curTime - $curEndTime \n$curLocation '),
+                    Text(
+                      msg,
+                      style: TextStyle(
+                          color: Colors.red.shade800,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ]),
               onTap: () {
                 Navigator.push(
                   context,
@@ -146,6 +158,7 @@ class _StudentWorkState extends State<StudentWork> {
     // Stream of all the jobs from database
     final allJobsFromDatabase = Provider.of<List<Jobs>>(context) ?? [];
     final curUser = Provider.of<User>(context);
+    currentUserID = curUser.uid;
     if (curUser != null) {
       return StreamBuilder<UserData>(
           stream: DatabaseService(userId: curUser.uid).userData,
