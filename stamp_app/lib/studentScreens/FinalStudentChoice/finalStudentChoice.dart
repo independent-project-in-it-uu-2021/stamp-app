@@ -112,14 +112,14 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
             child: ListTile(
               onTap: () {
                 // Show either its own profile page or other users
-                userID == currentUserID
+                userThatShownInterest[index].userID == currentUserID
                     ? Navigator.push(context,
                         MaterialPageRoute(builder: (context) => Profil()))
                     : Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => OthersProfile(
-                            userID: userID,
+                            userID: userThatShownInterest[index].userID,
                           ),
                         ),
                       );
