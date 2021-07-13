@@ -43,7 +43,6 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
   Map showSelectedUser;
   Map showReservedUser;
 
-  List<UserJob> userThatShownInterest = [];
   List<UserJob> userThatSelected = [];
   List<UserJob> userThatReserved = [];
   bool showMsgToUser = false;
@@ -64,12 +63,11 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
     maxCount = widget.curJob.maxCount;
     reserveCount = widget.curJob.reserveCount;
     category = widget.curJob.category;
-    showInterestUser = widget.curJob.currentInterest;
+
     showSelectedUser = widget.curJob.currentAccepted;
     showReservedUser = widget.curJob.currentReserve;
 
     // Create a list of users that have shown interest
-    userThatShownInterest = _createUsersList(showInterestUser, false, false);
 
     // List of users that are accepted
     userThatSelected = _createUsersList(showSelectedUser, true, false);
@@ -100,49 +98,6 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
   // returns userprofile image or icon
   Widget _userProfilePic(String imageUrl) {
     return ListViewImage(imageUrl: imageUrl);
-  }
-
-  // Build the listview for users that have shown interest for the job
-  Widget _buildUserShowIntereset() {
-    String userID;
-    String userName;
-    String userProfilePicUrl;
-    List userIDList = showInterestUser.keys.toList();
-
-    if (userIDList.isEmpty) {
-      return Text(
-        'Ingen intresseanmälningar',
-        style: TextStyle(fontSize: 15),
-      );
-    }
-    return ListView.builder(
-        shrinkWrap: true,
-        itemCount: userIDList.length,
-        itemBuilder: (context, index) {
-          userID = userThatShownInterest[index].userID;
-          userName = userThatShownInterest[index].userName;
-          userProfilePicUrl = userThatShownInterest[index].profilePickLink;
-          return Card(
-            child: ListTile(
-              onTap: () {
-                // Show either its own profile page or other users
-                userThatShownInterest[index].userID == currentUserID
-                    ? Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Profil()))
-                    : Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => OthersProfile(
-                            userID: userThatShownInterest[index].userID,
-                          ),
-                        ),
-                      );
-              },
-              leading: _userProfilePic(userProfilePicUrl),
-              title: Text(userName),
-            ),
-          );
-        });
   }
 
   Widget showSelectedUsers(List<UserJob> usersList, String msgText) {
