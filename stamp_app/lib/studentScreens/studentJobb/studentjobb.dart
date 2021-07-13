@@ -9,6 +9,7 @@ import 'package:stamp_app/models/jobsModel.dart';
 import 'package:stamp_app/models/user.dart';
 import 'package:stamp_app/sharedWidget/loadingScreen.dart';
 import 'package:stamp_app/studentScreens/FinalStudentChoice/finalStudentChoice.dart';
+import 'package:stamp_app/studentScreens/studentIntresse/studentIntresse.dart';
 import 'package:stamp_app/sharedWidget/iconForWorkFeed.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
@@ -36,7 +37,6 @@ class _StudentWorkState extends State<StudentWork> {
   }*/
 
   Widget showTheStudentJobs(List<Jobs> allTheJobs, Map studentJobs) {
-    print('Inside showTheStudent jobs');
     List studentJobsKey = studentJobs.keys.toList();
     List<Jobs> theStudentJobs = [];
     studentJobsKey.forEach((studentJobID) {
@@ -114,7 +114,7 @@ class _StudentWorkState extends State<StudentWork> {
                 final result = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => FinalStudentChoice(
+                    builder: (context) => StudentChoice(
                       curJob: allJobs[index],
                     ),
                   ),
