@@ -15,8 +15,8 @@ class FinalChoice extends StatelessWidget {
 
   FinalChoice({
     Key key,
-    this.curJob,
-    this.usersList,
+    @required this.curJob,
+    @required this.usersList,
   }) : super(key: key);
 
   Widget _userProfilePic(String imageUrl) {
@@ -51,8 +51,6 @@ class FinalChoice extends StatelessWidget {
   Widget buildReservedListView() {
     reservedUsers =
         usersList.where((element) => element.isReserve == true).toList();
-
-    print(reservedUsers.length);
 
     String userID;
     String userName;

@@ -78,6 +78,31 @@ class DatabaseService {
     }).toList();
   }
 
+  // Gets the job that user is either reserved or accepted
+  Future getUserJob(String userID, Map jobMap) async {
+    List jobKey = jobMap.keys.toList();
+    List<Jobs> userJobs = [];
+    jobKey.forEach((element) async {
+      final doc = await jobsCollection.doc(element).get();
+      userJobs.add(Jobs(
+        jobID: doc.id,
+        title: doc.data()['title'],
+        description: doc.data()['description'],
+        date: doc.data()['date'],
+        time: doc.data()['time'],
+        endTime: doc.data()['endTime'],
+        location: doc.data()['location'],
+        count: doc.data()['count'],
+        maxCount: doc.data()['maxCount'],
+        reserveCount: doc.data()['reserveCount'],
+        category: doc.data()['category'],
+        currentReserve: doc.data()['currentReserve'],
+        currentAccepted: doc.data()['currentAccepted'],
+        currentInterest: doc.data()['currentInterest'],
+      ));
+    });
+  }
+
   // Method is called when user show interest for a job
   Future showInterestJob(String jobID, String userID, String userName,
       String userProfileLink) async {
@@ -120,17 +145,15 @@ class DatabaseService {
         'userName': curUser.userName,
         'userProfilePicUrl': curUser.profilePickLink
       };
-      /* jobInfo = {
-        'roll': 'seleced'
-      };*/
+      jobInfo = {'roll': 'selected'};
       try {
         await jobsCollection.doc(jobID).update({
           selectedList + '.' + curUser.userID: userInfo,
           'currentInterest.' + curUser.userID: FieldValue.delete(),
         });
-        /*await userCollection.doc(curUser.userID).update({
-          'jobs.' + jobID: 
-        });*/
+        await userCollection.doc(curUser.userID).update({
+          'jobs.' + jobID: rollList,
+        });
       } on FirebaseException catch (e) {
         print('SelectedUers');
         print(e.code);
@@ -194,6 +217,7 @@ class DatabaseService {
       String userBio,
       String userProfilePicUrl,
       String accountType) async {
+    Map jobs = {};
     return await userCollection.doc(userId).set(
       {
         'userName': userName,
@@ -202,6 +226,7 @@ class DatabaseService {
         'userBio': userBio,
         'userProfilePicUrl': userProfilePicUrl,
         'accountType': accountType,
+        'jobs': jobs,
       },
     );
   }
@@ -282,6 +307,7 @@ class DatabaseService {
       bio: snapshot.data()['userBio'],
       imageUrl: snapshot.data()['userProfilePicUrl'],
       accountType: snapshot.data()['accountType'],
+      jobs: snapshot.data()['jobs'],
     );
   }
 

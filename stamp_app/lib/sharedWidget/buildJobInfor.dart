@@ -49,8 +49,6 @@ class _BuildJobInformationState extends State<BuildJobInformation> {
 
   // Returns different typ of icon depending on category
   Widget _buildCategoryIcon(String jobCategory) {
-    print('Build Category icon');
-    print(jobCategory);
     if (jobCategory != null && jobCategory.isNotEmpty) {
       return LayoutBuilder(builder: (context, constraints) {
         switch (jobCategory) {

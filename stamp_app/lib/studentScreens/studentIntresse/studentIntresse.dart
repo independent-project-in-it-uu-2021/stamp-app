@@ -1,30 +1,182 @@
 import 'package:flutter/material.dart';
-import 'package:stamp_app/services/auth.dart';
+import 'package:provider/provider.dart';
+import 'package:stamp_app/models/user.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-import 'package:stamp_app/screens/editProfile/redigera-konto.dart';
-import 'package:stamp_app/screens/home/home.dart';
-import 'package:stamp_app/screens/jobb/jobb.dart';
-import 'package:stamp_app/screens/slutval/slutval.dart';
+import 'package:stamp_app/models/jobsModel.dart';
+import 'package:stamp_app/screens/profil/profil.dart';
+import 'package:stamp_app/services/database.dart';
+import 'package:stamp_app/services/locator.dart';
+import 'package:stamp_app/sharedWidget/loadingScreen.dart';
+import 'package:stamp_app/sharedWidget/buildJobInfor.dart';
+import 'package:stamp_app/sharedWidget/imageForListView.dart';
 import 'package:stamp_app/screens/annansProfil/annansProfil.dart';
-import 'package:stamp_app/studentScreens/FinalStudentChoice/finalStudentChoice.dart';
 
-class StudentChoice extends StatelessWidget {
-  final AuthService _firebaseAuth = AuthService();
+class StudentChoice extends StatefulWidget {
+  final Jobs curJob;
+
+  StudentChoice({
+    Key key,
+    @required this.curJob,
+  }) : super(key: key);
+  @override
+  State<StatefulWidget> createState() {
+    return StudentChoiceState();
+  }
+}
+
+class StudentChoiceState extends State<StudentChoice> {
+  Jobs currentJob;
+  String jobID;
+  String title;
+  String description;
+  String date;
+  String time;
+  String endTime;
+  String location;
+  int count;
+  int maxCount;
+  int reserveCount;
+  String category;
+  Map showInterestUser;
+  List<UserJob> userThatShownInterest = [];
+  bool showMsgToUser = false;
+  String currentUserID;
+
+  @override
+  void initState() {
+    super.initState();
+    currentJob = widget.curJob;
+    jobID = widget.curJob.jobID;
+    title = widget.curJob.title;
+    description = widget.curJob.description;
+    date = widget.curJob.date;
+    time = widget.curJob.time;
+    endTime = widget.curJob.endTime;
+    location = widget.curJob.location;
+    count = widget.curJob.count;
+    maxCount = widget.curJob.maxCount;
+    reserveCount = widget.curJob.reserveCount;
+    category = widget.curJob.category;
+    showInterestUser = widget.curJob.currentInterest;
+    // Create a list of users that have shown interest
+    userThatShownInterest = _createUsersList(showInterestUser, false, false);
+  }
+
+  // Creates a list of Userjob object, which is easier to work with
+  List<UserJob> _createUsersList(Map userMap, bool select, bool reserve) {
+    List<UserJob> theList = [];
+    userMap.forEach(
+      (key, value) {
+        theList.add(
+          UserJob(
+            userID: key,
+            userName: value['userName'],
+            profilePickLink: value['userProfilePicUrl'],
+            isSelected: select,
+            isReserve: reserve,
+          ),
+        );
+      },
+    );
+    return theList;
+  }
+
+  // Check if user has profileimage or not
+  // returns userprofile image or icon
+  Widget _userProfilePic(String imageUrl) {
+    return ListViewImage(imageUrl: imageUrl);
+  }
+
+  // Build the listview for users that have shown interest for the job
+  Widget _buildUserShowIntereset() {
+    String userID;
+    String userName;
+    String userProfilePicUrl;
+    List userIDList = showInterestUser.keys.toList();
+
+    if (userIDList.isEmpty) {
+      return Text(
+        'Ingen intresseanmälningar',
+        style: TextStyle(fontSize: 15),
+      );
+    }
+    return ListView.builder(
+        shrinkWrap: true,
+        itemCount: userIDList.length,
+        itemBuilder: (context, index) {
+          userID = userThatShownInterest[index].userID;
+          userName = userThatShownInterest[index].userName;
+          userProfilePicUrl = userThatShownInterest[index].profilePickLink;
+          return Card(
+            child: ListTile(
+              onTap: () {
+                // Show either its own profile page or other users
+                userThatShownInterest[index].userID == currentUserID
+                    ? Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Profil()))
+                    : Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OthersProfile(
+                            userID: userThatShownInterest[index].userID,
+                          ),
+                        ),
+                      );
+              },
+              leading: _userProfilePic(userProfilePicUrl),
+              title: Text(userName),
+            ),
+          );
+        });
+  }
+
+  // Shows text message if user has show interest for the job
+  Widget _buildMsgWidget(String currentUserID) {
+    bool checkIfUserHarShownInterest = userThatShownInterest
+        .where((element) => element.userID == currentUserID)
+        .isNotEmpty;
+    if (showMsgToUser || checkIfUserHarShownInterest) {
+      return Text(
+        'Du har anmält intresse',
+        style: TextStyle(
+          fontSize: 20,
+          color: Colors.red.shade900,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    } else {
+      return Container();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Image.asset('assets/images/uuLogaNew.png', fit: BoxFit.cover),
-        //centerTitle: true,
-        backgroundColor: Colors.red.shade900,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_rounded),
-          //TODO: This does nothing now
-          onPressed: () => Navigator.of(context).pop(),
-          tooltip: 'Tillbaka',
-        ),
-        /*actions: <Widget>[
+    final _currentUser = Provider.of<User>(context);
+    currentUserID = _currentUser.uid;
+
+    return StreamBuilder<UserData>(
+      stream: DatabaseService(userId: _currentUser.uid).userData,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          String curUserID = _currentUser.uid;
+          String curUserName = snapshot.data.name;
+          String curUserProfileImage = snapshot.data.imageUrl;
+          return Scaffold(
+            appBar: AppBar(
+              title:
+                  Image.asset('assets/images/uuLogaNew.png', fit: BoxFit.cover),
+              //centerTitle: true,
+              backgroundColor: Colors.red.shade900,
+              elevation: 0,
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back_ios_rounded),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                tooltip: 'Tillbaka',
+              ),
+              /*actions: <Widget>[
               IconButton(
                 padding: EdgeInsets.only(right: 10),
                 onPressed: null,
@@ -35,261 +187,102 @@ class StudentChoice extends StatelessWidget {
                 ),
               ),
             ],*/
-      ),
-      body: Container(
-        width: double.infinity,
-        child: SingleChildScrollView(
-          child: Form(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                Column(
-                  children: [
-                    Row(
-                      children: [
-                        Padding(padding: EdgeInsets.only(left: 30)),
-                        Icon(
-                          Icons.smart_toy,
-                          size: 70,
-                        ),
-                        Padding(padding: EdgeInsets.only(left: 20)),
-                        Column(
-                          children: [
-                            Text(
-                              'Lego workshop',
-                              style: TextStyle(
-                                fontSize: 30,
-                                color: Colors.black,
-                              ),
-                            ),
-                            Text(
-                              '2021-07-11',
-                              style: TextStyle(fontSize: 20),
-                              textAlign: TextAlign.left,
-                            ),
-                            Text(
-                              '13:00 - 15:00',
-                              style: TextStyle(fontSize: 20),
-                            ),
-                            Text(
-                              'Uppsala',
-                              style: TextStyle(fontSize: 20),
-                            ),
-                            Text(
-                              '3/4 st',
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Padding(padding: EdgeInsets.only(top: 40)),
-                    Row(
-                      children: [
-                        Padding(padding: EdgeInsets.only(left: 30)),
-                        Expanded(
-                          child: Text(
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque porttitor tortor sed lacinia dictum. Mauris auctor massa magna, a consequat neque sodales eget. In ac hendrerit quam. Nullam sollicitudin orci at mauris rutrum scelerisque.',
-                            style: TextStyle(fontSize: 15),
-                            textAlign: TextAlign.left,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 10,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 40),
-                ),
-                Text(
-                  'Intresseanmälningar',
-                  style: TextStyle(
-                    fontSize: 30,
-                    color: Colors.black,
-                  ),
-                ),
-
-                TextButton(
-                  style: TextButton.styleFrom(
-                    textStyle: const TextStyle(fontSize: 26),
-                    primary: Colors.blue,
-                  ),
-                  onPressed: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => OthersProfile()),
-                    )
-                  },
-                ),
-
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                //---------------
-                FlatButton(
-                  onPressed: () => {},
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                  color: Colors.white,
-                  child: Row(
-                    // Replace with a Row for horizontal icon + text
-                    children: <Widget>[
-                      Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
-                      Image.asset(
-                        'assets/images/profilbild.png',
-                        fit: BoxFit.cover,
-                        scale: 3,
-                      ),
-                      Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
-                      Text(
-                        'Kalle Hansson',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                FlatButton(
-                  onPressed: () => {},
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                  color: Colors.white,
-                  child: Row(
-                    // Replace with a Row for horizontal icon + text
-                    children: <Widget>[
-                      Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
-                      Image.asset(
-                        'assets/images/profilbild.png',
-                        fit: BoxFit.cover,
-                        scale: 3,
-                      ),
-                      Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
-                      Text(
-                        'Agnes Brorson',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                FlatButton(
-                  onPressed: () => {},
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                  color: Colors.white,
-                  child: Row(
-                    // Replace with a Row for horizontal icon + text
-                    children: <Widget>[
-                      Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
-                      Image.asset(
-                        'assets/images/profilbild.png',
-                        fit: BoxFit.cover,
-                        scale: 3,
-                      ),
-                      Padding(padding: EdgeInsets.fromLTRB(15, 0, 0, 0)),
-                      Text(
-                        'Sixten Andersson',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.001,
-                    width: MediaQuery.of(context).size.width * 0.83,
-                    color: Colors.black12,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
-                ),
-              ],
             ),
-          ),
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Colors.green[400],
-                padding: EdgeInsets.symmetric(horizontal: 70, vertical: 15),
-              ),
-              child: Text(
-                'Anmäl intresse',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 21,
+            body: Container(
+              width: double.infinity,
+              child: SingleChildScrollView(
+                child: Form(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      // Builds job information
+                      BuildJobInformation(curJob: currentJob),
+
+                      Text(
+                        'Intresseanmälningar',
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Padding(padding: EdgeInsets.only(top: 10)),
+                      /*Text('Du har anmält intresse',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.red.shade900,
+                            fontWeight: FontWeight.bold,
+                          )),*/
+                      _buildMsgWidget(curUserID),
+
+                      Padding(padding: EdgeInsets.only(top: 10)),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.001,
+                          width: MediaQuery.of(context).size.width * 0.83,
+                          color: Colors.black12,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 20),
+                      ),
+                      //---------------
+
+                      _buildUserShowIntereset(),
+
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.001,
+                          width: MediaQuery.of(context).size.width * 0.83,
+                          color: Colors.black12,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 30),
+                      ),
+                      FloatingActionButton.extended(
+                        backgroundColor: Colors.green,
+                        onPressed: () async {
+                          final result = await locator
+                              .get<DatabaseService>()
+                              .showInterestJob(jobID, curUserID, curUserName,
+                                  curUserProfileImage);
+
+                          //print(result);
+                          if (userThatShownInterest
+                              .where((element) => element.userID == curUserID)
+                              .isNotEmpty) {
+                            setState(() {
+                              showMsgToUser = true;
+                            });
+                          }
+                          if (result == null) {
+                            setState(() {
+                              showMsgToUser = true;
+                            });
+                          }
+                          Navigator.pop(context, 'Du har anmält intresse');
+                        },
+                        label: Text(
+                          'Anmäl intresse',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              color: Colors.black,
+                              fontFamily: 'Roboto'),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
-              onPressed: () => {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => FinalStudentChoice()),
-                ),
-              },
             ),
-            Padding(padding: EdgeInsets.only(bottom: 100))
-          ],
-        ),
-      ),
+          );
+        } else {
+          return LoadingScreen();
+        }
+      },
     );
   }
 }

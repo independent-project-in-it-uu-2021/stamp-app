@@ -14,6 +14,8 @@ class ErrorMessage {
       case 'invalid-email':
         return 'Ogilig mejladress';
         break;
+      case 'firebase_auth/invalid-email':
+        return 'Ogiltig mejladress';
       case 'weak-password':
         return 'Lösenordet är för lätt';
         break;

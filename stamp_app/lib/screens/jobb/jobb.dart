@@ -7,53 +7,9 @@ import 'package:stamp_app/screens/createJob/create-job.dart';
 import 'package:stamp_app/screens/val/val.dart';
 import 'package:stamp_app/models/jobsModel.dart';
 import 'package:stamp_app/models/user.dart';
+import 'package:stamp_app/sharedWidget/iconForWorkFeed.dart';
 
 class Work extends StatelessWidget {
-  // Returns different typ of icon depending on category
-  Widget _buildCategoryIcon(String jobCategory) {
-    if (jobCategory != null && jobCategory.isNotEmpty) {
-      return LayoutBuilder(builder: (context, constraints) {
-        switch (jobCategory) {
-          case 'Workshop':
-            return Icon(
-              Icons.construction_sharp,
-              size: MediaQuery.of(context).size.height * 0.07,
-              color: Colors.black,
-            );
-            break;
-          case 'Lego workshop':
-            return Icon(
-              Icons.smart_toy,
-              size: MediaQuery.of(context).size.height * 0.07,
-              color: Colors.black,
-            );
-            break;
-          case 'Studiebesök':
-            return Icon(
-              Icons.school,
-              size: MediaQuery.of(context).size.height * 0.07,
-              color: Colors.black,
-            );
-            break;
-          default:
-            return Icon(
-              Icons.campaign_sharp,
-              size: MediaQuery.of(context).size.height * 0.07,
-              color: Colors.black,
-            );
-        }
-      });
-    } else {
-      return LayoutBuilder(builder: (context, constraints) {
-        return Icon(
-          Icons.campaign_sharp,
-          size: MediaQuery.of(context).size.height * 0.07,
-          color: Colors.black,
-        );
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final allJobs = Provider.of<List<Jobs>>(context) ?? [];
@@ -95,7 +51,7 @@ class Work extends StatelessWidget {
           return Card(
             child: ListTile(
               //leading: Icon(Icons.arrow_forward_ios),
-              leading: _buildCategoryIcon(jobCategory),
+              leading: IconForWorkFeed(jobCategory: jobCategory),
               title: Text('$date $title'), //Aligna med hjälp av textspan
               subtitle: Text(
                   '$time - $endTime \n$location \nStudenter: $count/$maxCount \nReserver: $reserveCount'),

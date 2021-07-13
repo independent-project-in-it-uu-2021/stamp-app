@@ -44,6 +44,7 @@ class ChoiceState extends State<Choice> {
   List<UserJob> userThatReserved = [];
   int amountSelected;
   int amountReserved;
+  bool showErrorMsg = false;
 
   @override
   void initState() {
@@ -64,17 +65,17 @@ class ChoiceState extends State<Choice> {
     showReservedUser = widget.curJob.currentReserve;
 
     // Create a list of users that have shown interest
-    userThatShownInterest = createUsersList(showInterestUser, false, false);
+    userThatShownInterest = _createUsersList(showInterestUser, false, false);
     // List of users that are accepted
-    userThatSelected = createUsersList(showSelectedUser, true, false);
+    userThatSelected = _createUsersList(showSelectedUser, true, false);
     // List of users that are reserved
-    userThatReserved = createUsersList(showReservedUser, false, true);
+    userThatReserved = _createUsersList(showReservedUser, false, true);
     amountSelected = widget.curJob.count;
     amountReserved = widget.curJob.reserveCount;
   }
 
   // Creates a list of Userjob object, which is easier to work with
-  List<UserJob> createUsersList(Map userMap, bool select, bool reserve) {
+  List<UserJob> _createUsersList(Map userMap, bool select, bool reserve) {
     List<UserJob> theList = [];
     userMap.forEach(
       (key, value) {
@@ -223,7 +224,7 @@ class ChoiceState extends State<Choice> {
                       changeState('reserve', index);
                     },
                     child: Text(
-                      'Reservera',
+                      'Reserver',
                       style: TextStyle(color: Colors.black),
                     ),
                   ),
@@ -242,6 +243,8 @@ class ChoiceState extends State<Choice> {
     bool selectedSelected = curUserInfo.isSelected == true;
     bool reserveSelected = curUserInfo.isReserve == true;
     setState(() {
+      // Checks if user has choosen any reserv or accepted anyone
+      showErrorMsg = false;
       if (adminChoice == 'selected' && reserveSelected) {
         curUserInfo.isSelected = !curUserInfo.isSelected;
         curUserInfo.isReserve = !curUserInfo.isReserve;
@@ -266,6 +269,7 @@ class ChoiceState extends State<Choice> {
     });
   }
 
+  // Show text message if user choose more than allowed amount of student
   Widget buildInfoText() {
     if (amountSelected == maxCount + 1) {
       return Text(
@@ -276,6 +280,65 @@ class ChoiceState extends State<Choice> {
     } else {
       return Container();
     }
+  }
+
+  // Shows text message if user has not selected anyone
+  Widget buildMsgText() {
+    if (showErrorMsg == true) {
+      return Text(
+        'TODO: Ingen har ... ',
+        style:
+            TextStyle(color: Colors.red.shade700, fontWeight: FontWeight.bold),
+      );
+    } else {
+      return Container();
+    }
+  }
+
+  // Logic and build widget for the bottombar button
+  Widget buildBottomBar() {
+    return BottomAppBar(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Colors.green[400],
+              padding: EdgeInsets.symmetric(horizontal: 90, vertical: 15),
+            ),
+            child: Text(
+              'Nästa Steg',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 21,
+              ),
+            ),
+            onPressed: () => {
+              if (reserveCount == amountReserved && count == amountSelected)
+                {
+                  setState(() {
+                    showErrorMsg = true;
+                  })
+                }
+              else
+                {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FinalChoice(
+                        curJob: widget.curJob,
+                        usersList: userThatShownInterest,
+                      ),
+                    ),
+                  ),
+                }
+            },
+          ),
+          Padding(padding: EdgeInsets.only(bottom: 60))
+        ],
+      ),
+    );
   }
 
   @override
@@ -321,6 +384,7 @@ class ChoiceState extends State<Choice> {
               Padding(
                 padding: EdgeInsets.only(top: 20),
               ),
+              buildMsgText(),
               buildInfoText(),
               _buildUserShowIntereset(),
               Padding(
@@ -361,39 +425,7 @@ class ChoiceState extends State<Choice> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Colors.green[400],
-                padding: EdgeInsets.symmetric(horizontal: 90, vertical: 15),
-              ),
-              child: Text(
-                'Nästa Steg',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 21,
-                ),
-              ),
-              onPressed: () => {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => FinalChoice(
-                      curJob: widget.curJob,
-                      usersList: userThatShownInterest,
-                    ),
-                  ),
-                ),
-              },
-            ),
-            Padding(padding: EdgeInsets.only(bottom: 100))
-          ],
-        ),
-      ),
+      bottomNavigationBar: buildBottomBar(),
     );
   }
 }
