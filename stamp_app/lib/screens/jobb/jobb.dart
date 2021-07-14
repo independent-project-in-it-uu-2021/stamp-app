@@ -52,7 +52,12 @@ class Work extends StatelessWidget {
             child: ListTile(
               //leading: Icon(Icons.arrow_forward_ios),
               leading: IconForWorkFeed(jobCategory: jobCategory),
-              title: Text('$date $title'), //Aligna med hjälp av textspan
+              title: Text(
+                '$date $title',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ), //Aligna med hjälp av textspan
               subtitle: Text(
                   '$time - $endTime \n$location \nStudenter: $count/$maxCount \nReserver: $reserveCount'),
               onTap: () => {

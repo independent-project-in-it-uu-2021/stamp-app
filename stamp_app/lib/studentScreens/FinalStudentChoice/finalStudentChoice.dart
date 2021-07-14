@@ -157,7 +157,9 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
       msg,
       style: TextStyle(
         fontSize: 20,
-        color: Colors.red.shade900,
+        color: msg == 'Du är antagen'
+            ? Colors.green.shade600
+            : Colors.red.shade900,
         fontWeight: FontWeight.bold,
       ),
     );

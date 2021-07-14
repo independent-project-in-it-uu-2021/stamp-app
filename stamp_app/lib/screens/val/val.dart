@@ -286,7 +286,7 @@ class ChoiceState extends State<Choice> {
   Widget buildMsgText() {
     if (showErrorMsg == true) {
       return Text(
-        'TODO: Ingen har ... ',
+        'Välj någon att acceptera eller som reserv ',
         style:
             TextStyle(color: Colors.red.shade700, fontWeight: FontWeight.bold),
       );

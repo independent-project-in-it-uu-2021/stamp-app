@@ -37,13 +37,21 @@ class _StudentWorkState extends State<StudentWork> {
     );
   }*/
 
+  // Builds the jobs where the student is either accepted or is reserved
   Widget showTheStudentJobs(List<Jobs> allTheJobs, Map studentJobs) {
     List studentJobsKey = studentJobs.keys.toList();
     List<Jobs> theStudentJobs = [];
+
+    // Find all the jobs where the user is either accepted or is reserved
     studentJobsKey.forEach((studentJobID) {
       List<Jobs> curJob =
           allTheJobs.where((element) => element.jobID == studentJobID).toList();
       theStudentJobs.addAll(curJob);
+    });
+
+    // Sort the jobs according to date
+    theStudentJobs.sort((a, b) {
+      return a.date.compareTo(b.date);
     });
 
     return ListView.builder(
@@ -59,6 +67,7 @@ class _StudentWorkState extends State<StudentWork> {
           String curJobCategory = theStudentJobs[index].category;
           String msg;
 
+          // If user is accepted Antaget message is shown otherwise Reserv
           (theStudentJobs[index].currentAccepted.containsKey(currentUserID))
               ? msg = 'Antagen'
               : msg = 'Reserv';
@@ -66,7 +75,10 @@ class _StudentWorkState extends State<StudentWork> {
           return Card(
             child: ListTile(
               leading: IconForWorkFeed(jobCategory: curJobCategory),
-              title: Text('$curDate $curTitle'),
+              title: Text(
+                '$curDate $curTitle',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -74,7 +86,9 @@ class _StudentWorkState extends State<StudentWork> {
                     Text(
                       msg,
                       style: TextStyle(
-                          color: Colors.red.shade800,
+                          color: msg == 'Antagen'
+                              ? Colors.green.shade600
+                              : Colors.red,
                           fontWeight: FontWeight.bold),
                     ),
                   ]),
@@ -95,6 +109,13 @@ class _StudentWorkState extends State<StudentWork> {
 
   // Returns a listviewbuilder for all the jobs
   Widget _buildAllJobs(List<Jobs> allJobs, String userID) {
+    /*Map test = {};
+    List studentKeyJobs = test.keys.toList();
+    List<Jobs> vacantJobs = [];
+    studentKeyJobs.forEach((curJobID) {
+      List<Jobs> curJob = allJobs.where((element) => element.jobID != curJobID);
+      vacantJobs.addAll(curJob);
+    });*/
     allJobs.sort((a, b) {
       return a.date.compareTo(b.date);
     });
@@ -119,7 +140,12 @@ class _StudentWorkState extends State<StudentWork> {
               leading: IconForWorkFeed(
                 jobCategory: curJobCategory,
               ),
-              title: Text('$curDate $curTitle'), //Aligna med hjälp av textspan
+              title: Text(
+                '$curDate $curTitle',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ), //Aligna med hjälp av textspan
               subtitle: Text(
                   '$curTime - $curEndTime \n$curLocation \nStudenter: $curCount/$curMaxCount \nReserver: $curReserveCount'),
               onTap: () async {
