@@ -108,32 +108,37 @@ class _StudentWorkState extends State<StudentWork> {
   }
 
   // Returns a listviewbuilder for all the jobs
-  Widget _buildAllJobs(List<Jobs> allJobs, String userID) {
-    /*Map test = {};
-    List studentKeyJobs = test.keys.toList();
+  Widget _buildAllJobs(List<Jobs> allJobs, String userID, Map studentJobs) {
+    Map test = {};
+    List studentKeyJobs = studentJobs.keys.toList();
     List<Jobs> vacantJobs = [];
+    vacantJobs.addAll(allJobs);
+    //List<Jobs> curJob = [];
+
     studentKeyJobs.forEach((curJobID) {
-      List<Jobs> curJob = allJobs.where((element) => element.jobID != curJobID);
-      vacantJobs.addAll(curJob);
-    });*/
-    allJobs.sort((a, b) {
+      vacantJobs.removeWhere((element) => element.jobID == curJobID);
+    });
+
+    print('Vacant jobs length ');
+    print(vacantJobs.length);
+    vacantJobs.sort((a, b) {
       return a.date.compareTo(b.date);
     });
     return ListView.builder(
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
-        itemCount: allJobs.length,
+        itemCount: vacantJobs.length,
         itemBuilder: (BuildContext context, int index) {
-          String curTitle = allJobs[index].title;
+          String curTitle = vacantJobs[index].title;
           //String curDescription = allJobs[index].description;
-          String curDate = allJobs[index].date;
-          String curTime = allJobs[index].time;
-          String curEndTime = allJobs[index].endTime;
-          String curLocation = allJobs[index].location;
-          int curCount = allJobs[index].count;
-          int curMaxCount = allJobs[index].maxCount;
-          int curReserveCount = allJobs[index].reserveCount;
-          String curJobCategory = allJobs[index].category;
+          String curDate = vacantJobs[index].date;
+          String curTime = vacantJobs[index].time;
+          String curEndTime = vacantJobs[index].endTime;
+          String curLocation = vacantJobs[index].location;
+          int curCount = vacantJobs[index].count;
+          int curMaxCount = vacantJobs[index].maxCount;
+          int curReserveCount = vacantJobs[index].reserveCount;
+          String curJobCategory = vacantJobs[index].category;
           return Card(
             child: ListTile(
               //leading: Icon(Icons.arrow_forward_ios),
@@ -153,7 +158,7 @@ class _StudentWorkState extends State<StudentWork> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => StudentChoice(
-                      curJob: allJobs[index],
+                      curJob: vacantJobs[index],
                     ),
                   ),
                 );
@@ -258,7 +263,8 @@ class _StudentWorkState extends State<StudentWork> {
                             color: Colors.black12,
                           ),
                         ),
-                        _buildAllJobs(allJobsFromDatabase, curUser.uid),
+                        _buildAllJobs(allJobsFromDatabase, curUser.uid,
+                            studentsCurrentJob),
                       ],
                     ),
                   ),
