@@ -7,6 +7,9 @@ import 'package:stamp_app/services/database.dart';
 import 'package:stamp_app/sharedWidget/loadingScreen.dart';
 import 'package:stamp_app/sharedWidget/profileImage.dart';
 import 'package:stamp_app/models/user.dart';
+import 'package:stamp_app/models/jobsModel.dart';
+import 'package:stamp_app/sharedWidget/iconForWorkFeed.dart';
+import 'package:stamp_app/studentScreens/FinalStudentChoice/finalStudentChoice.dart';
 
 class StudentProfile extends StatefulWidget {
   @override
@@ -21,12 +24,104 @@ class StudentProfileState extends State<StudentProfile> {
   String _userEmail = '';
   String _userBio = '';
   String _profileImageUrl = '';
+  Map _studentJobs = {};
 
   // key to hold the state of the form i.e referens to the form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   // reuseable profile image widget
-  Widget profilePic() {
+  Widget _profilePic() {
     return ProfileImage(profileImagUrl: _profileImageUrl);
+  }
+
+  // Build the three lastest jobbs listview
+  Widget _buildLastestJob(String currentUserID) {
+    final allTheJobs = Provider.of<List<Jobs>>(context) ?? [];
+    List studentJobsKey = _studentJobs.keys.toList();
+    List<Jobs> studentJobs = [];
+    // Filter out the jobs that the student is either selected or reserved
+    studentJobsKey.forEach((curJobID) {
+      List<Jobs> curJob =
+          allTheJobs.where((curJob) => curJob.jobID == curJobID).toList();
+      studentJobs.addAll(curJob);
+    });
+
+    // Sort according to job date
+    studentJobs.sort((a, b) {
+      return a.date.compareTo(b.date);
+    });
+
+    // Build a listview
+    return ListView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: 3,
+        itemBuilder: (BuildContext context, int index) {
+          String curTitle = studentJobs[index].title;
+          String curDate = studentJobs[index].date;
+          String curTime = studentJobs[index].time;
+          String curEndTime = studentJobs[index].endTime;
+          String curLocation = studentJobs[index].location;
+          String curJobCategory = studentJobs[index].category;
+          String msg;
+
+          // If user is accepted Antaget message is shown otherwise Reserv
+          (studentJobs[index].currentAccepted.containsKey(currentUserID))
+              ? msg = 'Antagen'
+              : msg = 'Reserv';
+
+          return Card(
+            child: ListTile(
+              leading: IconForWorkFeed(jobCategory: curJobCategory),
+              title: Text(
+                '$curDate $curTitle',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text('$curTime - $curEndTime \n$curLocation '),
+                    Text(
+                      msg,
+                      style: TextStyle(
+                          color: msg == 'Antagen'
+                              ? Colors.green.shade600
+                              : Colors.red,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ]),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FinalStudentChoice(
+                      curJob: studentJobs[index],
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        });
+  }
+
+  Widget _buildPaddingWithLine(double paddingSize) {
+    MediaQueryData _mediQuearyData = MediaQuery.of(context);
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.only(top: paddingSize),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10.0),
+          child: Container(
+            height: _mediQuearyData.size.height * 0.001,
+            width: _mediQuearyData.size.width * 0.83,
+            color: Colors.black12,
+          ),
+        ),
+      ],
+    );
   }
 
   @override
@@ -41,6 +136,7 @@ class StudentProfileState extends State<StudentProfile> {
             _userName = snapshot.data.name;
             _userEmail = snapshot.data.email;
             _userBio = snapshot.data.bio;
+            _studentJobs = snapshot.data.jobs;
 
             //If user has not profile picture
             snapshot.data.imageUrl == null
@@ -81,271 +177,144 @@ class StudentProfileState extends State<StudentProfile> {
               body: Container(
                 width: double.infinity,
                 child: SingleChildScrollView(
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(top: 30),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(top: 30),
+                      ),
+                      Stack(
+                        children: [
+                          Text(
+                            'Din profil',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 40,
+                              color: Colors.black,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 215,
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: _mediQuearyData.size.width * -0.05,
+                            child: RawMaterialButton(
+                                child: Icon(Icons.edit_rounded, size: 33),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProfileEdit(
+                                        userID: _currentUser.uid,
+                                        userName: _userName,
+                                        userEmail: _userEmail,
+                                        userNumber: _userNumber,
+                                        userBio: _userBio,
+                                        userProfileImgUrl: _profileImageUrl,
+                                      ),
+                                    ),
+                                  );
+                                }),
+                          )
+                        ],
+                      ),
+
+                      _buildPaddingWithLine(15.0),
+                      Padding(
+                        padding: EdgeInsets.only(top: 15),
+                      ),
+                      Text(
+                        _userName,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 25,
+                          color: Colors.black,
                         ),
-                        Stack(
-                          children: [
-                            Text(
-                              'Din profil',
-                              textAlign: TextAlign.center,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      _profilePic(),
+                      //_profilePicture(),
+                      _buildPaddingWithLine(20.0),
+                      Padding(
+                        padding: EdgeInsets.only(top: 12),
+                      ),
+                      Text(
+                        _userNumber,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                        ),
+                      ),
+
+                      _buildPaddingWithLine(12.0),
+                      Padding(
+                        padding: EdgeInsets.only(top: 12),
+                      ),
+                      Text(
+                        _userEmail,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                        ),
+                      ),
+                      _buildPaddingWithLine(12.0),
+                      Padding(
+                        padding: EdgeInsets.only(top: 12),
+                      ),
+                      Text(
+                        _userBio,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                        ),
+                      ),
+                      _buildPaddingWithLine(12.0),
+                      Padding(
+                        padding: EdgeInsets.only(top: 30),
+                      ),
+                      Text(
+                        'Senaste Jobb',
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.black,
+                        ),
+                      ),
+                      _buildPaddingWithLine(30.0),
+                      _buildLastestJob(_currentUser.uid),
+                      Padding(
+                        padding: EdgeInsets.only(top: 5),
+                        child: TextButton(
+                            child: Text(
+                              'Redigera profil',
                               style: TextStyle(
-                                fontSize: 40,
+                                fontSize: 20,
+                                decoration: TextDecoration.underline,
                                 color: Colors.black,
                               ),
                             ),
-                            SizedBox(
-                              width: 215,
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              right: _mediQuearyData.size.width * -0.05,
-                              child: RawMaterialButton(
-                                  child: Icon(Icons.edit_rounded, size: 33),
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ProfileEdit(
-                                          userID: _currentUser.uid,
-                                          userName: _userName,
-                                          userEmail: _userEmail,
-                                          userNumber: _userNumber,
-                                          userBio: _userBio,
-                                          userProfileImgUrl: _profileImageUrl,
-                                        ),
-                                      ),
-                                    );
-                                  }),
-                            )
-                          ],
-                        ),
-
-                        Padding(
-                          padding: EdgeInsets.only(top: 15),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Container(
-                            height: _mediQuearyData.size.height * 0.001,
-                            width: _mediQuearyData.size.width * 0.83,
-                            color: Colors.black12,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 15),
-                        ),
-                        Text(
-                          _userName,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 25,
-                            color: Colors.black,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        profilePic(),
-                        //_profilePicture(),
-                        Padding(
-                          padding: EdgeInsets.only(top: 20),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Container(
-                            height: _mediQuearyData.size.height * 0.001,
-                            width: _mediQuearyData.size.width * 0.83,
-                            color: Colors.black12,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 12),
-                        ),
-                        Text(
-                          _userNumber,
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.black,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 12),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Container(
-                            height: _mediQuearyData.size.height * 0.001,
-                            width: _mediQuearyData.size.width * 0.83,
-                            color: Colors.black12,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 12),
-                        ),
-                        Text(
-                          _userEmail,
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.black,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 12),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Container(
-                            height: _mediQuearyData.size.height * 0.001,
-                            width: _mediQuearyData.size.width * 0.83,
-                            color: Colors.black12,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 12),
-                        ),
-                        Text(
-                          _userBio,
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.black,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 12),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Container(
-                            height: _mediQuearyData.size.height * 0.001,
-                            width: _mediQuearyData.size.width * 0.83,
-                            color: Colors.black12,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 30),
-                        ),
-                        Text(
-                          'Senaste Jobb',
-                          style: TextStyle(
-                            fontSize: 30,
-                            color: Colors.black,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 30),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Container(
-                            height: _mediQuearyData.size.height * 0.001,
-                            width: _mediQuearyData.size.width * 0.83,
-                            color: Colors.black12,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 30),
-                        ),
-                        Text(
-                          'Jobb 1',
-                          style: TextStyle(
-                            fontSize: 30,
-                            color: Colors.black,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 30),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Container(
-                            height: _mediQuearyData.size.height * 0.001,
-                            width: _mediQuearyData.size.width * 0.83,
-                            color: Colors.black12,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 30),
-                        ),
-                        Text(
-                          'Jobb 2',
-                          style: TextStyle(
-                            fontSize: 30,
-                            color: Colors.black,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 30),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Container(
-                            height: _mediQuearyData.size.height * 0.001,
-                            width: _mediQuearyData.size.width * 0.83,
-                            color: Colors.black12,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 30),
-                        ),
-                        Text(
-                          'Jobb 3',
-                          style: TextStyle(
-                            fontSize: 30,
-                            color: Colors.black,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 30),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Container(
-                            height: _mediQuearyData.size.height * 0.001,
-                            width: _mediQuearyData.size.width * 0.83,
-                            color: Colors.black12,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 30),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 50),
-                          child: TextButton(
-                              child: Text(
-                                'Redigera profil',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  decoration: TextDecoration.underline,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ProfileEdit(
-                                      userID: _currentUser.uid,
-                                      userName: _userName,
-                                      userEmail: _userEmail,
-                                      userNumber: _userNumber,
-                                      userBio: _userBio,
-                                      userProfileImgUrl: _profileImageUrl,
-                                    ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProfileEdit(
+                                    userID: _currentUser.uid,
+                                    userName: _userName,
+                                    userEmail: _userEmail,
+                                    userNumber: _userNumber,
+                                    userBio: _userBio,
+                                    userProfileImgUrl: _profileImageUrl,
                                   ),
-                                );
-                              }),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 60),
-                        ),
-                      ],
-                    ),
+                                ),
+                              );
+                            }),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 60),
+                      ),
+                    ],
                   ),
                 ),
               ),

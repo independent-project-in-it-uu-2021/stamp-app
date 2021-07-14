@@ -233,6 +233,8 @@ class DatabaseService {
 
   // Change profileimage url
   Future updateProfileImgUrl(String userID, String imgUrl) async {
+    // Updates user profile image link in the job object
+    await _updateUserInfoJobObject(userID, 'userProfilePicUrl', imgUrl);
     return await userCollection
         .doc(userID)
         .update({'userProfilePicUrl': imgUrl});
@@ -246,12 +248,46 @@ class DatabaseService {
     String userPhoneNumber,
     String userBio,
   ) async {
+    //Update user name in job object
+    await _updateUserInfoJobObject(userID, 'userName', userName);
     return await userCollection.doc(userID).update({
       'userName': userName,
       //'userEmail': userEmail,
       'userPhoneNumber': userPhoneNumber,
       'userBio': userBio,
     });
+  }
+
+  // Updates user profile image link in the job object
+  Future _updateUserInfoJobObject(
+      String userID, String keyName, String newData) async {
+    final currentUser = await userCollection.doc(userID).get();
+    try {
+      // Update user profile in job object
+      if (currentUser.data()['accountType'] == 'student') {
+        Map currentJobs = currentUser.data()['jobs'];
+        // List of the jobs that user is either accepted or is reserv
+        List jobIDs = currentJobs.keys.toList();
+
+        // Loops through and change it in different map
+        jobIDs.forEach((curJobID) async {
+          // Checks if user is accepted or is reserve
+          if (currentJobs[curJobID.toString()] == 'selected') {
+            print('Inside if');
+            await jobsCollection
+                .doc(curJobID)
+                .update({'currentAccepted.' + userID + '.' + keyName: newData});
+          } else if (currentJobs[curJobID.toString()] == 'reserve') {
+            print('Inside else if');
+            await jobsCollection
+                .doc(curJobID)
+                .update({'currentReserve.' + userID + '.' + keyName: newData});
+          }
+        });
+      }
+    } on FirebaseException catch (e) {
+      print(e.code);
+    }
   }
 
   //Updates user email in the database when email is changed
