@@ -109,7 +109,6 @@ class _StudentWorkState extends State<StudentWork> {
 
   // Returns a listviewbuilder for all the jobs
   Widget _buildAllJobs(List<Jobs> allJobs, String userID, Map studentJobs) {
-    Map test = {};
     List studentKeyJobs = studentJobs.keys.toList();
     List<Jobs> vacantJobs = [];
     vacantJobs.addAll(allJobs);
@@ -119,8 +118,6 @@ class _StudentWorkState extends State<StudentWork> {
       vacantJobs.removeWhere((element) => element.jobID == curJobID);
     });
 
-    print('Vacant jobs length ');
-    print(vacantJobs.length);
     vacantJobs.sort((a, b) {
       return a.date.compareTo(b.date);
     });
