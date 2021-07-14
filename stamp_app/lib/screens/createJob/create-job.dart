@@ -24,8 +24,6 @@ class CreateJobState extends State<CreateJob> {
   String _selectedEndTime = 'Sluttid';
   String _icon;
   String _jobCategory = '';
-  // Boolean value use to hide the write bio option field
-  bool _writeBio = false;
 
   Future<void> _show() async {
     final TimeOfDay result = await showTimePicker(
