@@ -128,9 +128,12 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => OthersProfile(
-                      userID: userID,
-                    ),
+                    builder: (context) =>
+                        usersList[index].userID == currentUserID
+                            ? Profil()
+                            : OthersProfile(
+                                userID: usersList[index].userID,
+                              ),
                   ),
                 );
               },
