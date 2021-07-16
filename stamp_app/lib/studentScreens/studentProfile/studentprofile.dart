@@ -26,8 +26,6 @@ class StudentProfileState extends State<StudentProfile> {
   String _profileImageUrl = '';
   Map _studentJobs = {};
 
-  // key to hold the state of the form i.e referens to the form
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   // reuseable profile image widget
   Widget _profilePic() {
     return ProfileImage(profileImagUrl: _profileImageUrl);
