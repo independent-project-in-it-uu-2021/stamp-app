@@ -274,17 +274,26 @@ class DatabaseService {
         jobIDs.forEach((curJobID) async {
           // Checks if user is accepted or is reserve
           if (currentJobs[curJobID.toString()] == 'selected') {
-            print('Inside if');
             await jobsCollection
                 .doc(curJobID)
                 .update({'currentAccepted.' + userID + '.' + keyName: newData});
           } else if (currentJobs[curJobID.toString()] == 'reserve') {
-            print('Inside else if');
             await jobsCollection
                 .doc(curJobID)
                 .update({'currentReserve.' + userID + '.' + keyName: newData});
           }
         });
+
+        // Updates user infor for jobs that user has show interest
+        Map currentInterest = currentUser.data()['shownInterest'];
+        List currentInterestJobIDs = currentInterest.keys.toList();
+        if (currentInterestJobIDs.length > 0) {
+          currentInterestJobIDs.forEach((curJobID) async {
+            await jobsCollection
+                .doc(curJobID)
+                .update({'currentInterest.' + userID + '.' + keyName: newData});
+          });
+        }
       }
     } on FirebaseException catch (e) {
       print(e.code);
