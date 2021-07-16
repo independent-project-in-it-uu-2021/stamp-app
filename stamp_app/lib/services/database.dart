@@ -151,6 +151,9 @@ class DatabaseService {
           selectedList + '.' + curUser.userID: userInfo,
           'currentInterest.' + curUser.userID: FieldValue.delete(),
         });
+        await userCollection
+            .doc(curUser.userID)
+            .update({'shownInterest.' + jobID: FieldValue.delete()});
         await userCollection.doc(curUser.userID).update({
           'jobs.' + jobID: rollList,
         });
