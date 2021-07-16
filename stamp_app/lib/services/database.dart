@@ -112,16 +112,16 @@ class DatabaseService {
     };
 
     try {
+      // Add userinformation to job object in database
       await jobsCollection.doc(jobID).update({
         //'reserveCount': FieldValue.arrayUnion([userID]),
         'currentInterest.' + userID: userInformation,
-
-        /*'reserveCount.' + userID: {
-          'name': 'Anders Student',
-          'profileLink': 'This is a profileLink',
-        }*/
-        //'reserveCount.' + userID: 'This is my profile link'
       });
+
+      // Add jobid to user object in the database
+      await userCollection
+          .doc(userID)
+          .update({'shownInterest.' + jobID: 'showInterest'});
     } on FirebaseException catch (e) {
       print('Show instresset job');
       print(e.code);
@@ -186,7 +186,8 @@ class DatabaseService {
           phoneNumer: element.data()['userPhoneNumber'],
           bio: element.data()['userBio'],
           imageUrl: element.data()['userProfilePicUrl'],
-          accountType: element.data()['accountType']);
+          accountType: element.data()['accountType'],
+          jobs: element.data()['jobs']);
       return userInfo;
     } on FirebaseException catch (e) {
       print('getUserFromDataBase');
