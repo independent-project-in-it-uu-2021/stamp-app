@@ -41,9 +41,8 @@ class StudentProfileState extends State<StudentProfile> {
         SizedBox(
           height: 12,
         ),
-        // TODO: Maybe change the ext
         Text(
-          'Du har ingen senaste jobb',
+          'Ingen senaste jobb att visa',
           style: TextStyle(fontSize: 18.0),
         )
       ]);
@@ -66,19 +65,26 @@ class StudentProfileState extends State<StudentProfile> {
           physics: NeverScrollableScrollPhysics(),
           itemCount: studentJobsKey.length >= 3 ? 3 : studentJobsKey.length,
           itemBuilder: (BuildContext context, int index) {
-            String curTitle = studentJobs[index].title;
-            String curDate = studentJobs[index].date;
-            String curTime = studentJobs[index].time;
-            String curEndTime = studentJobs[index].endTime;
-            String curLocation = studentJobs[index].location;
-            String curJobCategory = studentJobs[index].category;
-            String msg;
+            String curTitle =
+                studentJobs.length > 0 ? studentJobs[index].title : '';
+            String curDate =
+                studentJobs.length > 0 ? studentJobs[index].date : '';
+            String curTime =
+                studentJobs.length > 0 ? studentJobs[index].time : '';
+            String curEndTime =
+                studentJobs.length > 0 ? studentJobs[index].endTime : '';
+            String curLocation =
+                studentJobs.length > 0 ? studentJobs[index].location : '';
+            String curJobCategory =
+                studentJobs.length > 0 ? studentJobs[index].category : '';
+            String msg = '';
 
             // If user is accepted Antaget message is shown otherwise Reserv
-            (studentJobs[index].currentAccepted.containsKey(currentUserID))
-                ? msg = 'Antagen'
-                : msg = 'Reserv';
-
+            if (studentJobs.length > 0) {
+              (studentJobs[index].currentAccepted.containsKey(currentUserID))
+                  ? msg = 'Antagen'
+                  : msg = 'Reserv';
+            }
             return Card(
               child: ListTile(
                 leading: IconForWorkFeed(jobCategory: curJobCategory),
