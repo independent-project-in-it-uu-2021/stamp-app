@@ -112,18 +112,33 @@ class DatabaseService {
     };
 
     try {
+      // Add userinformation to job object in database
       await jobsCollection.doc(jobID).update({
         //'reserveCount': FieldValue.arrayUnion([userID]),
         'currentInterest.' + userID: userInformation,
-
-        /*'reserveCount.' + userID: {
-          'name': 'Anders Student',
-          'profileLink': 'This is a profileLink',
-        }*/
-        //'reserveCount.' + userID: 'This is my profile link'
       });
+
+      // Add jobid to user object in the database
+      await userCollection
+          .doc(userID)
+          .update({'shownInterest.' + jobID: 'showInterest'});
     } on FirebaseException catch (e) {
       print('Show instresset job');
+      print(e.code);
+    }
+  }
+
+  // Deletes information if user withdraws interest
+  Future withDrawInterest(String jobID, String userID) async {
+    try {
+      await jobsCollection
+          .doc(jobID)
+          .update({'currentInterest.' + userID: FieldValue.delete()});
+      await userCollection
+          .doc(userID)
+          .update({'shownInterest.' + jobID: FieldValue.delete()});
+    } on FirebaseException catch (e) {
+      print('Withdraw interest');
       print(e.code);
     }
   }
@@ -151,6 +166,9 @@ class DatabaseService {
           selectedList + '.' + curUser.userID: userInfo,
           'currentInterest.' + curUser.userID: FieldValue.delete(),
         });
+        await userCollection
+            .doc(curUser.userID)
+            .update({'shownInterest.' + jobID: FieldValue.delete()});
         await userCollection.doc(curUser.userID).update({
           'jobs.' + jobID: rollList,
         });
@@ -186,7 +204,8 @@ class DatabaseService {
           phoneNumer: element.data()['userPhoneNumber'],
           bio: element.data()['userBio'],
           imageUrl: element.data()['userProfilePicUrl'],
-          accountType: element.data()['accountType']);
+          accountType: element.data()['accountType'],
+          jobs: element.data()['jobs']);
       return userInfo;
     } on FirebaseException catch (e) {
       print('getUserFromDataBase');
@@ -273,17 +292,26 @@ class DatabaseService {
         jobIDs.forEach((curJobID) async {
           // Checks if user is accepted or is reserve
           if (currentJobs[curJobID.toString()] == 'selected') {
-            print('Inside if');
             await jobsCollection
                 .doc(curJobID)
                 .update({'currentAccepted.' + userID + '.' + keyName: newData});
           } else if (currentJobs[curJobID.toString()] == 'reserve') {
-            print('Inside else if');
             await jobsCollection
                 .doc(curJobID)
                 .update({'currentReserve.' + userID + '.' + keyName: newData});
           }
         });
+
+        // Updates user infor for jobs that user has show interest
+        Map currentInterest = currentUser.data()['shownInterest'];
+        List currentInterestJobIDs = currentInterest.keys.toList();
+        if (currentInterestJobIDs.length > 0) {
+          currentInterestJobIDs.forEach((curJobID) async {
+            await jobsCollection
+                .doc(curJobID)
+                .update({'currentInterest.' + userID + '.' + keyName: newData});
+          });
+        }
       }
     } on FirebaseException catch (e) {
       print(e.code);

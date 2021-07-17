@@ -150,6 +150,79 @@ class StudentChoiceState extends State<StudentChoice> {
     }
   }
 
+  Widget _buildButtonWidget(
+      String currentUserID, String curUserName, String curUserProfileImage) {
+    bool checkIfUserHarShownInterest = userThatShownInterest
+        .where((element) => element.userID == currentUserID)
+        .isNotEmpty;
+    // Withdraw button is shown in user has already shown interest
+    if (showMsgToUser || checkIfUserHarShownInterest) {
+      return FloatingActionButton.extended(
+        backgroundColor: Colors.red,
+        onPressed: () async {
+          final result = await locator
+              .get<DatabaseService>()
+              .withDrawInterest(jobID, currentUserID);
+
+          //print(result);
+          if (userThatShownInterest
+              .where((element) => element.userID == currentUserID)
+              .isEmpty) {
+            setState(() {
+              showMsgToUser = false;
+            });
+          }
+          if (result == null) {
+            setState(() {
+              showMsgToUser = false;
+            });
+          }
+          Navigator.pop(context, 'Du har avanmält');
+        },
+        label: Text(
+          'Avanmäla',
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: Colors.black,
+              fontFamily: 'Roboto'),
+        ),
+      );
+    } else {
+      // Show interest button is shown
+      return FloatingActionButton.extended(
+        backgroundColor: Colors.green,
+        onPressed: () async {
+          final result = await locator.get<DatabaseService>().showInterestJob(
+              jobID, currentUserID, curUserName, curUserProfileImage);
+
+          //print(result);
+          if (userThatShownInterest
+              .where((element) => element.userID == currentUserID)
+              .isNotEmpty) {
+            setState(() {
+              showMsgToUser = true;
+            });
+          }
+          if (result == null) {
+            setState(() {
+              showMsgToUser = true;
+            });
+          }
+          Navigator.pop(context, 'Du har anmält intresse');
+        },
+        label: Text(
+          'Anmäl intresse',
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: Colors.black,
+              fontFamily: 'Roboto'),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final _currentUser = Provider.of<User>(context);
@@ -241,38 +314,8 @@ class StudentChoiceState extends State<StudentChoice> {
                       Padding(
                         padding: EdgeInsets.only(top: 30),
                       ),
-                      FloatingActionButton.extended(
-                        backgroundColor: Colors.green,
-                        onPressed: () async {
-                          final result = await locator
-                              .get<DatabaseService>()
-                              .showInterestJob(jobID, curUserID, curUserName,
-                                  curUserProfileImage);
-
-                          //print(result);
-                          if (userThatShownInterest
-                              .where((element) => element.userID == curUserID)
-                              .isNotEmpty) {
-                            setState(() {
-                              showMsgToUser = true;
-                            });
-                          }
-                          if (result == null) {
-                            setState(() {
-                              showMsgToUser = true;
-                            });
-                          }
-                          Navigator.pop(context, 'Du har anmält intresse');
-                        },
-                        label: Text(
-                          'Anmäl intresse',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                              color: Colors.black,
-                              fontFamily: 'Roboto'),
-                        ),
-                      )
+                      _buildButtonWidget(
+                          curUserID, curUserName, curUserProfileImage),
                     ],
                   ),
                 ),

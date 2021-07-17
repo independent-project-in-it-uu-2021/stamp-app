@@ -26,8 +26,6 @@ class StudentProfileState extends State<StudentProfile> {
   String _profileImageUrl = '';
   Map _studentJobs = {};
 
-  // key to hold the state of the form i.e referens to the form
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   // reuseable profile image widget
   Widget _profilePic() {
     return ProfileImage(profileImagUrl: _profileImageUrl);
@@ -38,70 +36,89 @@ class StudentProfileState extends State<StudentProfile> {
     final allTheJobs = Provider.of<List<Jobs>>(context) ?? [];
     List studentJobsKey = _studentJobs.keys.toList();
     List<Jobs> studentJobs = [];
-    // Filter out the jobs that the student is either selected or reserved
-    studentJobsKey.forEach((curJobID) {
-      List<Jobs> curJob =
-          allTheJobs.where((curJob) => curJob.jobID == curJobID).toList();
-      studentJobs.addAll(curJob);
-    });
+    if (studentJobsKey.length == 0) {
+      return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+        SizedBox(
+          height: 12,
+        ),
+        Text(
+          'Ingen senaste jobb att visa',
+          style: TextStyle(fontSize: 18.0),
+        )
+      ]);
+    } else {
+      // Filter out the jobs that the student is either selected or reserved
+      studentJobsKey.forEach((curJobID) {
+        List<Jobs> curJob =
+            allTheJobs.where((curJob) => curJob.jobID == curJobID).toList();
+        studentJobs.addAll(curJob);
+      });
 
-    // Sort according to job date
-    studentJobs.sort((a, b) {
-      return a.date.compareTo(b.date);
-    });
+      // Sort according to job date
+      studentJobs.sort((a, b) {
+        return a.date.compareTo(b.date);
+      });
 
-    // Build a listview
-    return ListView.builder(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        itemCount: 3,
-        itemBuilder: (BuildContext context, int index) {
-          String curTitle = studentJobs[index].title;
-          String curDate = studentJobs[index].date;
-          String curTime = studentJobs[index].time;
-          String curEndTime = studentJobs[index].endTime;
-          String curLocation = studentJobs[index].location;
-          String curJobCategory = studentJobs[index].category;
-          String msg;
+      // Build a listview
+      return ListView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: studentJobsKey.length >= 3 ? 3 : studentJobsKey.length,
+          itemBuilder: (BuildContext context, int index) {
+            String curTitle =
+                studentJobs.length > 0 ? studentJobs[index].title : '';
+            String curDate =
+                studentJobs.length > 0 ? studentJobs[index].date : '';
+            String curTime =
+                studentJobs.length > 0 ? studentJobs[index].time : '';
+            String curEndTime =
+                studentJobs.length > 0 ? studentJobs[index].endTime : '';
+            String curLocation =
+                studentJobs.length > 0 ? studentJobs[index].location : '';
+            String curJobCategory =
+                studentJobs.length > 0 ? studentJobs[index].category : '';
+            String msg = '';
 
-          // If user is accepted Antaget message is shown otherwise Reserv
-          (studentJobs[index].currentAccepted.containsKey(currentUserID))
-              ? msg = 'Antagen'
-              : msg = 'Reserv';
-
-          return Card(
-            child: ListTile(
-              leading: IconForWorkFeed(jobCategory: curJobCategory),
-              title: Text(
-                '$curDate $curTitle',
-                style: TextStyle(fontWeight: FontWeight.bold),
+            // If user is accepted Antaget message is shown otherwise Reserv
+            if (studentJobs.length > 0) {
+              (studentJobs[index].currentAccepted.containsKey(currentUserID))
+                  ? msg = 'Antagen'
+                  : msg = 'Reserv';
+            }
+            return Card(
+              child: ListTile(
+                leading: IconForWorkFeed(jobCategory: curJobCategory),
+                title: Text(
+                  '$curDate $curTitle',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text('$curTime - $curEndTime \n$curLocation '),
+                      Text(
+                        msg,
+                        style: TextStyle(
+                            color: msg == 'Antagen'
+                                ? Colors.green.shade600
+                                : Colors.red,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ]),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FinalStudentChoice(
+                        curJob: studentJobs[index],
+                      ),
+                    ),
+                  );
+                },
               ),
-              subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text('$curTime - $curEndTime \n$curLocation '),
-                    Text(
-                      msg,
-                      style: TextStyle(
-                          color: msg == 'Antagen'
-                              ? Colors.green.shade600
-                              : Colors.red,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ]),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => FinalStudentChoice(
-                      curJob: studentJobs[index],
-                    ),
-                  ),
-                );
-              },
-            ),
-          );
-        });
+            );
+          });
+    }
   }
 
   Widget _buildPaddingWithLine(double paddingSize) {
