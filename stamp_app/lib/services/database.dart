@@ -128,6 +128,21 @@ class DatabaseService {
     }
   }
 
+  // Deletes information if user withdraws interest
+  Future withDrawInterest(String jobID, String userID) async {
+    try {
+      await jobsCollection
+          .doc(jobID)
+          .update({'currentInterest.' + userID: FieldValue.delete()});
+      await userCollection
+          .doc(userID)
+          .update({'shownInterest.' + jobID: FieldValue.delete()});
+    } on FirebaseException catch (e) {
+      print('Withdraw interest');
+      print(e.code);
+    }
+  }
+
   // Method for user that are selected for a work
   Future selectedAndUserJob(List<UserJob> userInfoList, String jobID,
       String rollList, int count, int reservCount) async {

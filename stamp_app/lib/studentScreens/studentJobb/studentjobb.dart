@@ -159,7 +159,8 @@ class _StudentWorkState extends State<StudentWork> {
                     ),
                   ),
                 );
-                if (result == 'Du har anmält intresse') {
+                if (result == 'Du har anmält intresse' ||
+                    result == 'Du har avanmält') {
                   showTopSnackBar(
                     context,
                     CustomSnackBar.info(
