@@ -316,38 +316,6 @@ class StudentChoiceState extends State<StudentChoice> {
                       ),
                       _buildButtonWidget(
                           curUserID, curUserName, curUserProfileImage),
-                      /*FloatingActionButton.extended(
-                        backgroundColor: Colors.green,
-                        onPressed: () async {
-                          final result = await locator
-                              .get<DatabaseService>()
-                              .showInterestJob(jobID, curUserID, curUserName,
-                                  curUserProfileImage);
-
-                          //print(result);
-                          if (userThatShownInterest
-                              .where((element) => element.userID == curUserID)
-                              .isNotEmpty) {
-                            setState(() {
-                              showMsgToUser = true;
-                            });
-                          }
-                          if (result == null) {
-                            setState(() {
-                              showMsgToUser = true;
-                            });
-                          }
-                          Navigator.pop(context, 'Du har anmält intresse');
-                        },
-                        label: Text(
-                          'Anmäl intresse',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                              color: Colors.black,
-                              fontFamily: 'Roboto'),
-                        ),
-                      )*/
                     ],
                   ),
                 ),
