@@ -21,16 +21,21 @@ class _StudentHistoryState extends State<StudentHistory> {
   //Builds all the job that are older than today
   Widget _buildOldStudentJobs(String currentUserID) {
     final allTheJobs = Provider.of<List<Jobs>>(context) ?? [];
+    DateTime dateNow = DateTime.now();
+    String todaysDate = '${dateNow.day}-${dateNow.month}-${dateNow.year}';
+
     List studentJobsKey = _studentJobs.keys.toList();
     List<Jobs> studentJobs = [];
+    List<Jobs> oldJobs = [];
+
     if (studentJobsKey.length == 0) {
       return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
         SizedBox(
           height: 12,
         ),
-        // TODO: Maybe change the ext
+        // TODO: Maybe change the this
         Text(
-          'Du har ingen senaste jobb',
+          'Inget historik att visa',
           style: TextStyle(fontSize: 18.0),
         )
       ]);
@@ -41,17 +46,30 @@ class _StudentHistoryState extends State<StudentHistory> {
             allTheJobs.where((curJob) => curJob.jobID == curJobID).toList();
         studentJobs.addAll(curJob);
       });
-
       // Sort according to job date
       studentJobs.sort((a, b) {
         return a.date.compareTo(b.date);
       });
 
+      oldJobs.addAll(studentJobs);
+      studentJobs.forEach((curJob) {
+        /*print(
+
+            'Compare todays date with curJob ${curJob.date.compareTo(todaysDate)}');*/
+        if (todaysDate.compareTo(curJob.date) == 1) {
+          print('Inside if-statement');
+          oldJobs.add(curJob);
+        }
+      });
+
+      //print('OldJobs length is: ${oldJobs.length}');
+
       // Build a listview
       return ListView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-          itemCount: studentJobsKey.length >= 3 ? 3 : studentJobsKey.length,
+          //TODO: Change the length below
+          itemCount: studentJobsKey.length,
           itemBuilder: (BuildContext context, int index) {
             String curTitle = studentJobs[index].title;
             String curDate = studentJobs[index].date;
@@ -158,7 +176,12 @@ class _StudentHistoryState extends State<StudentHistory> {
                         color: Colors.black12,
                       ),
                     ),
-                    _buildOldStudentJobs(currentUser.uid),
+                    //_buildOldStudentJobs(currentUser.uid),
+                    Padding(padding: EdgeInsets.only(top: 20)),
+                    Text(
+                      'Ingen historik att visa',
+                      style: TextStyle(fontSize: 25),
+                    ),
                     Padding(
                       padding: EdgeInsets.only(top: 30),
                     ),
