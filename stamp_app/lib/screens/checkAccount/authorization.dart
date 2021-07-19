@@ -13,9 +13,9 @@ class Authorization extends StatelessWidget {
     final currentUser = Provider.of<UserData>(context);
     if (currentUser != null) {
       var userData = currentUser.accountType;
-      if (userData == 'inactive') {
+      if (userData.compareTo('inactive') == 0) {
         return InactiveHome();
-      } else if (userData == 'student') {
+      } else if (userData.compareTo('student') == 0) {
         return StudentHome();
       } else {
         return Home();
