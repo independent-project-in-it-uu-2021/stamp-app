@@ -118,6 +118,8 @@ class _BuildJobInformationState extends State<BuildJobInformation> {
                     overflow: TextOverflow.clip,
                   ),
                 ),
+                Text('Plats: ' + location,
+                    style: TextStyle(fontSize: 16), textAlign: TextAlign.left),
                 Text('Tid: ' + time + '-' + endTime,
                     style: TextStyle(fontSize: 18), textAlign: TextAlign.left),
                 Text('Datum: ' + date,

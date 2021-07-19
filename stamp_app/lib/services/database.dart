@@ -304,13 +304,14 @@ class DatabaseService {
 
         // Updates user infor for jobs that user has show interest
         Map currentInterest = currentUser.data()['shownInterest'];
-        List currentInterestJobIDs = currentInterest.keys.toList();
-        if (currentInterestJobIDs.length > 0) {
-          currentInterestJobIDs.forEach((curJobID) async {
-            await jobsCollection
-                .doc(curJobID)
-                .update({'currentInterest.' + userID + '.' + keyName: newData});
-          });
+        if (currentInterest != null) {
+          List currentInterestJobIDs = currentInterest.keys.toList();
+          if (currentInterestJobIDs.length > 0) {
+            currentInterestJobIDs.forEach((curJobID) async {
+              await jobsCollection.doc(curJobID).update(
+                  {'currentInterest.' + userID + '.' + keyName: newData});
+            });
+          }
         }
       }
     } on FirebaseException catch (e) {

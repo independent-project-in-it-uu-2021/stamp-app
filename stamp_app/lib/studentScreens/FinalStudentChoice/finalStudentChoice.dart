@@ -11,6 +11,7 @@ import 'package:stamp_app/sharedWidget/loadingScreen.dart';
 import 'package:stamp_app/sharedWidget/buildJobInfor.dart';
 import 'package:stamp_app/sharedWidget/imageForListView.dart';
 import 'package:stamp_app/screens/annansProfil/annansProfil.dart';
+import 'package:stamp_app/studentScreens/studentProfile/studentprofile.dart';
 
 class FinalStudentChoice extends StatefulWidget {
   final Jobs curJob;
@@ -130,7 +131,7 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
                   MaterialPageRoute(
                     builder: (context) =>
                         usersList[index].userID == currentUserID
-                            ? Profil()
+                            ? StudentProfile()
                             : OthersProfile(
                                 userID: usersList[index].userID,
                               ),
@@ -212,6 +213,9 @@ class FinalStudentChoiceState extends State<FinalStudentChoice> {
                     children: <Widget>[
                       // Builds job information
                       BuildJobInformation(curJob: currentJob),
+                      SizedBox(
+                        height: 10,
+                      ),
                       _buildMsgWidget(curUserID),
                       Text(
                         'Accepterad',
