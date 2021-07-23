@@ -106,7 +106,7 @@ class CreateAccountState extends State<CreateAccount> {
         // The  form is saved and we tell what to do with the value
         onChanged: (String value) {
           setState(() {
-            _email = value;
+            _email = value.toLowerCase();
           });
         },
       ),
