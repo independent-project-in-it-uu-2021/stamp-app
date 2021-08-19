@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        showSemanticsDebugger: false,
+        debugShowCheckedModeBanner: false,
         title: 'Registrera konto',
         home: Wrapper(),
       ),
